@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="processor"
+            class="com.bizvpm.dps.processor.pm.PreferencePage"
+            id="com.bizvpm.dps.processors.pm.PreferencePage"
+            name="BizVPM 数据源">
+      </page>
+   </extension>
+   <extension
+         point="com.bizvpm.dps.processor">
+      <processor
+            catalog="BizVPM/成本"
+            id="costsummary.byprojectgroup"
+            maxThreadCount="5"
+            name="统计项目大类研发成本费用"
+            processorActivater="com.bizvpm.dps.processor.pm.Starter"
+            runnable="com.bizvpm.dps.processor.pm.processors.CostSummaryByProjectGroup">
+         <parameter
+               description="实际成本费用发生的年 2016,2017,…"
+               name="year"
+               optional="false"
+               type="String">
+         </parameter>
+         <parameter
+               description="实际成本费用发生的月，1~12"
+               name="month"
+               optional="false"
+               type="String">
+         </parameter>
+      </processor>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="com.bizvpm.dps.processor.pm.PreferenceInitializer">
+      </initializer>
+   </extension>
+
+</plugin>

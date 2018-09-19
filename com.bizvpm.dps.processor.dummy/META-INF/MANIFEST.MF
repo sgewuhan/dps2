@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Dummy
+Bundle-SymbolicName: com.bizvpm.dps.processor.dummy;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: com.bizvpm.dps.processor.dummy.Activator
+Bundle-Vendor: BIZVPM
+Require-Bundle: org.eclipse.core.runtime,
+ com.bizvpm.dps
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy

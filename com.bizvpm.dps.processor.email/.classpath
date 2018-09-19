@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry exported="true" kind="lib" path="libs/imap-1.5.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/javax.mail-1.5.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/javax.mail-api-1.5.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/mailapi-1.5.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/pop3-1.5.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/smtp-1.5.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/commons-email-1.4.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
+		<accessrules>
+			<accessrule kind="accessible" pattern="**"/>
+		</accessrules>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="com.bizvpm.dps.processor">
+      <processor
+            description="使用MSOffice软件转换Office格式文件为PDF"
+            id="msoffice.msofficeconverter"
+            maxThreadCount="5"
+            name="MSOffice文件转换处理器"
+            runnable="com.bizvpm.dps.processor.msoffice.MSOfficeProcessor"
+            webpage="desc.html">
+         <parameter
+               description="需转换的Office文件"
+               name="file"
+               optional="false"
+               type="DataHandler">
+         </parameter>
+         <parameter
+               name="sourceType"
+               optional="false"
+               type="String">
+            <restriction
+                  value="doc">
+            </restriction>
+            <restriction
+                  value="docx">
+            </restriction>
+            <restriction
+                  value="xls">
+            </restriction>
+            <restriction
+                  value="xlsx">
+            </restriction>
+            <restriction
+                  value="ppt">
+            </restriction>
+            <restriction
+                  value="pptx">
+            </restriction>
+         </parameter>
+         <parameter
+               name="targetType"
+               optional="false"
+               type="String">
+            <restriction
+                  value="pdf">
+            </restriction>
+         </parameter>
+      </processor>
+   </extension>
+
+</plugin>

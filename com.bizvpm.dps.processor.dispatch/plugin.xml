@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="com.bizvpm.dps.processor">
+      <processor
+            id="dispatch.sequential"
+            maxThreadCount="5"
+            name="通用串行任务分发器"
+            runnable="com.bizvpm.dps.processor.dispatch.SequentialDispatcher">
+         <parameter
+               description="处理器类型组成的List"
+               name="processors"
+               optional="true"
+               type="List">
+         </parameter>
+      </processor>
+   </extension>
+
+</plugin>

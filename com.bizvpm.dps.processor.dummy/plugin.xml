@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="com.bizvpm.dps.processor">
+      <processor
+            id="math.add"
+            maxThreadCount="5"
+            name="加法"
+            runnable="com.bizvpm.dps.processor.dummy.MathAddProcessor">
+         <parameter
+               name="value1"
+               type="Double">
+         </parameter>
+         <parameter
+               name="value2"
+               type="Double">
+         </parameter>
+      </processor>
+      <processor
+            id="math.minus"
+            maxThreadCount="5"
+            name="减法"
+            runnable="com.bizvpm.dps.processor.dummy.MathMinusProcessor">
+         <parameter
+               name="value1"
+               type="Double">
+         </parameter>
+         <parameter
+               name="value2"
+               type="Double">
+         </parameter>
+      </processor>
+   </extension>
+
+</plugin>

@@ -1,0 +1,543 @@
+[
+  {
+    "typeId": "com.bizvpm.psm.model.PlmPart",
+    "fieldGroups": [
+      {
+        "isDefault": "true",
+        "name": "v_tree",
+        "title": "结构树视图",
+        "fieldIds": ["partf2","partf3","partf4","partf5"]
+      },
+      {
+        "name": "v_list",
+        "title": "基本视图",
+        "fieldIds": ["partf2","partf3","partf4","partf5","partf6",
+        "parts1","parts3","parts4","partfs5","parts7","parts8","parts9","parts10","parts11","parts12","parts13",
+        "partf7","partf8","partf9","partf10","partf11","partf12"]
+      },
+      {
+        "name": "v_detail",
+        "title": "详细信息视图",
+        "fieldIds": ["partf2","partf3","partf4","partf5","partf6",
+        "parts1","parts3","parts4","partfs5","parts7","parts8","parts9","parts10","parts11","parts12","parts13",
+        "partf7","partf8","partf9","partf10","partf11","partf12"]
+      }
+    ],
+    "ibaField": [
+      {
+        "name": "CSR_SHIFOUTUIJIANSHIYONG",
+        "title": "不推荐",
+        "type": "String",
+        "id": "parts1"
+      },
+      
+      {
+        "name": "CSR_CHANPINLEIXING",
+        "title": "产品类型",
+        "type": "String",
+        "id": "parts3"
+      },
+      {
+        "name": "CSR_XINGHAOGUIGE",
+        "title": "型号规格",
+        "type": "String",
+        "id": "parts4"
+      },
+      {
+        "name": "CSR_SAPBANBEN",
+        "title": "SAP版本",
+        "type": "String",
+        "id": "parts5"
+      },
+      {
+        "name": "CSR_SHIFOUTONGYONGJIAN",
+        "title": "是否通用",
+        "type": "String",
+        "id": "parts7"
+      },
+      {
+        "name": "CSR_ISKEYPART",
+        "title": "是否关键件",
+        "type": "String",
+        "id": "parts8"
+      },
+      {
+        "name": "CSR_CAILIAO",
+        "title": "材料",
+        "type": "String",
+        "id": "parts9"
+      },
+      {
+        "name": "CSR_ZHONGLIANG",
+        "title": "重量",
+        "type": "String",
+        "id": "parts10"
+      },
+      {
+        "name": "CSR_TUFU",
+        "title": "图幅",
+        "type": "String",
+        "id": "parts11"
+      },
+      {
+        "name": "CSR_TUYANGLEIXING",
+        "title": "图样类型",
+        "type": "String",
+        "id": "parts12"
+      },
+      {
+        "name": "CSR_TUZHILEIXING",
+        "title": "图纸类型",
+        "type": "String",
+        "id": "parts13"
+      }
+    ],
+    "typeField": [
+      {
+        "name": "OBJOUID",
+        "title": "OUID",
+        "type": "String",
+        "id": "partf1"
+      },
+      {
+        "name": "OBJNUMBER",
+        "title": "编号",
+        "width": 120,
+        "type": "String",
+        "id": "partf2"
+      },
+      {
+        "name": "OBJNAME",
+        "title": "名称",
+        "width": 120,
+        "type": "String",
+        "id": "partf3"
+      },
+      {
+        "name": "VERSION",
+        "title": "版本",
+        "width": 50,
+        "type": "String",
+        "id": "partf4"
+      },
+      {
+        "name": "OBJVIEW",
+        "title": "视图",
+         "width": 60,
+       "type": "String",
+        "id": "partf5"
+      },
+      {
+        "name": "STATE",
+        "title": "状态",
+         "width": 60,
+        "type": "String",
+        "id": "partf6"
+      },
+      {
+        "name": "SOURCE",
+        "title": "来源",
+         "width": 60,
+        "type": "String",
+        "id": "partf7"
+      },
+      {
+        "name": "UNIT",
+        "title": "默认单位",
+         "width": 60,
+        "type": "String",
+        "id": "partf8"
+      },
+      {
+        "name": "CONTAINER",
+        "title": "上下文",
+         "width": 120,
+        "type": "String",
+        "id": "partf9"
+      },
+      {
+        "name": "CREATOR",
+        "title": "创建者",
+         "width": 60,
+        "type": "String",
+        "id": "partf10"
+      },
+      {
+        "name": "CREATETIME",
+        "title": "创建时间",
+        "type": "DateTime",
+         "width": 80,
+        "id": "partf11"
+      },
+      {
+        "name": "MODIFYTIME",
+        "title": "修改时间",
+         "width": 80,
+        "type": "DateTime",
+        "id": "partf12"
+      }
+    ]
+  },
+  {
+    "typeId": "com.bizvpm.psm.model.PlmUsageLink",
+    "fieldGroups": [
+      {
+        "isDefault": "true",
+        "name": "v_tree",
+        "title": "结构树视图",
+        "fieldIds": ["usagef2"]
+      },
+      {
+        "name": "v_list",
+        "title": "基本视图",
+        "fieldIds": ["usagef1","usagef2","usages1","usages2","usages3","usages4"]
+      }
+      ,
+      {
+        "name": "v_detail",
+        "title": "详细信息视图",
+        "fieldIds": ["usagef1","usagef2","usages1","usages2","usages3","usages4"]
+      }
+    ],
+    "ibaField": [
+      {
+        "name": "CSR_GUANXILAIYUAN",
+        "title": "关系来源",
+        "type": "String",
+        "id": "usages1"
+      },
+			{
+        "name": "CSR_YOUXIANJI",
+        "title": "优先级",
+        "type": "String",
+        "id": "usages2"
+      },
+      {
+        "name": "CSR_ZONGZHONG",
+        "title": "总重",
+        "type": "String",
+        "id": "usages3"
+      },
+      {
+        "name": "CSR_BEIZHU",
+        "title": "备注",
+        "type": "String",
+        "id": "usages4"
+      }
+    ],
+    "typeField": [
+      {
+        "name": "L_LINENUMBER",
+        "title": "行号",
+        "type": "String",
+        "id": "usagef1"
+      },
+      {
+        "name": "L_QUANTITY",
+        "title": "数量",
+        "width": 60,
+        "type": "Double",
+        "id": "usagef2"
+      }
+    ]
+  },
+  {
+    "typeId": "com.bizvpm.psm.model.PlmDoc",
+    "fieldGroups": [
+       {
+        "isDefault": "true",
+        "name": "v_list",
+        "title": "基本视图",
+        "fieldIds": ["docf2","docf3","docf4","docf5","docf6",
+        "docs1","docs2","docs3","docs4","docs5",
+        "docf7","docf8","docf9","docf10"]
+      }
+      ,
+      {
+        "name": "v_detail",
+        "title": "详细信息视图",
+        "fieldIds": ["docf2","docf3","docf4","docf5","docf6",
+        "docs1","docs2","docs3","docs4","docs5",
+        "docf7","docf8","docf9","docf10"]
+      }
+    ],
+    "ibaField": [
+      {
+        "name": "CSR_TUYANGLEIXING",
+        "title": "图样类型",
+        "type": "String",
+        "id": "docs1"
+      },
+      {
+        "name": "CSR_TUZHILEIXING",
+        "title": "图纸类型",
+        "type": "String",
+        "id": "docs2"
+      },
+      {
+        "name": "CSR_TUFU",
+        "title": "图幅",
+        "type": "String",
+        "id": "docs3"
+      },
+      {
+        "name": "CSR_DAYINFENSHU",
+        "title": "打印份数",
+        "type": "String",
+        "id": "docs4"
+      },
+      {
+        "name": "CSR_DAYINYUANYIN",
+        "title": "打印原因",
+        "type": "String",
+        "id": "docs5"
+      }
+    ],
+    "typeField": [
+      {
+        "name": "OBJOUID",
+        "title": "OUID",
+        "type": "String",
+        "id": "docf1"
+      },
+      {
+        "name": "OBJNUMBER",
+        "title": "编号",
+        "type": "String",
+        "id": "docf2"
+      },
+      {
+        "name": "OBJNAME",
+        "title": "名称",
+        "type": "String",
+        "id": "docf3"
+      },
+      {
+        "name": "VERSION",
+        "title": "版本",
+        "type": "String",
+        "id": "docf4"
+      },
+      {
+        "name": "STATE",
+        "title": "状态",
+        "type": "String",
+        "id": "docf5"
+      },
+      {
+        "name": "CONTAINER",
+        "title": "上下文",
+         "width": 120,
+        "type": "String",
+        "id": "partf6"
+      },
+      {
+        "name": "CREATOR",
+        "title": "创建者",
+        "type": "String",
+        "id": "docf7"
+      },
+      {
+        "name": "CREATETIME",
+        "title": "创建时间",
+        "type": "DateTime",
+        "id": "docf8"
+      },
+      {
+        "name": "MODIFYTIME",
+        "title": "修改时间",
+        "type": "DateTime",
+        "id": "docf9"
+      }
+    ]
+  },
+     
+  {
+    "typeId": "com.bizvpm.psm.model.PlmEPM",
+    "fieldGroups": [
+       {
+        "isDefault": "true",
+        "name": "v_list",
+        "title": "基本视图",
+        "fieldIds": ["epmf2","epm3","epm4","epm5","epm6",
+        "epms1","epms2","epms3","epms4","epms5",
+        "epmf7","epmf8","epmf9","epmf10"]
+      }
+      ,
+      {
+        "name": "v_detail",
+        "title": "详细信息视图",
+        "fieldIds": ["epmf2","epm3","epm4","epm5","epm6",
+        "epms1","epms2","epms3","epms4","epms5",
+        "epmf7","epmf8","epmf9","epmf10"]
+      }
+    ],
+		"ibaField": [
+      {
+        "name": "CSR_TUYANGLEIXING",
+        "title": "图样类型",
+        "type": "String",
+        "id": "epms1"
+      },
+      {
+        "name": "CSR_TUZHILEIXING",
+        "title": "图纸类型",
+        "type": "String",
+        "id": "epms2"
+      },
+      {
+        "name": "CSR_TUFU",
+        "title": "图幅",
+        "type": "String",
+        "id": "epms3"
+      },
+      {
+        "name": "CSR_DAYINFENSHU",
+        "title": "打印份数",
+        "type": "String",
+        "id": "epms4"
+      },
+      {
+        "name": "CSR_DAYINYUANYIN",
+        "title": "打印原因",
+        "type": "String",
+        "id": "epms5"
+      }
+    ],
+    "typeField": [
+      {
+        "name": "OBJOUID",
+        "title": "OUID",
+        "type": "String",
+        "id": "EPMf1"
+      },
+      {
+        "name": "OBJNUMBER",
+        "title": "编号",
+        "type": "String",
+        "id": "EPMf2"
+      },
+      {
+        "name": "OBJNAME",
+        "title": "名称",
+        "type": "String",
+        "id": "EPMf3"
+      },
+      {
+        "name": "VERSION",
+        "title": "版本",
+        "type": "String",
+        "id": "EPMf4"
+      },
+      {
+        "name": "STATE",
+        "title": "状态",
+        "type": "String",
+        "id": "EPMf5"
+      },
+      {
+        "name": "CONTAINER",
+        "title": "上下文",
+         "width": 120,
+        "type": "String",
+        "id": "partf6"
+      },
+      {
+        "name": "CONTAINER",
+        "title": "上下文",
+         "width": 120,
+        "type": "String",
+        "id": "partf6"
+      },
+      {
+        "name": "CADNAME",
+        "title": "CAD文件名",
+         "width": 120,
+        "type": "String",
+        "id": "partf7"
+      },
+      {
+        "name": "DOCTYPE",
+        "title": "CAD类型",
+         "width": 120,
+        "type": "String",
+        "id": "partf8"
+      },
+      {
+        "name": "CREATOR",
+        "title": "创建者",
+        "type": "String",
+        "id": "EPMf9"
+      },
+      {
+        "name": "CREATETIME",
+        "title": "创建时间",
+        "type": "DateTime",
+        "id": "EPMf10"
+      },
+      {
+        "name": "MODIFYTIME",
+        "title": "修改时间",
+        "type": "DateTime",
+        "id": "EPMf11"
+      }
+    ]
+  }
+  ,
+  {
+    "typeId": "com.bizvpm.psm.model.PlmEpmLink",
+    "fieldGroups": [
+      {
+        "name": "v_list",
+        "title": "基本视图",
+        "fieldIds": ["usagef1"]
+      }
+      
+    ],
+    "typeField": [
+      {
+        "name": "L_BUILDTYPE",
+        "title": "构建类型",
+        "type": "String",
+        "id": "usagef1"
+      }
+    ]
+  },
+  {
+    "typeId": "com.bizvpm.psm.model.PlmAlterLink",
+    "fieldGroups": [
+      {
+        "name": "v_list",
+        "title": "基本视图",
+        "fieldIds": ["usagef1"]
+      }
+    ],
+    "typeField": [
+      {
+        "name": "L_REPTYPE",
+        "title": "替代类型",
+        "type": "String",
+        "id": "usagef1"
+      }
+    ]
+  },
+  {
+    "typeId": "com.bizvpm.psm.model.PlmAlterSLink",
+    "fieldGroups": [
+      {
+        "name": "v_list",
+        "title": "基本视图",
+        "fieldIds": ["usagef1"]
+      }
+      
+    ],
+     "typeField": [
+      {
+        "name": "L_QUANTITY",
+        "title": "替代数量",
+        "type": "Integer",
+        "id": "usagef1"
+      }
+    ]
+  }
+]

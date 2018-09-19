@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="com.bizvpm.dps.processor">
+      <processor
+            id="birtreport"
+            maxThreadCount="5"
+            name="Birt报表生成"
+            runnable="com.bizvpm.dps.processor.report.BirtReportProcessor">
+         <parameter
+               description="模板文件，可以是url String类型也可以是file"
+               name="design"
+               optional="false"
+               type="uncheck">
+         </parameter>
+         <parameter
+               description="输出的文件类型"
+               name="output"
+               optional="false"
+               type="String">
+            <restriction
+                  value="docx">
+            </restriction>
+            <restriction
+                  value="excel">
+            </restriction>
+            <restriction
+                  value="html">
+            </restriction>
+            <restriction
+                  value="pdf">
+            </restriction>
+            <restriction
+                  value="pptx">
+            </restriction>
+         </parameter>
+         <parameter
+               description="传入数据xml地址，比如 key &quot;FILELIST&quot;, value &quot;http://document.xml&quot;"
+               name="datasource_parameter"
+               optional="false"
+               type="Map">
+         </parameter>
+         <parameter
+               description="报表任务参数，参考Birt设置"
+               name="task_parameter"
+               optional="true"
+               type="Map">
+         </parameter>
+         <parameter
+               description="是否输出HTML String"
+               name="output_html_string"
+               type="Boolean">
+         </parameter>
+      </processor>
+   </extension>
+
+</plugin>

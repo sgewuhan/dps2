@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Table of Contents</title>
+</head>
+
+<body>
+<h1>Distribute Process System</h1>
+Distribute Process System是一个分布式的处理框架。
+- 允许多台计算机进行分布式处理任务
+- 在多台计算机上进行转移处理故障
+- 处理计算机能够动态注册
+- 提供统一的WebService接口
+
+1. DPS注册
+DPS启动时将向DPS注册服务器注册处理服务。
+为了避免注册服务器出现不可访问的情况，DPS将试图连接一个列表中的注册服务器。
+注册服务器的列表在安装文件夹下的configuration/dpfserverlist中。
+dpfserverlist内容，由主机IP和端口号组成，示例如下：
+127.0.0.1:8199
+127.0.0.1:8130
+127.0.0.1:8110
+尽管DPS与注册服务器之间是采用Webservice方式互相调用，但这一点对使用者而言是无须考虑的。
+
+2. 处理任务调度
+注册服务器根据用户的处理请求，执行DPS的任务调度。根据处理任务的类型，寻找合适的DPS主机，并将任务分配到该主机。
+注册服务器的调度将根据DPS主机的性能和可用资源，比如当前CPU占用、内存占用等作为判定条件。
+
+3. DPS处理功能
+DPS的处理功能是以Plugin的方式安装到DPS系统中的。
+这些功能Plugin可以由DPS控制启用、停用。
+这些功能Plugin通过DPS提供了统一的Webservice接口供外部调用。并提供统一的返回。
+DPS为每个安装的处理功能提供了并发、队列、日志的功能。
+我们可以简单地认为，处理程序的开发者只需要考虑如何执行处理，其他的交给DSP完成。
+
+4. DPS故障
+当某个处理请求需要调药某一台故障的DPS，注册服务器将感知该DPS的问题，并将它未完成的处理转移到其他可执行同样处理的DPS主机上。
+
+5. 安装和升级
+DPS可连接网络上发布的更新站点进行升级。新的处理程序也可以使用更新站点进行安装。
+DPS可以设置自动安装模式，当更新站点上出现新的处理功能或新版本时，DPS主机将自动安装该功能。
+
+</body>
+</html>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="com.bizvpm.dps.processor">
+      <processor
+            description="发送TMT的短信"
+            id="tmtsms.sms"
+            maxThreadCount="5"
+            name="TMT短信处理器"
+            processorActivater="com.tmt.dps.processor.sms.preferences.TMTSmsProcessorStarter"
+            runnable="com.tmt.dps.processor.sms.TMTSmsProcessor">
+         <parameter
+               name="to"
+               optional="false"
+               type="Map">
+         </parameter>
+         <parameter
+               name="mobileCount"
+               type="String">
+         </parameter>
+         <parameter
+               name="sendTime"
+               type="String">
+         </parameter>
+         <parameter
+               name="textMessage"
+               optional="false"
+               type="String">
+         </parameter>
+      </processor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="com.tmt.dps.processor.sms.preferences.TMTSmsPreferencePage"
+            id="com.tmt.dps.processor.sms.preferences.TMTSmsPreferencePage"
+            name="TMT短信设置">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="com.tmt.dps.processor.sms.preferences.TMTSmsPreferenceInitializer">
+      </initializer>
+   </extension>
+
+</plugin>

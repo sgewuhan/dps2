@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="com.bizvpm.dps.processor">
+      <processor
+            description="使用Open Office"
+            id="openoffice.openofficeconverter"
+            maxThreadCount="5"
+            name="OpenOffice文件转换处理器"
+            runnable="com.bizvpm.dps.processor.openoffice.OpenOfficeProcessor"
+            processorActivater="com.bizvpm.dps.processor.openoffice.Starter">
+      </processor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="processor"
+            class="com.bizvpm.dps.processor.openoffice.preferences.OpenOfficePreferencePage"
+            id="com.bizvpm.dps.processor.openoffice.preferences.OpenOfficePreferencePage"
+            name="Open Office 转换设置">
+      </page>
+   </extension>
+
+</plugin>

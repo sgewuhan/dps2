@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="com.bizvpm.dps.processor">
+      <processor
+            catalog="Windchill DS/零部件"
+            description="传入零部件id 数组 返回 零部件IBA属性值 列表"
+            id="partquery"
+            maxThreadCount="5"
+            name="零部件属性查询"
+            runnable="com.bizvpm.dps.processor.plm.wcs.processor.PartQuery">
+         <parameter
+               description="List&lt;String&gt; 每个元素是Ouid字符串 "
+               name="ids"
+               optional="false"
+               type="List">
+         </parameter>
+      </processor>
+      <processor
+            catalog="Windchill DS/BOM"
+            id="bomquery"
+            maxThreadCount="5"
+            name="BOM查询"
+            runnable="com.bizvpm.dps.processor.plm.wcs.processor.BomQuery">
+         <parameter
+               description="List&lt;String&gt; 每个元素是Ouid字符串 "
+               name="ids"
+               optional="false"
+               type="List">
+         </parameter>
+      </processor>
+      <processor
+            catalog="Windchill DS/图文档"
+            description="传入零部件ouid 数组 返回 描述文档IBA属性值 列表"
+            id="docDescribeQuery"
+            maxThreadCount="5"
+            name="说明文档查询"
+            runnable="com.bizvpm.dps.processor.plm.wcs.processor.DocDescribeQuery">
+         <parameter
+               description="List&lt;String&gt; 每个元素是Ouid字符串 "
+               name="ids"
+               optional="false"
+               type="List">
+         </parameter>
+      </processor>
+      <processor
+            catalog="Windchill DS/图文档"
+            description="传入零部件ouid 数组 返回 参考文档IBA属性值 列表"
+            id="docReferenceQuery"
+            maxThreadCount="5"
+            name="参考文档查询"
+            runnable="com.bizvpm.dps.processor.plm.wcs.processor.DocReferenceQuery">
+         <parameter
+               description="List&lt;String&gt; 每个元素是Ouid字符串 "
+               name="ids"
+               optional="false"
+               type="List">
+         </parameter>
+      </processor>
+
+       <processor
+             catalog="Windchill DS"
+             id="softattrquery"
+             maxThreadCount="5"
+             name="对象软属性查询"
+             runnable="com.bizvpm.dps.processor.plm.wcs.processor.SoftAttrQuery">
+         <parameter
+               description="对象ouid列表"
+               name="ouidList"
+               optional="false"
+               type="List">
+         </parameter>
+         <parameter
+               description="软属性列表"
+               name="attrList"
+               optional="false"
+               type="List">
+         </parameter>
+      </processor>
+       <processor
+             catalog="Windchill DS/BOM"
+             id="bomcountquery"
+             maxThreadCount="5"
+             name="查询bom零部件数量"
+             runnable="com.bizvpm.dps.processor.plm.wcs.processor.BomCountQuery">
+          <parameter
+                description="零部件ouid列表List&lt;String&gt;"
+                name="ids"
+                optional="false"
+                type="List">
+          </parameter>
+       </processor>
+       <processor
+             catalog="Windchill DS/零部件"
+             id="alternatesquery"
+             maxThreadCount="5"
+             name="全局替换查询"
+             runnable="com.bizvpm.dps.processor.plm.wcs.processor.AlternatesQuery">
+          <parameter
+                description="List&lt;String&gt; 每个元素是Ouid字符串 "
+                name="ids"
+                optional="false"
+                type="List">
+          </parameter>
+         </processor>
+       <processor
+             catalog="Windchill DS/零部件"
+             id="substitutequery"
+             maxThreadCount="5"
+             name="特定替代查询"
+             runnable="com.bizvpm.dps.processor.plm.wcs.processor.SubstituteQuery">
+          <parameter
+                description="List&lt;String&gt; 每个元素是Ouid字符串 "
+                name="linkIds"
+                optional="false"
+                type="List">
+          </parameter>
+ 
+       </processor>
+       <processor
+             catalog="Windchill DS/图文档"
+             id="epmquery"
+             maxThreadCount="5"
+             name="EPM对象查询"
+             runnable="com.bizvpm.dps.processor.plm.wcs.processor.EPMQuery">
+          <parameter
+                description="List&lt;String&gt; 每个元素是Ouid字符串 "
+                name="ids"
+                optional="false"
+                type="List">
+          </parameter>
+       </processor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="processor"
+            class="com.bizvpm.dps.processor.plm.wcs.PreferencePage"
+            id="com.bizvpm.dps.processor.plm.wcs.preferences.WindchillDSPreferencePage"
+            name="Windchill DS">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="com.bizvpm.dps.processor.plm.wcs.PreferenceInitializer">
+      </initializer>
+   </extension>
+
+</plugin>
