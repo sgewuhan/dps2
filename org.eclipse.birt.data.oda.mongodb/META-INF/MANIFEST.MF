@@ -1,0 +1,124 @@
+Manifest-Version: 1.0
+Bundle-Localization: plugin
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Built-By: build
+Bundle-SymbolicName: org.eclipse.birt.data.oda.mongodb;singleton:=true
+Bundle-Activator: org.eclipse.birt.data.oda.mongodb.Activator
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.datatools.connectivity.oda;bundle-version="[3.3.0,4.0.0)",
+ org.eclipse.datatools.connectivity.oda.profile;bundle-version="[3.2.0,4.0.0)",
+ org.mongodb.mongo-java-driver;bundle-version="3.8.0"
+Export-Package: org.eclipse.birt.data.oda.mongodb.impl,org.eclipse.bir
+ t.data.oda.mongodb.internal.impl;x-friends:="org.eclipse.birt.data.od
+ a.mongodb.ui"
+Bundle-Version: 4.5.0.v201809202134
+Build-Jdk: 1.7.0_51
+Bundle-ClassPath: .
+Bundle-ActivationPolicy: lazy
+Bundle-Vendor: Eclipse BIRT Project
+Bundle-Name: %plugin.name
+Archiver-Version: Plexus Archiver
+Created-By: Apache Maven 3.0.5
+Bundle-ManifestVersion: 2
+
+Name: org/eclipse/birt/data/oda/mongodb/impl/MongoDBDriver$ReadPrefere
+ nceChoice.class
+SHA1-Digest: 9EGycNhigTxRRFysTNQbZaEZxIA=
+
+Name: org/eclipse/birt/data/oda/mongodb/internal/impl/DriverUtil.class
+SHA1-Digest: Kv2NNuwBBszofdvsiJULuZ9MfNQ=
+
+Name: org/eclipse/birt/data/oda/mongodb/impl/MongoDBDriver.class
+SHA1-Digest: T04a9f91hglEA2enGa2QF1cg/X0=
+
+Name: META-INF/maven/org.eclipse.birt/org.eclipse.birt.data.oda.mongod
+ b/pom.xml
+SHA1-Digest: w1BCsJuc8O0pBBJsc9eGhuGfjcU=
+
+Name: plugin.properties
+SHA1-Digest: yhyRc6sGUUnuHqbfxowJybcObmA=
+
+Name: org/eclipse/birt/data/oda/mongodb/impl/MDbResultSetMetaData.clas
+ s
+SHA1-Digest: VdwQaQudMA7OmpagqeoYc5wJC+E=
+
+Name: org/eclipse/birt/data/oda/mongodb/impl/DataSetMetaData.class
+SHA1-Digest: DDmJl5J9lFtXz8txYu5FmdqIehI=
+
+Name: org/eclipse/birt/data/oda/mongodb/internal/impl/MDbOperation.cla
+ ss
+SHA1-Digest: GbzoYRF2U0PmP0smpIh0PtWygUw=
+
+Name: org/eclipse/birt/data/oda/mongodb/internal/impl/QueryProperties.
+ class
+SHA1-Digest: KuhyE7NXCWFcpV6gv/AUh14JJuU=
+
+Name: org/eclipse/birt/data/oda/mongodb/impl/MDbConnection.class
+SHA1-Digest: IZoXYSDlHiKujL4lifSScif5eEY=
+
+Name: org/eclipse/birt/data/oda/mongodb/internal/impl/MDbMetaData$Docu
+ mentsMetaData.class
+SHA1-Digest: zatVHJogeN6Ahh1rWvgJ+EgtqwQ=
+
+Name: org/eclipse/birt/data/oda/mongodb/internal/impl/MDbMetaData$Fiel
+ dMetaData.class
+SHA1-Digest: uWA+zifqk6lQ8tGKWuorqXN2UBs=
+
+Name: org/eclipse/birt/data/oda/mongodb/internal/impl/ArrayFieldValues
+ .class
+SHA1-Digest: iuOVEnORU1UClK3d+329IekE0QA=
+
+Name: plugin.xml
+SHA1-Digest: t/xDS3GzhIqvpbZnG4e7UHmOZsg=
+
+Name: org/eclipse/birt/data/oda/mongodb/internal/impl/ResultDataHandle
+ r.class
+SHA1-Digest: eax8N9XaGgQs2MIBQGCDD6zOsgY=
+
+Name: org/eclipse/birt/data/oda/mongodb/impl/MDbResultSet.class
+SHA1-Digest: T+4CI4GT53nE238NyPzvlWHDbWw=
+
+Name: org/eclipse/birt/data/oda/mongodb/nls/Messages.class
+SHA1-Digest: KP8WHxbne91y/mGvIIuXblQLVG4=
+
+Name: META-INF/eclipse.inf
+SHA1-Digest: 09gN05tobgS/MdtqyTNQhOhB73M=
+
+Name: org/eclipse/birt/data/oda/mongodb/impl/MDbQuery.class
+SHA1-Digest: 5KbrEiSOBg1ebc+q+QukS9wIIe4=
+
+Name: org/eclipse/birt/data/oda/mongodb/impl/ParameterMetaData.class
+SHA1-Digest: 0oFf5MGUiCJXvZbu/6mz009USmQ=
+
+Name: org/eclipse/birt/data/oda/mongodb/nls/messages.properties
+SHA1-Digest: Xyu7KasIk/3lOVtxExGwznjzIqc=
+
+Name: about.html
+SHA1-Digest: 8rMTPjyWWuNAfKUYG5B5vLfupP8=
+
+Name: org/eclipse/birt/data/oda/mongodb/Activator.class
+SHA1-Digest: UztjZFeZ716GSkKRMu72fxUIa8c=
+
+Name: org/eclipse/birt/data/oda/mongodb/internal/impl/MDbMetaData.clas
+ s
+SHA1-Digest: EW1VqoTq6u+bxmZbgMpAiwoynog=
+
+Name: org/eclipse/birt/data/oda/mongodb/internal/impl/QueryProperties$
+ CommandOperationType.class
+SHA1-Digest: XFkg4fJnvZdjqMuRmqX+e2jMkxY=
+
+Name: org/eclipse/birt/data/oda/mongodb/internal/impl/QueryModel.class
+SHA1-Digest: 1Lbv4ydSOIu0IUix1/nU8d3Uf48=
+
+Name: META-INF/maven/org.eclipse.birt/org.eclipse.birt.data.oda.mongod
+ b/pom.properties
+SHA1-Digest: /44fflU+NoikkZGtoqtaODRTa6Q=
+
+Name: org/eclipse/birt/data/oda/mongodb/impl/MongoDBDriver$ServerNodeK
+ ey.class
+SHA1-Digest: ZR9ceBing7rOLmUsPCsSkW09xuw=
+
+Name: org/eclipse/birt/data/oda/mongodb/internal/impl/MDbOperation$Com
+ mandOperation.class
+SHA1-Digest: hmru+iJgTihsqgCwIfaj85Fihmc=
+
