@@ -316,13 +316,6 @@ a. 遵守购买本软件时您所在国家/地区的法律。
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.birt.data.oda.mongodb"
-         download-size="0"
-         install-size="0"
-         version="4.5.0.v201506092134"
-         unpack="false"/>
-
-   <plugin
          id="org.eclipse.birt.data.oda.pojo"
          download-size="0"
          install-size="0"
@@ -629,13 +622,6 @@ a. 遵守购买本软件时您所在国家/地区的法律。
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.orbit.mongodb"
-         download-size="0"
-         install-size="0"
-         version="2.10.1.v20130422-1135"
-         unpack="false"/>
-
-   <plugin
          id="org.mozilla.javascript"
          download-size="0"
          install-size="0"
@@ -771,6 +757,20 @@ a. 遵守购买本软件时您所在国家/地区的法律。
 
    <plugin
          id="org.apache.log4j"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.birt.data.oda.mongodb"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.mongodb.mongo-java-driver"
          download-size="0"
          install-size="0"
          version="0.0.0"
