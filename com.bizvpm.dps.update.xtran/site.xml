@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/com.bizvpm.dps.processor.acmecad.feature_1.0.0.201809190957.jar" id="com.bizvpm.dps.processor.acmecad.feature" version="1.0.0.201809190957">
+   <feature url="features/com.bizvpm.dps.processor.acmecad.feature_1.0.0.201810021121.jar" id="com.bizvpm.dps.processor.acmecad.feature" version="1.0.0.201810021121">
       <category name="bizvpm.dps.transfer"/>
    </feature>
-   <feature url="features/com.bizvpm.dps.processor.msoffice.feature_1.0.0.201809190957.jar" id="com.bizvpm.dps.processor.msoffice.feature" version="1.0.0.201809190957">
+   <feature url="features/com.bizvpm.dps.processor.openoffice.feature_1.0.0.201810021121.jar" id="com.bizvpm.dps.processor.openoffice.feature" version="1.0.0.201810021121">
       <category name="bizvpm.dps.transfer"/>
    </feature>
-   <feature url="features/com.bizvpm.dps.processor.email.feature_1.0.0.201809190957.jar" id="com.bizvpm.dps.processor.email.feature" version="1.0.0.201809190957">
+   <feature url="features/com.bizvpm.dps.processor.email.feature_1.0.0.201810021121.jar" id="com.bizvpm.dps.processor.email.feature" version="1.0.0.201810021121">
       <category name="bizvpm.dps.communication"/>
    </feature>
-   <feature url="features/com.bizvpm.dps.processor.dispatch.feature_1.0.0.201809190957.jar" id="com.bizvpm.dps.processor.dispatch.feature" version="1.0.0.201809190957">
+   <feature url="features/com.bizvpm.dps.processor.dispatch.feature_1.0.0.201810021121.jar" id="com.bizvpm.dps.processor.dispatch.feature" version="1.0.0.201810021121">
       <category name="bizvpm.dps.dispatch"/>
    </feature>
    <category-def name="bizvpm.dps.transfer" label="Distribute File Transfer Service"/>
