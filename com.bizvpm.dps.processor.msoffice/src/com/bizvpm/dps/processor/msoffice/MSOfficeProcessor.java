@@ -22,8 +22,8 @@ public class MSOfficeProcessor implements IProcessorRunable {
 	private String targetType;
 
 	@Override
-	public ProcessResult run(ProcessTask processTask, IProgressMonitor monitor,
-			IProcessContext context) throws Exception {
+	public ProcessResult run(ProcessTask processTask, IProgressMonitor monitor, IProcessContext context)
+			throws Exception {
 		init(processTask);
 		convert();
 
@@ -44,7 +44,7 @@ public class MSOfficeProcessor implements IProcessorRunable {
 		Dispatch dis = null;
 		ActiveXComponent app = null;
 
-		AbstractMSOfficeConverter msOfficeConverter = AbstractMSOfficeConverter.getInstance(sourceType);
+		AbstractMSOfficeConverter msOfficeConverter = AbstractMSOfficeConverter.getInstance(sourceType, targetType);
 		try {
 			ComThread.InitSTA();
 			app = msOfficeConverter.getActiveXComponent();
@@ -63,8 +63,8 @@ public class MSOfficeProcessor implements IProcessorRunable {
 
 		long time = new Date().getTime();
 
-		String pathName = DPSUtil.getTempDirector(getClass(),true);
-		
+		String pathName = DPSUtil.getTempDirector(getClass(), true);
+
 		inputFile = new File(pathName + time + "." + sourceType);
 		outputFile = new File(pathName + time + "." + targetType);
 
