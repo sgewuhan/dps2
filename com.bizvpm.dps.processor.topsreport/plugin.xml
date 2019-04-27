@@ -7,6 +7,7 @@
             id="topsreport"
             maxThreadCount="5"
             name="TOPS报表生成"
+            processorActivater="com.bizvpm.dps.processor.topsreport.TOPSReportStarter"
             runnable="com.bizvpm.dps.processor.topsreport.TOPSReportProcessor">
          <parameter
                description="模板文件，可以是url String类型也可以是file"
@@ -44,14 +45,8 @@
             category="processor"
             class="com.bizvpm.dps.processor.topsreport.PreferencePage"
             id="com.bizvpm.dps.processor.topsreport.PreferencePage"
-            name="tops 数据服务器">
+            name="tops 报表服务器">
       </page>
-   </extension>
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="com.bizvpm.dps.processor.topsreport.PreferenceInitializer">
-      </initializer>
    </extension>
 
 </plugin>

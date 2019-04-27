@@ -47,6 +47,7 @@ import com.bizvpm.dps.runtime.ProcessTask;
 import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.ComThread;
 import com.jacob.com.Dispatch;
+import com.jacob.com.Variant;
 
 public class TOPSReportProcessor implements IProcessorRunable {
 
@@ -59,6 +60,9 @@ public class TOPSReportProcessor implements IProcessorRunable {
 	private static final String PARA_REPORT_SERVERPATH = "serverPath";
 
 	private static final String PARA_REPORT_FILENAME = "fileName";
+
+	// private static final String SYSTEM_TEMPORARY_PATH =
+	// System.getProperty("java.io.tmpdir");
 
 	public TOPSReportProcessor() {
 	}
@@ -123,19 +127,36 @@ public class TOPSReportProcessor implements IProcessorRunable {
 		Dispatch dis = null;
 		ActiveXComponent app = null;
 
-		AbstractMSOfficeConverter msOfficeConverter = AbstractMSOfficeConverter.getInstance();
 		try {
 			ComThread.InitSTA();
-			app = msOfficeConverter.getActiveXComponent();
-			dis = msOfficeConverter.openDocument(app, filename);
-			msOfficeConverter.convert(dis, toFilename);
+			app = new ActiveXComponent("Word.Application");
+			app.setProperty("Visible", false);
+			dis = app.getProperty("Documents").toDispatch();
+			// dis = Dispatch.invoke(dis, "Add", Dispatch.Method, new Object[0], new
+			// int[1]).toDispatch();
+			dis = Dispatch.call(dis, "Open", Activator.getDefault().getTemplatePath()).toDispatch();
+			Dispatch.invoke(app.getProperty("Selection").toDispatch(), "InsertFile", Dispatch.Method,
+					new Object[] { filename, "", new Variant(false), new Variant(false), new Variant(false) },
+					new int[3]);
+
+			// 参数new Variant(16)
+			// word
+			// 另存格式参数列表https://docs.microsoft.com/zh-cn/dotnet/api/microsoft.office.interop.word.wdsaveformat?view=word-pia
+			// 在MSDN中可用WdSaveFormat 进行查询
+			Dispatch.invoke(dis, "SaveAs", Dispatch.Method, new Object[] { toFilename, new Variant(16) }, new int[1]);
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			msOfficeConverter.dispose(app, dis);
+			if (dis != null) {
+				Dispatch.call(dis, "Close", false);
+			}
+			if (app != null) {
+				app.invoke("Quit", 0);
+				app = null;
+			}
 		}
 
-		// TODO 获取下载文件，并生成ZIP
+		// 获取下载文件，并生成ZIP
 		File att = new File(pathName + time + File.separator + "附件");
 		att.mkdirs();
 
@@ -152,7 +173,7 @@ public class TOPSReportProcessor implements IProcessorRunable {
 		// 调用函数
 		compress(zipOut, bos, att, att.getName());
 		compress(zipOut, bos, outputFile, outputFile.getName());
-		
+
 		bos.close();
 		zipOut.close();
 
@@ -246,14 +267,27 @@ public class TOPSReportProcessor implements IProcessorRunable {
 
 		String regEx_html = "___HTML___(.*?)(___EHTML___)";
 		Pattern p_html = Pattern.compile(regEx_html, Pattern.CASE_INSENSITIVE);
-		Matcher om = p_html.matcher(html);
-		while (om.find()) {
-			String o_html = om.group();
+		Matcher m_html = p_html.matcher(html);
+		while (m_html.find()) {
+			String o_html = m_html.group();
 			String n_html = o_html.replaceAll("&#xa0;", "");
 			n_html = n_html.replaceAll("<br/>", "");
 			n_html = n_html.replaceAll("___HTML___", "");
 			n_html = n_html.replaceAll("___EHTML___", "");
 			html = html.replace(o_html, n_html);
+		}
+		
+		
+		
+		String regEx_file = "___FILE___(.*?)(___EFILE___)";
+		Pattern p_file = Pattern.compile(regEx_file, Pattern.CASE_INSENSITIVE);
+		Matcher m_file = p_file.matcher(html);
+		while (m_file.find()) {
+			String o_file = m_file.group();
+			String n_flie = o_file.replaceAll(",", "<br/>");
+			n_flie = n_flie.replaceAll("___FILE___\\[", "");
+			n_flie = n_flie.replaceAll("\\]___EFILE___", "");
+			html = html.replace(o_file, n_flie);
 		}
 
 		html = html.replaceAll("</p><br/>", "</p>");

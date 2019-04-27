@@ -65,4 +65,9 @@ public class Activator extends AbstractUIPlugin {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		return store.getString(PreferenceConstacts.IP);
 	}
+
+	public String getTemplatePath() {
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		return store.getString(PreferenceConstacts.TEMPLATEPATH);
+	}
 }

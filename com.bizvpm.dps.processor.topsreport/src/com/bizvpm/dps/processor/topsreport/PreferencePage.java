@@ -12,7 +12,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	public PreferencePage() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Server地址");
+		setDescription("TOPS Server地址");
 	}
 
 	@Override
@@ -28,7 +28,9 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 */
 	public void createFieldEditors() {
 		Composite parent = getFieldEditorParent();
-		addField(new StringFieldEditor(PreferenceConstacts.IP, "Server地址", parent));
+		addField(new StringFieldEditor(PreferenceConstacts.IP, "TOPS Server地址", parent));
+
+		addField(new StringFieldEditor(PreferenceConstacts.TEMPLATEPATH, "Word模板文件", parent));
 	}
 
 	/*
