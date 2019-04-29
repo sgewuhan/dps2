@@ -39,6 +39,10 @@ import org.eclipse.birt.report.model.api.SlotHandle;
 import org.eclipse.birt.report.model.api.activity.SemanticException;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import com.bizvpm.dps.runtime.DPSUtil;
 import com.bizvpm.dps.runtime.IProcessContext;
@@ -110,7 +114,6 @@ public class TOPSReportProcessor implements IProcessorRunable {
 		dir.mkdirs();
 
 		// 下载并处理图片
-
 		File img = new File(pathName + time + File.separator + "image");
 		img.mkdirs();
 
@@ -384,6 +387,7 @@ public class TOPSReportProcessor implements IProcessorRunable {
 
 	private String convertHTML(String html, String host, Map<String, String> downloadFileUrl,
 			Map<String, String> pics) {
+
 		html = html.replaceAll("&amp;", "&");
 		html = html.replaceAll("&quot;", "'");
 		html = html.replaceAll("&lt;", "<");
@@ -417,6 +421,8 @@ public class TOPSReportProcessor implements IProcessorRunable {
 			String n_flie = o_file.replaceAll(",", "<br/>");
 			n_flie = n_flie.replaceAll("___FILE___\\[", "");
 			n_flie = n_flie.replaceAll("\\]___EFILE___", "");
+			n_flie = n_flie.replaceAll("___FILE___", "");
+			n_flie = n_flie.replaceAll("___EFILE___", "");
 			html = html.replace(o_file, n_flie);
 		}
 
@@ -441,6 +447,8 @@ public class TOPSReportProcessor implements IProcessorRunable {
 		html = html.replaceAll("</p><br/>", "</p>");
 
 		html = html.replaceAll("</p><br/>", "</p>");
+		
+		html = html.replaceAll("null", "");
 
 		// 格式化下载文件并获取下载文件地址。
 		String regEx_a = "<a(.*?)(</a>)";
@@ -461,6 +469,58 @@ public class TOPSReportProcessor implements IProcessorRunable {
 			}
 			html = html.replace(o_a, fileName);
 		}
+
+		Document doc = Jsoup.parse(html);
+		Elements tables = doc.getElementsByTag("table");
+		for (Element table : tables) {
+			Elements children = table.children();
+			String[] widths = null;
+			if ("colgroup".equals(children.get(0).tagName().toLowerCase())) {
+				widths = new String[children.size() - 1];
+				for (int i = 0; i < children.size() - 1; i++) {
+					Element element = children.get(i);
+					Elements col = element.getElementsByTag("col");
+					if (col.hasAttr("style")) {
+						widths[i] = col.attr("style");
+					}
+				}
+			}
+			if (widths != null) {
+				Element element = children.get(children.size() - 1);
+				Elements tbody = element.children();
+				Elements trs = null;
+				if ("tbody".equals(tbody.get(0).tagName().toLowerCase())) {
+					trs = tbody.get(0).children();
+				} else if ("tr".equals(tbody.get(0).tagName().toLowerCase())) {
+					trs = element.children();
+				}
+				if (trs != null) {
+					for (Element tr : trs) {
+						Elements tds = tr.children();
+						for (int i = 0; i < tds.size() ; i++) {
+							if (tds.get(i).hasAttr("colspan")) {
+								int colspan = Integer.parseInt(tds.get(i).attr("colspan"));
+								i = i + colspan - 1;
+							} else {
+								String width = widths[i];
+								if (width != null) {
+									if (tds.get(i).hasAttr("style")) {
+										String attr = tds.get(i).attr("style");
+										tds.get(i).removeAttr("style");
+										tds.get(i).attr("style", attr + ";" + width);
+									} else {
+										tds.get(i).attr("style", width);
+									}
+								}
+							}
+						}
+					}
+
+				}
+
+			}
+		}
+		html = doc.toString();
 		return html;
 	}
 

@@ -16,5 +16,6 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: libs/mongo-java-driver-3.8.0.jar,
  libs/jacob.jar,
- .
+ .,
+ libs/jsoup-1.11.3.jar
 Import-Package: org.apache.commons.io
