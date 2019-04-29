@@ -1,5 +1,6 @@
 package com.bizvpm.dps.processor.topsreport;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
@@ -91,9 +92,10 @@ public class TOPSReportProcessor implements IProcessorRunable {
 		String html = out.toString("utf-8");
 
 		Map<String, String> downloadFileUrl = new HashMap<String, String>();
+		Map<String, String> pics = new HashMap<String, String>();
 
 		String host = (String) processTask.get(PARA_REPORT_SERVERPATH);
-		html = convertHTML(html, host, downloadFileUrl);
+		html = convertHTML(html, host, downloadFileUrl, pics);
 
 		String pathName = DPSUtil.getTempDirector(getClass(), true);
 
@@ -106,6 +108,14 @@ public class TOPSReportProcessor implements IProcessorRunable {
 
 		File dir = new File(pathName + time);
 		dir.mkdirs();
+
+		// 下载并处理图片
+
+		File img = new File(pathName + time + File.separator + "image");
+		img.mkdirs();
+
+		Map<String, String> picBuffereds = new HashMap<String, String>();
+		downloadAndScaleFitImage(pics, picBuffereds, img.getPath());
 
 		File inputFile = new File(pathName + time + File.separator + fileName + ".html");
 
@@ -135,9 +145,19 @@ public class TOPSReportProcessor implements IProcessorRunable {
 			// dis = Dispatch.invoke(dis, "Add", Dispatch.Method, new Object[0], new
 			// int[1]).toDispatch();
 			dis = Dispatch.call(dis, "Open", Activator.getDefault().getTemplatePath()).toDispatch();
-			Dispatch.invoke(app.getProperty("Selection").toDispatch(), "InsertFile", Dispatch.Method,
+			Dispatch selection = app.getProperty("Selection").toDispatch();
+			Dispatch.invoke(selection, "InsertFile", Dispatch.Method,
 					new Object[] { filename, "", new Variant(false), new Variant(false), new Variant(false) },
 					new int[3]);
+
+			// 替换图片
+			for (String replaceText : picBuffereds.keySet()) {
+				String imgPath = picBuffereds.get(replaceText);
+				Dispatch.call(selection, "HomeKey", new Variant(6));
+				while (find(selection, replaceText)) {
+					insertImage(selection, imgPath);
+				}
+			}
 
 			// 参数new Variant(16)
 			// word
@@ -156,11 +176,17 @@ public class TOPSReportProcessor implements IProcessorRunable {
 			}
 		}
 
+		// // 使用POI打开文档
+		// FileInputStream fis = new FileInputStream(toFilename);
+		// XWPFDocument document = new XWPFDocument(OPCPackage.open(fis));
+		// // 设置图片尺寸
+		// setPictures(document.getTables());
+
 		// 获取下载文件，并生成ZIP
 		File att = new File(pathName + time + File.separator + "附件");
 		att.mkdirs();
 
-		downloadFile(downloadFileUrl, host, pathName + time + File.separator + "附件");
+		downloadFile(downloadFileUrl, host, att.getPath());
 
 		ProcessResult result = new ProcessResult();
 
@@ -183,6 +209,111 @@ public class TOPSReportProcessor implements IProcessorRunable {
 		result.put("result", resultDataHandler);
 		return result;
 	}
+
+	/**
+	 * 向当前插入点替换图片
+	 * 
+	 * @param imagePath
+	 *            图片的路径
+	 */
+	private void insertImage(Dispatch selection, String imagePath) {
+		Dispatch.call(Dispatch.get(selection, "InLineShapes").toDispatch(), "AddPicture", imagePath);
+	}
+
+	private boolean find(Dispatch selection, String toFindText) {
+		// 从selection所在位置开始查询
+		Dispatch find = Dispatch.call(selection, "Find").toDispatch();
+		// 设置要查找的文本
+		Dispatch.put(find, "Text", toFindText);
+		// 向前查找
+		Dispatch.put(find, "Forward", "True");
+		// 设置格式
+		Dispatch.put(find, "Format", "True");
+		// 大小写匹配
+		Dispatch.put(find, "MatchCase", "True");
+		// 全字匹配
+		Dispatch.put(find, "MatchWholeWord", "True");
+		// 查找并选中
+		return Dispatch.call(find, "Execute").getBoolean();
+	}
+
+	private void downloadAndScaleFitImage(Map<String, String> pics, Map<String, String> picBuffereds, String saveDir) {
+		for (String key : pics.keySet()) {
+
+			try {
+				String url = pics.get(key);
+				if (url.indexOf("/bvs/fs") >= 0) {
+					String id = "";
+					String namespace = "";
+					String fileName = "";
+					String[] split = url.split("\\?");
+					if (split.length > 1) {
+						String[] paras = split[1].split("&");
+						for (String para : paras) {
+							if (para.startsWith("id=")) {
+								id = para.replace("id=", "");
+							}
+							if (para.startsWith("namespace=")) {
+								namespace = para.replace("namespace=", "");
+							}
+							if (para.startsWith("name=")) {
+								fileName = para.replace("name=", "");
+							}
+						}
+					}
+					url = Activator.getDefault().getServer() + "/fs/" + namespace + "/" + id + "/"
+							+ URLEncoder.encode(fileName, "utf-8");
+					File file = new File(saveDir + File.separator + fileName);
+					// 缩放图片
+					BufferedImage image = ImageUtil.getBufferedImage(new URL(url));
+					int width = 200;
+					int height = width * image.getHeight() / image.getWidth();
+
+					image = ImageUtil.fitImage(image, width, height);
+					ImageUtil.saveImage(image, file.getPath(), "jpg");
+					picBuffereds.put(key, file.getPath());
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	// /**
+	// * 使用POI读取word文档
+	// * @param tables
+	// */
+	// private void setPictures(List<XWPFTable> tables) {
+	// for (XWPFTable table : tables) {
+	// List<XWPFTableRow> rows = table.getRows();
+	// for (XWPFTableRow row : rows) {
+	// List<XWPFTableCell> tableCells = row.getTableCells();
+	// for (XWPFTableCell cell : tableCells) {
+	// List<XWPFTable> child = cell.getTables();
+	// if (child != null && child.size() > 0) {
+	// setPictures(child);
+	// } else {
+	// List<XWPFParagraph> paragraphs = cell.getParagraphs();
+	// for (XWPFParagraph paragraph : paragraphs) {
+	// List<XWPFRun> runs = paragraph.getRuns();
+	// List<XWPFRun> allRuns = new ArrayList<XWPFRun>(runs);
+	// for (XWPFRun run : allRuns) {
+	// // 获取单个对象
+	// String text = run.getText(run.getTextPosition());
+	// if (text == null) {
+	// // 处理图片
+	// List<XWPFPicture> pictures = run.getEmbeddedPictures();
+	// for (XWPFPicture picture : pictures) {
+	//
+	// }
+	// }
+	// }
+	// }
+	// }
+	// }
+	// }
+	// }
+	// }
 
 	private void compress(ZipOutputStream out, BufferedOutputStream bos, File sourceFile, String base) {
 		try {
@@ -251,7 +382,8 @@ public class TOPSReportProcessor implements IProcessorRunable {
 		}
 	}
 
-	private String convertHTML(String html, String host, Map<String, String> downloadFileUrl) {
+	private String convertHTML(String html, String host, Map<String, String> downloadFileUrl,
+			Map<String, String> pics) {
 		html = html.replaceAll("&amp;", "&");
 		html = html.replaceAll("&quot;", "'");
 		html = html.replaceAll("&lt;", "<");
@@ -276,9 +408,7 @@ public class TOPSReportProcessor implements IProcessorRunable {
 			n_html = n_html.replaceAll("___EHTML___", "");
 			html = html.replace(o_html, n_html);
 		}
-		
-		
-		
+
 		String regEx_file = "___FILE___(.*?)(___EFILE___)";
 		Pattern p_file = Pattern.compile(regEx_file, Pattern.CASE_INSENSITIVE);
 		Matcher m_file = p_file.matcher(html);
@@ -288,6 +418,24 @@ public class TOPSReportProcessor implements IProcessorRunable {
 			n_flie = n_flie.replaceAll("___FILE___\\[", "");
 			n_flie = n_flie.replaceAll("\\]___EFILE___", "");
 			html = html.replace(o_file, n_flie);
+		}
+
+		// 获取图片
+		int count = 0;
+		String regEx_image = "<(img|IMG)(.*?)(>|></img>|/>)";
+		Pattern p_image = Pattern.compile(regEx_image, Pattern.CASE_INSENSITIVE);
+		Matcher m_image = p_image.matcher(html);
+		while (m_image.find()) {
+			count++;
+			String o_image = m_image.group();
+			String group = m_image.group(2);
+			Pattern srcText = Pattern.compile("(src|SRC)=(\"|\')(.*?)(\"|\')");// 匹配图片的地址
+			Matcher matcher2 = srcText.matcher(group);
+			if (matcher2.find()) {
+				String sImg = "${imgReplace" + count + "}";
+				pics.put(sImg, matcher2.group(3));
+				html = html.replace(o_image, sImg);
+			}
 		}
 
 		html = html.replaceAll("</p><br/>", "</p>");
@@ -376,6 +524,10 @@ public class TOPSReportProcessor implements IProcessorRunable {
 
 		designStream.close();
 		return reportRunnable;
+	}
+
+	public static void main(String[] args) {
+
 	}
 
 }
