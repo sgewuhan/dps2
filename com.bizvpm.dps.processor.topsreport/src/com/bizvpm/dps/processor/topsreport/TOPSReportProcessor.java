@@ -118,7 +118,7 @@ public class TOPSReportProcessor implements IProcessorRunable {
 		img.mkdirs();
 
 		Map<String, String> picBuffereds = new HashMap<String, String>();
-		downloadAndScaleFitImage(pics, picBuffereds, img.getPath());
+		downloadImage(pics, picBuffereds, img.getPath());
 
 		File inputFile = new File(pathName + time + File.separator + fileName + ".html");
 
@@ -156,6 +156,7 @@ public class TOPSReportProcessor implements IProcessorRunable {
 			// 替换图片
 			for (String replaceText : picBuffereds.keySet()) {
 				String imgPath = picBuffereds.get(replaceText);
+				// 将光标移动到起始位置
 				Dispatch.call(selection, "HomeKey", new Variant(6));
 				while (find(selection, replaceText)) {
 					insertImage(selection, imgPath);
@@ -189,7 +190,7 @@ public class TOPSReportProcessor implements IProcessorRunable {
 		File att = new File(pathName + time + File.separator + "附件");
 		att.mkdirs();
 
-		downloadFile(downloadFileUrl, host, att.getPath());
+		downloadFile(downloadFileUrl, att.getPath());
 
 		ProcessResult result = new ProcessResult();
 
@@ -201,6 +202,7 @@ public class TOPSReportProcessor implements IProcessorRunable {
 		BufferedOutputStream bos = new BufferedOutputStream(zipOut);
 		// 调用函数
 		compress(zipOut, bos, att, att.getName());
+		compress(zipOut, bos, img, img.getName());
 		compress(zipOut, bos, outputFile, outputFile.getName());
 
 		bos.close();
@@ -220,9 +222,43 @@ public class TOPSReportProcessor implements IProcessorRunable {
 	 *            图片的路径
 	 */
 	private void insertImage(Dispatch selection, String imagePath) {
-		Dispatch.call(Dispatch.get(selection, "InLineShapes").toDispatch(), "AddPicture", imagePath);
+		// 获得图片原始尺寸并计算缩放后的尺寸
+		BufferedImage image = ImageUtil.getBufferedImage(imagePath);
+
+		int width = 200;
+		int height = width * image.getHeight() / image.getWidth();
+
+		// 插入图片
+		Dispatch picture = Dispatch.call(Dispatch.get(selection, "InLineShapes").toDispatch(), "AddPicture", imagePath)
+				.getDispatch();
+		Dispatch.call(picture, "Select");
+		Dispatch.put(picture, "Width", new Variant(width));// 设置图片宽度
+		Dispatch.put(picture, "Height", new Variant(height));// 设置图片高度
+		// Dispatch ShapeRange = Dispatch.call(picture, "ConvertToShape").toDispatch();
+		// // 取得图片区域
+		// Dispatch WrapFormat = Dispatch.get(ShapeRange, "WrapFormat").toDispatch(); //
+		// 取得图片的格式对象
+		// Dispatch.put(WrapFormat, "Type", 5);
+		// 设置环绕格式（0 - 7）下面是参数说明
+		// wdWrapInline 7 将形状嵌入到文字中。
+		// wdWrapNone 3 将形状放在文字前面。请参阅 wdWrapFront 。
+		// wdWrapSquare 0 使文字环绕形状。行在形状的另一侧延续。
+		// wdWrapThrough 2 使文字环绕形状。
+		// wdWrapTight 1 使文字紧密地环绕形状。
+		// wdWrapTopBottom 4 将文字放在形状的上方和下方。
+		// wdWrapBehind 5 将形状放在文字后面。
+		// wdWrapFront 6 将形状放在文字前面。
 	}
 
+	/**
+	 * 查找word中的内容
+	 * 
+	 * @param selection
+	 *            选中位置
+	 * @param toFindText
+	 *            需要查找的内容
+	 * @return 是否找到待查找的内容
+	 */
 	private boolean find(Dispatch selection, String toFindText) {
 		// 从selection所在位置开始查询
 		Dispatch find = Dispatch.call(selection, "Find").toDispatch();
@@ -240,10 +276,21 @@ public class TOPSReportProcessor implements IProcessorRunable {
 		return Dispatch.call(find, "Execute").getBoolean();
 	}
 
-	private void downloadAndScaleFitImage(Map<String, String> pics, Map<String, String> picBuffereds, String saveDir) {
+	/**
+	 * TODO 可以优化到与HTML转换时进行下载操作。 下载图片
+	 * 
+	 * @param pics
+	 *            图片集合，key为替换后的图片变量名称，value为图片url
+	 * @param picBuffereds
+	 *            新图片集合，key为替换后的图片变量名称，value为图片文件存放位置
+	 * @param saveDir
+	 *            图片存放临时文件夹
+	 */
+	private void downloadImage(Map<String, String> pics, Map<String, String> picBuffereds, String saveDir) {
 		for (String key : pics.keySet()) {
 
 			try {
+				// 获取图片下载地址，应该地址为客户端地址，因此转换成服务端地址进行下载。
 				String url = pics.get(key);
 				if (url.indexOf("/bvs/fs") >= 0) {
 					String id = "";
@@ -266,13 +313,9 @@ public class TOPSReportProcessor implements IProcessorRunable {
 					}
 					url = Activator.getDefault().getServer() + "/fs/" + namespace + "/" + id + "/"
 							+ URLEncoder.encode(fileName, "utf-8");
+					// 下载并将图片存放到临时文件夹中
 					File file = new File(saveDir + File.separator + fileName);
-					// 缩放图片
 					BufferedImage image = ImageUtil.getBufferedImage(new URL(url));
-					int width = 200;
-					int height = width * image.getHeight() / image.getWidth();
-
-					image = ImageUtil.fitImage(image, width, height);
 					ImageUtil.saveImage(image, file.getPath(), "jpg");
 					picBuffereds.put(key, file.getPath());
 				}
@@ -282,42 +325,18 @@ public class TOPSReportProcessor implements IProcessorRunable {
 		}
 	}
 
-	// /**
-	// * 使用POI读取word文档
-	// * @param tables
-	// */
-	// private void setPictures(List<XWPFTable> tables) {
-	// for (XWPFTable table : tables) {
-	// List<XWPFTableRow> rows = table.getRows();
-	// for (XWPFTableRow row : rows) {
-	// List<XWPFTableCell> tableCells = row.getTableCells();
-	// for (XWPFTableCell cell : tableCells) {
-	// List<XWPFTable> child = cell.getTables();
-	// if (child != null && child.size() > 0) {
-	// setPictures(child);
-	// } else {
-	// List<XWPFParagraph> paragraphs = cell.getParagraphs();
-	// for (XWPFParagraph paragraph : paragraphs) {
-	// List<XWPFRun> runs = paragraph.getRuns();
-	// List<XWPFRun> allRuns = new ArrayList<XWPFRun>(runs);
-	// for (XWPFRun run : allRuns) {
-	// // 获取单个对象
-	// String text = run.getText(run.getTextPosition());
-	// if (text == null) {
-	// // 处理图片
-	// List<XWPFPicture> pictures = run.getEmbeddedPictures();
-	// for (XWPFPicture picture : pictures) {
-	//
-	// }
-	// }
-	// }
-	// }
-	// }
-	// }
-	// }
-	// }
-	// }
-
+	/**
+	 * 压缩文件
+	 * 
+	 * @param out
+	 *            zip包输出流
+	 * @param bos
+	 *            缓冲流
+	 * @param sourceFile
+	 *            要压缩的文件夹或文件
+	 * @param base
+	 *            压缩的路径
+	 */
 	private void compress(ZipOutputStream out, BufferedOutputStream bos, File sourceFile, String base) {
 		try {
 			// 如果路径为目录（文件夹）
@@ -356,9 +375,18 @@ public class TOPSReportProcessor implements IProcessorRunable {
 		}
 	}
 
-	private void downloadFile(Map<String, String> downloadFileUrl, String host, String saveDir) {
+	/**
+	 * TODO 合并到HTML转换中. 下载文件
+	 * 
+	 * @param downloadFileUrl
+	 *            要下载的文件，key为替换后的图片变量名称，value为文件url
+	 * @param saveDir
+	 *            文件存放临时文件夹
+	 */
+	private void downloadFile(Map<String, String> downloadFileUrl, String saveDir) {
 		for (String fileName : downloadFileUrl.keySet()) {
 			try {
+				// 获取文件下载地址，应该地址为客户端地址，因此转换成服务端地址进行下载。
 				String url = downloadFileUrl.get(fileName);
 				if (url.indexOf("/bvs/fs") >= 0) {
 					String id = "";
@@ -378,6 +406,7 @@ public class TOPSReportProcessor implements IProcessorRunable {
 					url = Activator.getDefault().getServer() + "/fs/" + namespace + "/" + id + "/"
 							+ URLEncoder.encode(fileName, "utf-8");
 				}
+				// 下载文件
 				FileUtils.copyURLToFile(new URL(url), new File(saveDir + File.separator + fileName));
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -385,9 +414,22 @@ public class TOPSReportProcessor implements IProcessorRunable {
 		}
 	}
 
+	/**
+	 * 转换HTML
+	 * 
+	 * @param html
+	 *            birt生成的html
+	 * @param host
+	 *            客户端地址
+	 * @param downloadFileUrl
+	 *            要下载的附件
+	 * @param pics
+	 *            要下载的图片
+	 * @return 转换后的html
+	 */
 	private String convertHTML(String html, String host, Map<String, String> downloadFileUrl,
 			Map<String, String> pics) {
-
+		// 替换CKEditor中的关键字
 		html = html.replaceAll("&amp;", "&");
 		html = html.replaceAll("&quot;", "'");
 		html = html.replaceAll("&lt;", "<");
@@ -395,8 +437,7 @@ public class TOPSReportProcessor implements IProcessorRunable {
 		html = html.replaceAll("&amp;", "&");
 		html = html.replaceAll("&amp", "&");
 
-		// 替换地址
-		html = html.replaceAll("/bvs/fs", host + "/bvs/fs");
+		// html = html.replaceAll("/bvs/fs", host + "/bvs/fs");
 
 		html = html.replace("</head>", "<link rel='stylesheet' type='text/css'href='" + host
 				+ "/bvs/widgets/ckeditor/codebase/contents.css'></head>");
@@ -447,7 +488,7 @@ public class TOPSReportProcessor implements IProcessorRunable {
 		html = html.replaceAll("</p><br/>", "</p>");
 
 		html = html.replaceAll("</p><br/>", "</p>");
-		
+
 		html = html.replaceAll("null", "");
 
 		// 格式化下载文件并获取下载文件地址。
@@ -497,7 +538,7 @@ public class TOPSReportProcessor implements IProcessorRunable {
 				if (trs != null) {
 					for (Element tr : trs) {
 						Elements tds = tr.children();
-						for (int i = 0; i < tds.size() ; i++) {
+						for (int i = 0; i < tds.size(); i++) {
 							if (tds.get(i).hasAttr("colspan")) {
 								int colspan = Integer.parseInt(tds.get(i).attr("colspan"));
 								i = i + colspan - 1;
