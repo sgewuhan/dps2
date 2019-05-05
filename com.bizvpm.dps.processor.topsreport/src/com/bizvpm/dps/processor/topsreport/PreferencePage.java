@@ -1,6 +1,7 @@
 package com.bizvpm.dps.processor.topsreport;
 
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -12,7 +13,8 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	public PreferencePage() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("TOPS Server地址");
+		setDescription("TOPS报表转换器设置\n" + "TOPS Server地址：请在此处配置TOPS服务端地址。如：http://rs.wisplanner.com:9158/services\n"
+				+ "Word模板文件：请选择Word的模板文件（*.dotx）");
 	}
 
 	@Override
@@ -28,9 +30,16 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 */
 	public void createFieldEditors() {
 		Composite parent = getFieldEditorParent();
-		addField(new StringFieldEditor(PreferenceConstacts.IP, "TOPS Server地址", parent));
+		StringFieldEditor stringEditor = new StringFieldEditor(PreferenceConstacts.IP, "TOPS Server地址", parent);
+		stringEditor.setEmptyStringAllowed(false);
+		stringEditor.setErrorMessage("请填写TOPS Server地址，否则无法启动TOPS报表转换器");
+		addField(stringEditor);
 
-		addField(new StringFieldEditor(PreferenceConstacts.TEMPLATEPATH, "Word模板文件", parent));
+		FileFieldEditor fileEditor = new FileFieldEditor(PreferenceConstacts.TEMPLATEPATH, "Word模板文件", parent);
+		fileEditor.setFileExtensions(new String[] { "*.dotx" });
+		fileEditor.setEmptyStringAllowed(false);
+		fileEditor.setErrorMessage("请选择Word模板文件，否则无法启动TOPS报表转换器");
+		addField(fileEditor);
 	}
 
 	/*

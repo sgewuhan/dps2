@@ -6,7 +6,7 @@
       <processor
             id="topsreport"
             maxThreadCount="5"
-            name="TOPS报表生成"
+            name="TOPS报表转换器"
             processorActivater="com.bizvpm.dps.processor.topsreport.TOPSReportStarter"
             runnable="com.bizvpm.dps.processor.topsreport.TOPSReportProcessor">
          <parameter
@@ -45,7 +45,7 @@
             category="processor"
             class="com.bizvpm.dps.processor.topsreport.PreferencePage"
             id="com.bizvpm.dps.processor.topsreport.PreferencePage"
-            name="tops 报表服务器">
+            name="TOPS报表转换器">
       </page>
    </extension>
 

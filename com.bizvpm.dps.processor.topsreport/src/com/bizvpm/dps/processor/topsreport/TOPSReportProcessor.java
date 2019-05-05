@@ -627,8 +627,4 @@ public class TOPSReportProcessor implements IProcessorRunable {
 		return reportRunnable;
 	}
 
-	public static void main(String[] args) {
-
-	}
-
 }
