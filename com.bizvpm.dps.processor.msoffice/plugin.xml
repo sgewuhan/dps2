@@ -11,10 +11,10 @@
             runnable="com.bizvpm.dps.processor.msoffice.MSOfficeProcessor"
             webpage="desc.html">
          <parameter
-               description="需转换的Office文件"
+               description="需转换的文件"
                name="file"
                optional="false"
-               type="DataHandler">
+               type="uncheck">
          </parameter>
          <parameter
                name="sourceType"
@@ -38,6 +38,9 @@
             <restriction
                   value="pptx">
             </restriction>
+            <restriction
+                  value="html">
+            </restriction>
          </parameter>
          <parameter
                name="targetType"
@@ -46,6 +49,33 @@
             <restriction
                   value="pdf">
             </restriction>
+            <restriction
+                  value="docx">
+            </restriction>
+         </parameter>
+         <parameter
+               name="hasImage"
+               type="Boolean">
+         </parameter>
+         <parameter
+               name="hasAtt"
+               type="Boolean">
+         </parameter>
+         <parameter
+               name="returnZIP"
+               type="Boolean">
+         </parameter>
+         <parameter
+               name="template"
+               type="uncheck">
+         </parameter>
+         <parameter
+               name="serverPath"
+               type="String">
+         </parameter>
+         <parameter
+               name="targetName"
+               type="String">
          </parameter>
       </processor>
    </extension>

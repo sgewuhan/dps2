@@ -11,11 +11,11 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.birt.chart.engine;bundle-version="4.5.0",
  org.apache.commons.io;bundle-version="2.2.0",
  org.eclipse.ui,
- org.mongodb.mongo-java-driver;bundle-version="3.8.0"
+ org.mongodb.mongo-java-driver;bundle-version="3.8.0",
+ org.apache.commons.commons-text;bundle-version="1.6.0",
+ org.apache.commons.lang3;bundle-version="3.1.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Bundle-ClassPath: libs/mongo-java-driver-3.8.0.jar,
- libs/jacob.jar,
- .,
- libs/jsoup-1.11.3.jar
+Bundle-ClassPath: libs/jsoup-1.11.3.jar,
+ .
 Import-Package: org.apache.commons.io

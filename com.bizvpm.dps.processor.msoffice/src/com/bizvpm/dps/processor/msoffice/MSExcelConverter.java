@@ -1,10 +1,16 @@
 package com.bizvpm.dps.processor.msoffice;
 
+import java.util.Map;
+
 import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.Dispatch;
 import com.jacob.com.Variant;
 
 public class MSExcelConverter extends AbstractMSOfficeConverter {
+	public MSExcelConverter(String sourceType, String targetType) {
+		super.sourceType = sourceType;
+		super.targetType = targetType;
+	}
 
 	@Override
 	public ActiveXComponent getActiveXComponent() throws Exception {
@@ -14,14 +20,14 @@ public class MSExcelConverter extends AbstractMSOfficeConverter {
 	}
 
 	@Override
-	public Dispatch openDocument(ActiveXComponent app, String filename) throws Exception {
+	public Dispatch openDocument(ActiveXComponent app, String filename, String templatePath) throws Exception {
 		Dispatch dis = app.getProperty("Workbooks").toDispatch();
 		return Dispatch.invoke(dis, "Open", Dispatch.Method,
 				new Object[] { filename, new Variant(false), new Variant(false) }, new int[9]).toDispatch();
 	}
 
 	@Override
-	public void convert(Dispatch dis, String toFilename) throws Exception {
+	public void convert(ActiveXComponent app, Dispatch dis, String fromFilename, String toFilename,Map<String, String> pics) throws Exception {
 		// 原来的saveas只能打印活动或者指定的一个sheet内容
 		// Dispatch.invoke(dis, "SaveAs", Dispatch.Method, new Object[] {
 		// toFilename, new Variant(57), new Variant(false),

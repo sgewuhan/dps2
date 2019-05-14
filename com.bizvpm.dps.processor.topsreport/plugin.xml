@@ -10,31 +10,11 @@
             processorActivater="com.bizvpm.dps.processor.topsreport.TOPSReportStarter"
             runnable="com.bizvpm.dps.processor.topsreport.TOPSReportProcessor">
          <parameter
-               description="模板文件，可以是url String类型也可以是file"
-               name="design"
-               optional="false"
+               name="file"
                type="uncheck">
          </parameter>
          <parameter
-               description="报表任务参数，参考Birt设置"
-               name="task_parameter"
-               optional="true"
-               type="Map">
-         </parameter>
-         <parameter
-               description="服务器地址，下载服务器上图片和附件地址"
                name="serverPath"
-               type="String">
-         </parameter>
-         <parameter
-               description="传入数据xml地址，比如 key &quot;FILELIST&quot;, value &quot;http://document.xml&quot;"
-               name="datasource_parameter"
-               optional="true"
-               type="Map">
-         </parameter>
-         <parameter
-               description="生成文件名，默认为随机数"
-               name="fileName"
                type="String">
          </parameter>
       </processor>
