@@ -1,9 +1,5 @@
 package com.bizvpm.dps.processor.topsreport;
 
-import org.eclipse.birt.core.framework.Platform;
-import org.eclipse.birt.report.engine.api.EngineConfig;
-import org.eclipse.birt.report.engine.api.IReportEngine;
-import org.eclipse.birt.report.engine.api.IReportEngineFactory;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -16,8 +12,6 @@ public class Activator extends AbstractUIPlugin {
 		return context;
 	}
 
-	private static IReportEngine engine;
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -27,20 +21,8 @@ public class Activator extends AbstractUIPlugin {
 	public void start(BundleContext bundleContext) throws Exception {
 		Activator.context = bundleContext;
 		plugin = this;
-		engine = createEngine();
 	}
 
-	public static IReportEngine getEngine() {
-		return engine;
-	}
-
-	public IReportEngine createEngine() {
-		IReportEngineFactory factory = (IReportEngineFactory) Platform
-				.createFactoryObject(IReportEngineFactory.EXTENSION_REPORT_ENGINE_FACTORY);
-		EngineConfig config = new EngineConfig();
-		IReportEngine engine = factory.createReportEngine(config);
-		return engine;
-	}
 
 	private static Activator plugin;
 
@@ -55,9 +37,6 @@ public class Activator extends AbstractUIPlugin {
 	 * org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext bundleContext) throws Exception {
-		if (engine != null) {
-			engine.destroy();
-		}
 		Activator.context = null;
 	}
 

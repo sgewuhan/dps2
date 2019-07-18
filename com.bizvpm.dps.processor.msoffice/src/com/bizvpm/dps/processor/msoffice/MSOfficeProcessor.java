@@ -20,7 +20,7 @@ import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.text.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.bizvpm.dps.runtime.DPSUtil;
@@ -96,10 +96,10 @@ public class MSOfficeProcessor implements IProcessorRunable {
 			// 调用函数
 			if (hasImage)
 				compress(zipOut, bos, img, img.getName());
-			
+
 			if (hasAtt)
 				compress(zipOut, bos, att, att.getName());
-			
+
 			compress(zipOut, bos, out, out.getName());
 
 			bos.close();
@@ -114,7 +114,7 @@ public class MSOfficeProcessor implements IProcessorRunable {
 		targetType = (String) processTask.get("targetType");
 
 		serverPath = (String) processTask.get("serverPath");
-		
+
 		String targetName = (String) processTask.get("targetName");
 
 		time = new Date().getTime();
@@ -214,6 +214,7 @@ public class MSOfficeProcessor implements IProcessorRunable {
 		if (url.indexOf("/bvs/fs") >= 0) {
 			String id = "";
 			String namespace = "";
+			String domain = "";
 			String fileName = "";
 			String[] split = url.split("\\?");
 			if (split.length > 1) {
@@ -228,9 +229,13 @@ public class MSOfficeProcessor implements IProcessorRunable {
 					if (para.startsWith("name=")) {
 						fileName = para.replace("name=", "");
 					}
+					if (para.startsWith("domain=")) {
+						domain = para.replace("domain=", "");
+					}
 				}
 			}
-			url = serverPath + "/fs/" + namespace + "/" + id + "/" + URLEncoder.encode(fileName, "utf-8");
+			url = serverPath + "/fs/" + domain + "/" + namespace + "/" + id + "/"
+					+ URLEncoder.encode(fileName, "utf-8");
 			// 下载并将图片存放到临时文件夹中
 			file = new File(saveDir + File.separator + fileName);
 			BufferedImage image = ImageUtil.getBufferedImage(new URL(url));
@@ -256,6 +261,7 @@ public class MSOfficeProcessor implements IProcessorRunable {
 			if (url.indexOf("/bvs/fs") >= 0) {
 				String id = "";
 				String namespace = "";
+				String domain = "";
 				String[] split = url.split("\\?");
 				if (split.length > 1) {
 					String[] paras = split[1].split("&");
@@ -266,9 +272,13 @@ public class MSOfficeProcessor implements IProcessorRunable {
 						if (para.startsWith("namespace=")) {
 							namespace = para.replace("namespace=", "");
 						}
+						if (para.startsWith("domain=")) {
+							domain = para.replace("domain=", "");
+						}
 					}
 				}
-				url = serverPath + "/fs/" + namespace + "/" + id + "/" + URLEncoder.encode(fileName, "utf-8");
+				url = serverPath + "/fs/" + domain + "/" + namespace + "/" + id + "/"
+						+ URLEncoder.encode(fileName, "utf-8");
 			}
 			// 下载文件
 			FileUtils.copyURLToFile(new URL(url), new File(saveDir + File.separator + fileName));
