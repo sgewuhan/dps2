@@ -80,10 +80,10 @@ public class BirtReportProcessor implements IProcessorRunable {
 		task.close();
 
 		String html = null;
-		if(Boolean.TRUE.equals(processTask.get("output_html_string"))){
+		if (Boolean.TRUE.equals(processTask.get("output_html_string"))) {
 			task = engine.createRunAndRenderTask(reportRunnable);
 
-			IRenderOption renderOptions1 =  getHtmlRenderOption();
+			IRenderOption renderOptions1 = getHtmlRenderOption();
 			Assert.isNotNull(renderOptions1, "Must set report render option before generate ContentBody");
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			renderOptions1.setOutputStream(baos);
@@ -96,14 +96,13 @@ public class BirtReportProcessor implements IProcessorRunable {
 			task.close();
 			html = baos.toString("utf-8");
 		}
-		
-		
+
 		ProcessResult result = new ProcessResult();
 		DataSource dataSource = new ByteArrayDataSource(out.toByteArray(), "application/octet-stream");
 
 		DataHandler resultDataHandler = new DataHandler(dataSource);
 		result.put("result", resultDataHandler);
-		if(html!=null){
+		if (html != null) {
 			result.put("html", html);
 		}
 		return result;
@@ -138,17 +137,17 @@ public class BirtReportProcessor implements IProcessorRunable {
 				e.printStackTrace();
 			}
 		}
-		
-//		SlotHandle dataSet = designHandle.getDataSets();
-//		count = dataSet.getCount();
-//		for (int i = 0; i < count; i++) {
-//			DesignElementHandle handle = dataSet.get(i);
-//			try {
-//				handle.setProperties((Map) parameters);
-//			} catch (SemanticException e) {
-//				e.printStackTrace();
-//			}
-//		}
+
+		// SlotHandle dataSet = designHandle.getDataSets();
+		// count = dataSet.getCount();
+		// for (int i = 0; i < count; i++) {
+		// DesignElementHandle handle = dataSet.get(i);
+		// try {
+		// handle.setProperties((Map) parameters);
+		// } catch (SemanticException e) {
+		// e.printStackTrace();
+		// }
+		// }
 	}
 
 	private IRenderOption createRenderOption(ProcessTask processTask) {
@@ -190,7 +189,9 @@ public class BirtReportProcessor implements IProcessorRunable {
 	private IRenderOption getExcelRenderOption() {
 		EXCELRenderOption render = new EXCELRenderOption();
 		render.setOutputFormat("xlsx");
-		render.setEmitterID("org.eclipse.birt.report.engine.emitter.xlsx");
+		// render.setEmitterID("uk.co.spudsoft.birt.emitters.excel");
+		render.setEmitterID("org.eclipse.birt.report.engine.emitter.prototype.excel");
+		// render.setEmitterID("org.eclipse.birt.report.engine.emitter.xlsx");
 		render.setSupportedImageFormats("PNG");
 		return render;
 	}
@@ -199,7 +200,8 @@ public class BirtReportProcessor implements IProcessorRunable {
 		PDFRenderOption pdfRender = new PDFRenderOption();
 		pdfRender.setOutputFormat(IRenderOption.OUTPUT_FORMAT_PDF);
 		pdfRender.setSupportedImageFormats("PNG");
-//		pdfRender.setOption(IPDFRenderOption.PAGE_OVERFLOW, IPDFRenderOption.FIT_TO_PAGE_SIZE);
+		// pdfRender.setOption(IPDFRenderOption.PAGE_OVERFLOW,
+		// IPDFRenderOption.FIT_TO_PAGE_SIZE);
 		return pdfRender;
 	}
 

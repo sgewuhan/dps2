@@ -421,27 +421,28 @@ public class ProcessorManager extends PersistableProcessorManager implements IPr
 
 	@Override
 	public double getProformenceScore() {
-		Sigar sigar = new Sigar();
-
-		// 假定4G内存，100%CPU空闲为100分
-		try {
-			CpuPerc cpuPerc = sigar.getCpuPerc();
-			double cpuScore = 0.5 * cpuPerc.getIdle();
-
-			Mem mem = sigar.getMem();
-			long free = mem.getFree() / (1024 * 1024l);
-			double memScore;
-			if (free > 4096l) {
-				memScore = 0.5d;
-			} else {
-				memScore = 0.5d * free / 4096l;
-			}
-
-			return cpuScore + memScore;
-		} catch (SigarException e) {
-			Log.logError(e);
-			return 0f;
-		}
+		return 0f;
+//		Sigar sigar = new Sigar();
+//
+//		// 假定4G内存，100%CPU空闲为100分
+//		try {
+//			CpuPerc cpuPerc = sigar.getCpuPerc();
+//			double cpuScore = 0.5 * cpuPerc.getIdle();
+//
+//			Mem mem = sigar.getMem();
+//			long free = mem.getFree() / (1024 * 1024l);
+//			double memScore;
+//			if (free > 4096l) {
+//				memScore = 0.5d;
+//			} else {
+//				memScore = 0.5d * free / 4096l;
+//			}
+//
+//			return cpuScore + memScore;
+//		} catch (SigarException e) {
+//			Log.logError(e);
+//			return 0f;
+//		}
 	}
 
 	@Override
