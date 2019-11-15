@@ -207,4 +207,18 @@ public class Check {
 		return false;
 	}
 
+	public static boolean isNumbers(String content) {
+		if (content == null || "".equals(content)) {
+			return false;
+		}
+		int length = content.length();
+		for (int i = 0; i < length; i++) {
+			char ch = content.charAt(i);
+			if (!Character.isDigit(ch)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 }

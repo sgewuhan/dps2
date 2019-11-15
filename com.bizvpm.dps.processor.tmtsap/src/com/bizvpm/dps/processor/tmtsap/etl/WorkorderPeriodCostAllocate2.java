@@ -13,19 +13,12 @@ import java.util.Set;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
-import com.mobnut.commons.Commons;
-import com.mobnut.commons.util.Utils;
-import com.mobnut.db.DBActivator;
-import com.mobnut.db.model.ModelService;
+import com.bizvpm.dps.processor.tmtsap.model.RNDPeriodCost;
+import com.bizvpm.dps.processor.tmtsap.model.WorkOrderPeriodCost;
+import com.bizvpm.dps.processor.tmtsap.tools.Check;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
 import com.mongodb.client.MongoCollection;
-import com.sg.business.model.IModelConstants;
-import com.sg.business.model.Organization;
-import com.sg.business.model.Project;
-import com.sg.business.model.RNDPeriodCost;
-import com.sg.business.model.WorkOrderPeriodCost;
 
 /**
  * 使用项目实际开始时间和完成时间进行研发成本分摊 仅用于期初数据的导入
@@ -35,11 +28,11 @@ import com.sg.business.model.WorkOrderPeriodCost;
  */
 public class WorkorderPeriodCostAllocate2 {
 
-	public static final String COSECENTERCODE = "cost"; //$NON-NLS-1$
-	public static final String ACCOUNTNUMERS = "account"; //$NON-NLS-1$
-	public static final String YEAR = "year"; //$NON-NLS-1$
-	public static final String MONTH = "month"; //$NON-NLS-1$
-	public static final String RNDCOST = "rndcost"; //$NON-NLS-1$
+	public static final String COSECENTERCODE = "cost";
+	public static final String ACCOUNTNUMERS = "account";
+	public static final String YEAR = "year";
+	public static final String MONTH = "month";
+	public static final String RNDCOST = "rndcost";
 	private MongoCollection<Document> costAllocateCol;
 	private MongoCollection<Document> projectCol;
 
@@ -50,94 +43,75 @@ public class WorkorderPeriodCostAllocate2 {
 		// IModelConstants.C_PROJECT);
 	}
 
-	public Collection<? extends WorkOrderPeriodCost> getData(
-			Map<String, Object> parameter) {
+	public Collection<? extends WorkOrderPeriodCost> getData(Map<String, Object> parameter) {
 
 		Object year = parameter.get(YEAR);
 		Object month = parameter.get(MONTH);
 		if (!(year instanceof Integer) || !(month instanceof Integer)) {
-			throw new IllegalArgumentException(Messages.get().WorkorderPeriodCostAllocate2_5);
+			throw new IllegalArgumentException("期间 year, month参数错误");
 		}
 
 		Object costCenterCode = parameter.get(COSECENTERCODE);
 		if (!(costCenterCode instanceof String)) {
-			throw new IllegalArgumentException(Messages.get().WorkorderPeriodCostAllocate2_6);
+			throw new IllegalArgumentException("成本中心代码 costcode 参数错误");
 		}
 
 		Object account = parameter.get(ACCOUNTNUMERS);
 		if (account != null && !(account instanceof String[])) {
-			throw new IllegalArgumentException(Messages.get().WorkorderPeriodCostAllocate2_7);
+			throw new IllegalArgumentException("科目表  account 参数错误");
 		}
 
 		Object rndCost = parameter.get(RNDCOST);
 		if (!(rndCost instanceof RNDPeriodCost)) {
-			throw new IllegalArgumentException(Messages.get().WorkorderPeriodCostAllocate2_8);
+			throw new IllegalArgumentException("成本中心研发成本  rndcost 参数错误");
 		}
 
 		// 1. 根据成本中心获得组织
 		RNDPeriodCost rndpc = ((RNDPeriodCost) rndCost);
-		Organization org = rndpc.getOrganization();
+		Document org = rndpc.getOrganization();
 
 		if (org == null) {
-			throw new IllegalArgumentException(Messages.get().WorkorderPeriodCostAllocate2_9);
+			throw new IllegalArgumentException("成本中心无法获得对应的组织");
 		}
 
-		Organization company = org.getCompany();
-		if (company == null) {
-			throw new IllegalArgumentException(Messages.get().WorkorderPeriodCostAllocate2_10);
-		}
+		// Document company = org.getCompany();
+		// if (company == null) {
+		// throw new IllegalArgumentException("成本中心无法获得对应的公司代码");
+		// }
 
 		// 获得组织下级所有正在进行的项目
-		List<Organization> list = company.getOrganizationStructure();
-		ObjectId[] orgids = new ObjectId[list.size()];
-		for (int i = 0; i < orgids.length; i++) {
-			orgids[i] = list.get(i).get_id();
-		}
+		// List<Document> list = company.getOrganizationStructure();
+		// ObjectId[] orgids = new ObjectId[list.size()];
+		// for (int i = 0; i < orgids.length; i++) {
+		// orgids[i] = list.get(i).get_id();
+		// }
 
 		// 承担组织在orgids中,在当月处于进行状态的的项目的工作令号
 		Calendar cal = Calendar.getInstance();
-		cal.set(((Integer) year).intValue(),
-				((Integer) month).intValue() - 1, 1, 0, 0, 0);
+		cal.set(((Integer) year).intValue(), ((Integer) month).intValue() - 1, 1, 0, 0, 0);
 		Date stop = cal.getTime();
 
 		// 增加取后一月份第一天的数据
 		cal.add(Calendar.MONTH, 1);
 		Date start = cal.getTime();
 
-		BasicDBObject query = new BasicDBObject();
-		query.put(Project.F_LAUNCH_ORGANIZATION,
-				new BasicDBObject().append("$in", orgids)); //$NON-NLS-1$
-		query.put(
-				"$and", //$NON-NLS-1$
-				new BasicDBObject[] {
-						new BasicDBObject().append(
-								"$or", //$NON-NLS-1$
-								new BasicDBObject[] {
-										// 完成时间为空
-										// 或者完成时间大于前一月的最后一天
-										new BasicDBObject().append(
-												Project.F_ACTUAL_FINISH, null),
-										new BasicDBObject().append(
-												Project.F_ACTUAL_FINISH,
-												new BasicDBObject().append(
-														"$gte", stop)) }), //$NON-NLS-1$
-														
-						new BasicDBObject().append(
-								"$or", //$NON-NLS-1$
-								new BasicDBObject[] {
-										//开始时间必须不为空
-										//开始时间必须小于当月的最后一天
-										new BasicDBObject().append(
-												Project.F_ACTUAL_START,
-												new BasicDBObject().append(
-														"$ne", null)), //$NON-NLS-1$
-										new BasicDBObject().append(
-												Project.F_ACTUAL_START,
-												new BasicDBObject().append(
-														"$lt", start)) }) }); //$NON-NLS-1$
+		Document query = new Document();
+		// TODO
+		query.put("launchorg_id", new BasicDBObject("$in", orgids));
+		query.put("$and", new BasicDBObject[] { new BasicDBObject("$or", new BasicDBObject[] {
+				// 完成时间为空
+				// 或者完成时间大于前一月的最后一天
+				new BasicDBObject("actualfinish", null),
+				new BasicDBObject("actualfinish", new BasicDBObject("$gte", stop)) }),
+
+				new BasicDBObject("$or", new BasicDBObject[] {
+						// 开始时间必须不为空
+						// 开始时间必须小于当月的最后一天
+						new BasicDBObject("actualstart", new BasicDBObject("$ne", null)),
+						new BasicDBObject("actualstart", new BasicDBObject("$lt", start)) }) });
 
 		@SuppressWarnings("rawtypes")
-		List workorders = projectCol.distinct(Project.F_WORK_ORDER, query);
+		List workorders = projectCol.distinct("workorder", query);
 
 		// 应当归属到本成本中心的工作令号
 		Set<String> effectiveWorkOrders = new HashSet<String>();
@@ -152,16 +126,16 @@ public class WorkorderPeriodCostAllocate2 {
 
 		// 将研发成本平摊到每个工作令号
 		if (effectiveWorkOrders.isEmpty()) {
-			Commons.logerror(Messages.get().WorkorderPeriodCostAllocate2_18 + costCenterCode + company + Messages.get().WorkorderPeriodCostAllocate2_19
-					+ year + month + Messages.get().WorkorderPeriodCostAllocate2_20);
+			System.out.println("成本中心" + costCenterCode + company + ", 在期间:" + year + month
+					+ " 无可分摊研发成本的工作令号,可能是在该期间没有正在进行的项目可供分摊。");
 			return new ArrayList<WorkOrderPeriodCost>();
 		}
 
-		List<DBObject> toBeInsert = new ArrayList<DBObject>();
+		List<Document> toBeInsert = new ArrayList<Document>();
 		Iterator<?> iter = effectiveWorkOrders.iterator();
 		while (iter.hasNext()) {
 			String workOrderNumber = (String) iter.next();
-			DBObject wopc = new BasicDBObject();
+			Document wopc = new Document();
 			wopc.put(WorkOrderPeriodCost.F_WORKORDER, workOrderNumber);
 			wopc.put(WorkOrderPeriodCost.F_YEAR, year);
 			wopc.put(WorkOrderPeriodCost.F_MONTH, month);
@@ -170,7 +144,7 @@ public class WorkorderPeriodCostAllocate2 {
 			Iterator<String> iter2 = rndpc.get_data().keySet().iterator();
 			while (iter2.hasNext()) {
 				String key = iter2.next();
-				if (!Utils.isNumbers(key)) {// 不是数字类型的字段忽略
+				if (!Check.isNumbers(key)) {// 不是数字类型的字段忽略
 					continue;
 				}
 				Object cost = rndpc.getValue(key);
@@ -186,15 +160,15 @@ public class WorkorderPeriodCostAllocate2 {
 		}
 
 		if (toBeInsert.size() > 0) {
-			costAllocateCol.insert(toBeInsert);
+			costAllocateCol.insertMany(toBeInsert);
 		}
 
 		// 准备返回
 		ArrayList<WorkOrderPeriodCost> result = new ArrayList<WorkOrderPeriodCost>();
-		for (int i = 0; i < toBeInsert.size(); i++) {
-			result.add(ModelService.createModelObject(toBeInsert.get(i),
-					WorkOrderPeriodCost.class));
-		}
+		// for (int i = 0; i < toBeInsert.size(); i++) {
+		// result.add(ModelService.createModelObject(toBeInsert.get(i),
+		// WorkOrderPeriodCost.class));
+		// }
 
 		return result;
 	}

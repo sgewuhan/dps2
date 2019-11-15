@@ -40,4 +40,8 @@ public class RNDPeriodCost implements IAccountPeriod, IFinanceAccountNumber {
 		return null;
 	}
 
+	public Document get_data() {
+		return null;
+	}
+
 }
