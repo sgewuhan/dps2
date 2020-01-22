@@ -33,6 +33,7 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
+            category="processor"
             class="com.tmt.dps.processor.sms.preferences.TMTSmsPreferencePage"
             id="com.tmt.dps.processor.sms.preferences.TMTSmsPreferencePage"
             name="TMT短信设置">
