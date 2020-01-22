@@ -1,0 +1,340 @@
+Manifest-Version: 1.0
+Bundle-Localization: plugin
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Built-By: build
+Bundle-SymbolicName: org.eclipse.birt.data.oda.mongodb.ui;singleton:=t
+ rue
+Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.da
+ tatools.connectivity.oda.design.ui;bundle-version="[3.2.0,4.0.0)",org
+ .eclipse.birt.data.oda.mongodb;bundle-version="[4.2.2, 5.0.0)"
+Bundle-Activator: org.eclipse.birt.data.oda.mongodb.ui.Activator
+Bundle-Version: 4.5.0.v201809202134
+Build-Jdk: 1.7.0_51
+Bundle-ActivationPolicy: lazy
+Bundle-Vendor: Eclipse BIRT Project
+Bundle-Name: %plugin.name
+Archiver-Version: Plexus Archiver
+Created-By: Apache Maven 3.0.5
+Import-Package: com.mongodb;version="2.10.1"
+Bundle-ManifestVersion: 2
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/util/FieldEntryWrapper.clas
+ s
+SHA1-Digest: eLafCKmjUoVvnHeglSO3IAc34u0=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSourcePageH
+ elper$2.class
+SHA1-Digest: fsQVr1SFvL9yKZ6bl/WSBpCUrho=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSetWizardPa
+ ge$11.class
+SHA1-Digest: pmOl6uunO76aSdYSvImDdo6nB7s=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSourcePageH
+ elper$4.class
+SHA1-Digest: bnP6+8GSGCLTPvOEgn+/wyRkdho=
+
+Name: icons/collection.gif
+SHA1-Digest: yIiMj2LljMe8IVjJktmQcTDIdM8=
+
+Name: icons/profile.gif
+SHA1-Digest: HK0Nc7o77dkH2q0RNHOYSbmBodA=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSourcePageH
+ elper$6.class
+SHA1-Digest: ByvEIyrdVN3TxsFfkcGMXiQyAF0=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MDBQueryExpressionBuil
+ der.class
+SHA1-Digest: FG5xUPam1KnDCZhW+qqJ3h3zzUE=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSetWizardPa
+ ge$13.class
+SHA1-Digest: xqqcjhAAp0ZTpx1Ho4dfKa7TLyo=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/util/CommandExpressionUtil.
+ class
+SHA1-Digest: yRI7j4O+Mel/XxbEAfS6yy56FPc=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSourcePageH
+ elper$8.class
+SHA1-Digest: sJFhm3xd9vajqnV0XRcIj7ks2lk=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSetWizardPa
+ ge$15.class
+SHA1-Digest: w0ap3lstnxnwakhfnPEE+2E6+tE=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSetWizardPa
+ ge$17.class
+SHA1-Digest: gBue3wJRL7CrLqvVXK8z9NaLqpU=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSetWizardPa
+ ge.class
+SHA1-Digest: DF+nQ1pWznQn8HSOtz7X1t2sgNw=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSetWizardPa
+ ge$19.class
+SHA1-Digest: 1Pft/3YVbPrbdFrH47JGW7+XAxg=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSetWizardPa
+ ge$FieldsTreeProvider.class
+SHA1-Digest: qQFpJqB0k8+LI45oz4hpt0Aqi2Y=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/util/IHelpConstants.class
+SHA1-Digest: RTrdfFN7P66DhZDyMmPCThPKdzs=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/Activator.class
+SHA1-Digest: M2Pi94X7lvoVwpEJbTUzv4+z2Q0=
+
+Name: icons/field.gif
+SHA1-Digest: EhLlugLTMHdwMYjsypDLx121z2Q=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSetWizardPa
+ ge$2.class
+SHA1-Digest: yhW1iYuzGn7TNpfPyb3yfFxQ3jo=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSetWizardPa
+ ge$4.class
+SHA1-Digest: JPYkVeZNwjGaWiuBBYW2CwZqu8o=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBExpressionBuild
+ er.class
+SHA1-Digest: VzRWastvy3aNVktpuHbEHXBQKek=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSetWizardPa
+ ge$6.class
+SHA1-Digest: vVeIBiqLrFc4AqTsSUzhhWfexBs=
+
+Name: META-INF/eclipse.inf
+SHA1-Digest: 09gN05tobgS/MdtqyTNQhOhB73M=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSetWizardPa
+ ge$8.class
+SHA1-Digest: NfdI1glSRbwGDSYr1LT3AAySjp0=
+
+Name: META-INF/maven/org.eclipse.birt/org.eclipse.birt.data.oda.mongod
+ b.ui/pom.xml
+SHA1-Digest: 0fNW/0KGzLNaT5TurYxZd2Hol/Y=
+
+Name: icons/database.gif
+SHA1-Digest: N16kaLk8rTSVM807t/TyQUGy/6M=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSetWizardPa
+ ge$20.class
+SHA1-Digest: NkIMJR4crJUjsV8EDca2o50Jsv4=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSetWizardPa
+ ge$22.class
+SHA1-Digest: If0RpraPEiJG6/2n51R/LsUuJUA=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSetWizardPa
+ ge$24.class
+SHA1-Digest: RCgpyHzaD0dfocIHPVZwFOsw2Cs=
+
+Name: icons/field_selected.gif
+SHA1-Digest: x4pivqcsurlbOjvxNf2FxqQr+MI=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSetWizardPa
+ ge$26.class
+SHA1-Digest: nrzSTn56pYUqPDcANIq79RRu6mw=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/i18n/messages.properties
+SHA1-Digest: FNN7j4TXjB0LXDYRSTjltVrxYIk=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBExpressionBuild
+ er$1.class
+SHA1-Digest: 35p7r40sthAuuTk2+Nur/PTumLQ=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBExpressionBuild
+ er$3.class
+SHA1-Digest: sqNjeEd+Zly+uNlO/DDiWn07sdk=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBAdvancedSetting
+ sDialog$2.class
+SHA1-Digest: dcA4sj9Nrs3g0Wqca1VBmUon8Ug=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBAdvancedSetting
+ sDialog$4.class
+SHA1-Digest: BTaacafkTQaNM2YlCZhEgOvJKcY=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBAdvancedSetting
+ sDialog$6.class
+SHA1-Digest: DzqgtlYhMHtTOnkxL5ldo15n3q4=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSourceWizar
+ dPage.class
+SHA1-Digest: JmjDCT7C1C62IhMBlHBhwcpiGLc=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBAdvancedSetting
+ sDialog$8.class
+SHA1-Digest: ArBAAJ6irlbWaKwZD6xjcPu7b7w=
+
+Name: icons/new_oda_dswiz.ico
+SHA1-Digest: QQ8xS+plvyQDqy0tC90WKqE8r3U=
+
+Name: icons/datasetpage.ico
+SHA1-Digest: ae25s4KupDOa83maFb3GvizjWIw=
+
+Name: icons/validate.gif
+SHA1-Digest: R7AGuW4be+JWTfLlO8x3o18d0KI=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSourcePageH
+ elper$1.class
+SHA1-Digest: rlfK4jRGmgzebmU8B3ydDO9ZDv4=
+
+Name: icons/document.gif
+SHA1-Digest: QPoNzFKlGBrClivyjFHBF0VZb8E=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSourcePageH
+ elper$3.class
+SHA1-Digest: wWh3J0Xn6kek41KHqzndEv8mcSA=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSetWizardPa
+ ge$10.class
+SHA1-Digest: xS3CEAnGnwsZqew9iKycUA1DZ7U=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSourcePageH
+ elper$5.class
+SHA1-Digest: LKcZNf7//MEJBG6uyLzDf84/feY=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSetWizardPa
+ ge$12.class
+SHA1-Digest: 22J/pjL8hzX/0hYzy4NArCCB24o=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MDBSortExpressionBuild
+ er.class
+SHA1-Digest: Od+32sidT+2URics7Z4Ifb0fZOo=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSourcePageH
+ elper$7.class
+SHA1-Digest: KfsO+HX2etn8TCm9PjCd/Bw6jxE=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSetWizardPa
+ ge$14.class
+SHA1-Digest: Ipnw7imXTv02UnorEfsCfA2m358=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSetWizardPa
+ ge$16.class
+SHA1-Digest: yYPOJShWjgzI00XbLcJGSocgFzw=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSourcePageH
+ elper$9.class
+SHA1-Digest: /e6Oxvqeu1zFjNY3UZfZGII+KWU=
+
+Name: plugin.properties
+SHA1-Digest: GkLu5NyPKPZc0Pm4/tIZ+IeMK08=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSetWizardPa
+ ge$18.class
+SHA1-Digest: d1EaVcZJ9t8Du1F0f8jcsV80ab0=
+
+Name: plugin.xml
+SHA1-Digest: nUkC4/10vMSWhsudiflA6XIoSF8=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSetWizardPa
+ ge$1.class
+SHA1-Digest: lWBkPGjaEWPcKYAKl1SkMRhVCgI=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/i18n/Messages.class
+SHA1-Digest: 1hesScFJqdb3RIPOHPkS6o2xVAY=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSourcePrope
+ rtyPage.class
+SHA1-Digest: A8kAvNJenZiXWUm8mPjVG3IEER4=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSetWizardPa
+ ge$3.class
+SHA1-Digest: RPqDGdNnPzhuVIvD5Gm+JMEnq40=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSourcePageH
+ elper$10.class
+SHA1-Digest: VzwGPeXTrOgEQHkGofyE8L6lF7Y=
+
+Name: icons/document_selected.gif
+SHA1-Digest: wkVRrCFCX7gNcbsmLguRvbunF9Q=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSetWizardPa
+ ge$5.class
+SHA1-Digest: rIRyjLylL4zQUl+VwutQ1PQNyvs=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBAdvancedSetting
+ sDialog.class
+SHA1-Digest: ISCV0V+9DyWNs+isDPAGQ56hsvk=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSetWizardPa
+ ge$7.class
+SHA1-Digest: 7Pl2s1fe97nse/Q1BMaOBMqwV8A=
+
+Name: META-INF/maven/org.eclipse.birt/org.eclipse.birt.data.oda.mongod
+ b.ui/pom.properties
+SHA1-Digest: tjedqj4Lq8DMiWITkpEkYtCFvL8=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSetWizardPa
+ ge$9.class
+SHA1-Digest: jBDuziNYu8Y41K4gQJ/z9JehWjQ=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MDBCommandExpressionBu
+ ilder.class
+SHA1-Digest: idjPHBO1r5kBMadZY5L318gnmUo=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSetWizardPa
+ ge$21.class
+SHA1-Digest: U+22WjxZQAHs1aOVuHSWomHc+vw=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSetWizardPa
+ ge$23.class
+SHA1-Digest: AG6QpZzf5nlLz9P0Tt2jFWMoVFI=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSetWizardPa
+ ge$TableProvider.class
+SHA1-Digest: zBrJbcpXcltc4HqUglr+VtFKEmo=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSetWizardPa
+ ge$25.class
+SHA1-Digest: ilVzwTsxmPnGaQK0HCJBNSQy3PY=
+
+Name: about.html
+SHA1-Digest: 15ln36L42jvng63rDnZLcupFrvk=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBExpressionBuild
+ er$2.class
+SHA1-Digest: f6dIkkw+RtMnJ402M3D4xq1AHCI=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/util/UIHelper.class
+SHA1-Digest: ta2PwoWJ/h7XK93F7XEsZjpEIK4=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBAdvancedSetting
+ sDialog$1.class
+SHA1-Digest: OXyd0EidAqLGa6Ia5fpA/t8AEfY=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBExpressionBuild
+ er$4.class
+SHA1-Digest: pXTkWW3R4CW1L7zft6X3WK2vstI=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBAdvancedSetting
+ sDialog$3.class
+SHA1-Digest: Y6e/PeHyfJYemtmYHpVuL1l1XOA=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBAdvancedSetting
+ sDialog$5.class
+SHA1-Digest: mT1j4IliOAb45ZusiGPdR8uQdCk=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSetWizardPa
+ ge$22$1.class
+SHA1-Digest: qicI58BsPREQXC2eQi3XuagrNvo=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBAdvancedSetting
+ sDialog$7.class
+SHA1-Digest: lDZ0TFBSAmZ2IAt2T/N1wn6Bwbo=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBAdvancedSetting
+ sDialog$9.class
+SHA1-Digest: I20lSkrElK9ZXVJ8gdN0WQjtt9k=
+
+Name: org/eclipse/birt/data/oda/mongodb/ui/impl/MongoDBDataSourcePageH
+ elper.class
+SHA1-Digest: s+jYAzfNm0abaLjH75oYLpIvPmg=
+
+Name: icons/warning.gif
+SHA1-Digest: B813ktKtSfZ54krEOlrcTF6r6+A=
+

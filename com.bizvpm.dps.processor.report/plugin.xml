@@ -38,7 +38,7 @@
          <parameter
                description="传入数据xml地址，比如 key &quot;FILELIST&quot;, value &quot;http://document.xml&quot;"
                name="datasource_parameter"
-               optional="false"
+               optional="true"
                type="Map">
          </parameter>
          <parameter

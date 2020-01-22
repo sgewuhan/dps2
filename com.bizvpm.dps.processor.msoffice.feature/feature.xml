@@ -68,4 +68,18 @@ a. 遵守购买本软件时您所在国家/地区的法律。
          version="0.0.0"
          unpack="false"/>
 
+   <plugin
+         id="org.apache.commons.io"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.commons.lang3"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
 </feature>

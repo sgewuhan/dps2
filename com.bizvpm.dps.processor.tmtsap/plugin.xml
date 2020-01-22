@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="processor"
+            class="com.bizvpm.dps.processor.tmtsap.PreferencePage"
+            id="com.bizvpm.dps.processor.tmtsap.PreferencePage"
+            name="TMT SAP处理器">
+      </page>
+   </extension>
+   <extension
+         point="com.bizvpm.dps.processor">
+      <processor
+            id="tmtreport"
+            maxThreadCount="5"
+            name="TMT SAP处理器"
+            processorActivater="com.bizvpm.dps.processor.tmtsap.TMTSAPStarter"
+            runnable="com.bizvpm.dps.processor.tmtsap.TMTSAPProcessor">
+      </processor>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="com.bizvpm.dps.processor.tmtsap.SAPPreferenceInitializer">
+      </initializer>
+   </extension>
+
+</plugin>

@@ -1,9 +1,16 @@
 package com.bizvpm.dps.processor.msoffice;
 
+import java.util.Map;
+
 import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.Dispatch;
 
 public class MSPowerPointConverter extends AbstractMSOfficeConverter {
+	
+	public MSPowerPointConverter(String sourceType, String targetType) {
+		super.sourceType = sourceType;
+		super.targetType = targetType;
+	}
 
 	@Override
 	public ActiveXComponent getActiveXComponent() throws Exception {
@@ -11,15 +18,13 @@ public class MSPowerPointConverter extends AbstractMSOfficeConverter {
 	}
 
 	@Override
-	public Dispatch openDocument(ActiveXComponent app, String filename)
-			throws Exception {
+	public Dispatch openDocument(ActiveXComponent app, String filename, String templatePath) throws Exception {
 		Dispatch dis = app.getProperty("Presentations").toDispatch();
-		return Dispatch.call(dis, "Open", filename, true, true, false)
-				.toDispatch();
+		return Dispatch.call(dis, "Open", filename, true, true, false).toDispatch();
 	}
 
 	@Override
-	public void convert(Dispatch dis, String toFilename) throws Exception {
+	public void convert(ActiveXComponent app, Dispatch dis, String fromFilename, String toFilename,Map<String, String> pics) throws Exception {
 		Dispatch.call(dis, "SaveAs", toFilename, 32);
 	}
 
