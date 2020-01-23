@@ -19,7 +19,7 @@ public class PDFGenService extends AbstractVisualService {
 	@Override
 	protected ProcessResult handleTransferedFile(ProcessTask pT, GridFSFile file, InputStream pdfs) throws IOException {
 		ProcessResult result = new ProcessResult();
-		result.put("file", new DataHandler(new ByteArrayDataSource(toByteArray(pdfs), "application/octet-stream")));
+		result.put("result", new DataHandler(new ByteArrayDataSource(toByteArray(pdfs), "application/octet-stream")));
 		pdfs.close();
 		return result;
 	}

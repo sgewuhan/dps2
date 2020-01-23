@@ -1,5 +1,6 @@
 package dpsclient;
 
+import java.io.File;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -16,6 +17,7 @@ public class Test7 {
 	private static final String serverUrl = "http://127.0.0.1:8199/dps/server?wsdl";
 	private static DPS dps;
 	private static String type = "com.bizvpm.dps.processor.pmsvis:pms.visualservice";
+	private static String type1 = "com.bizvpm.dps.processor.pmsvis:pms.pdfgen";
 
 	/**
 	 * @param args
@@ -35,6 +37,7 @@ public class Test7 {
 	 */
 	public static void testRun(String name) {
 		try {
+			
 			Task task = new Task();
 			task.setName(name);
 			task.setPriority(Task.PRIORITY_1);
@@ -43,9 +46,14 @@ public class Test7 {
 			task.setValue("target", "docuFile_preview");
 			task.setValue("_id", "5e251e3549acc94dec4f91e3");
 
-			Map<String, Object> result = dps.runTask(task, type);
-			Object dbo = result.get("result");
-			System.out.println(dbo);
+			final IProcessorManager manager = dps.getProcessorManager();
+			Result result = manager.runTask(task, type1);
+			result.writeToFile("result", new File("d:/" + name + ".pdf"));
+
+			
+			result = manager.runTask(task, type);
+			Object msg = result.getValue("result");
+			System.out.println(msg);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

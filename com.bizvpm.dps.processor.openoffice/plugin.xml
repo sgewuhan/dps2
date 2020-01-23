@@ -90,6 +90,9 @@
             <restriction
                   value="swf">
             </restriction>
+            <restriction
+                  value="pdf">
+            </restriction>
          </parameter>
       </processor>
    </extension>
