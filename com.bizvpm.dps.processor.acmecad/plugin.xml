@@ -24,6 +24,12 @@
             <restriction
                   value="dwg">
             </restriction>
+            <restriction
+                  value="dxf">
+            </restriction>
+            <restriction
+                  value="dwf">
+            </restriction>
          </parameter>
          <parameter
                description="目标文件类型"
