@@ -44,7 +44,7 @@ public class Test7 {
 			task.setValue("_id", "5e251e3549acc94dec4f91e3");
 
 			Map<String, Object> result = dps.runTask(task, type);
-			Object dbo = result.get("results");
+			Object dbo = result.get("result");
 			System.out.println(dbo);
 		} catch (Exception e) {
 			e.printStackTrace();
