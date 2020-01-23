@@ -41,7 +41,7 @@ public class VisualService extends AbstractVisualService {
 		if (v_id != null) {
 			updateResult(_id, db, colName, v_id, null);
 			result = new ProcessResult();
-			result.put("result", "ok");
+			result.put("result", "");
 			return result;
 		} else {
 			updateResult(_id, db, colName, v_id, "保存可视化文件失败");

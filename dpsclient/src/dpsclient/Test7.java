@@ -8,6 +8,7 @@ import javax.xml.ws.AsyncHandler;
 import javax.xml.ws.Response;
 
 import com.bizvpm.dps.client.DPS;
+import com.bizvpm.dps.client.DataObject;
 import com.bizvpm.dps.client.IProcessorManager;
 import com.bizvpm.dps.client.Result;
 import com.bizvpm.dps.client.Task;
@@ -52,8 +53,8 @@ public class Test7 {
 
 			
 			result = manager.runTask(task, type);
-			Object msg = result.getValue("result");
-			System.out.println(msg);
+			DataObject msg = (DataObject) result.getValue("result");
+			System.out.println(msg.getStringValue());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
