@@ -55,26 +55,32 @@
          </parameter>
          <parameter
                name="hasImage"
+               optional="true"
                type="Boolean">
          </parameter>
          <parameter
                name="hasAtt"
+               optional="true"
                type="Boolean">
          </parameter>
          <parameter
                name="returnZIP"
+               optional="true"
                type="Boolean">
          </parameter>
          <parameter
                name="template"
+               optional="true"
                type="uncheck">
          </parameter>
          <parameter
                name="serverPath"
+               optional="true"
                type="String">
          </parameter>
          <parameter
                name="targetName"
+               optional="true"
                type="String">
          </parameter>
          <parameter

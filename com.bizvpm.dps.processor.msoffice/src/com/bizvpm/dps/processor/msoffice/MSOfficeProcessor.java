@@ -164,13 +164,14 @@ public class MSOfficeProcessor implements IProcessorRunable {
 		Object t = processTask.get("template");
 		if (t instanceof String) {
 			template = new File((String) t);
-		} else {
+		}
+		if (template.isFile()) {
 			processTask.writeToFile("template", template);
 		}
 
-		returnZIP = (boolean) processTask.get("returnZIP");
-		hasImage = (boolean) processTask.get("hasImage");
-		hasAtt = (boolean) processTask.get("hasAtt");
+		returnZIP = Boolean.TRUE.equals(processTask.get("returnZIP"));
+		hasImage = Boolean.TRUE.equals(processTask.get("hasImage"));
+		hasAtt = Boolean.TRUE.equals(processTask.get("hasAtt"));
 	}
 
 	private String convertHTML(String html) {

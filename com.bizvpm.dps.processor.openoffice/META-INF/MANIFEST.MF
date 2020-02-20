@@ -10,3 +10,14 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.9.100",
  org.eclipse.ui
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.bizvpm.dps.processor.openoffice.Activator
+Bundle-ClassPath: lib/commons-io-2.6.jar,
+ lib/commons-lang3-3.9.jar,
+ lib/jodconverter-local-4.2.4.jar,
+ lib/jodconverter-core-4.2.4.jar,
+ lib/juh-4.1.2.jar,
+ lib/jurt-4.1.2.jar,
+ lib/ridl-4.1.2.jar,
+ lib/slf4j-api-1.7.29.jar,
+ lib/unoil-4.1.2.jar,
+ lib/gson-2.8.6.jar,
+ .

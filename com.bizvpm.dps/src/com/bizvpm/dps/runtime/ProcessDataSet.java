@@ -43,6 +43,10 @@ public class ProcessDataSet implements IDataSetAdaptable {
 		put(parameter, new DataHandler(new ByteArrayDataSource(byteArray, "application/octet-stream")));
 	}
 
+	public void putByteArray(String parameter, byte[] byteArray, String mime) throws Exception {
+		put(parameter, new DataHandler(new ByteArrayDataSource(byteArray, mime)));
+	}
+
 	private byte[] getBytes(File file) throws Exception {
 
 		InputStream is = new FileInputStream(file);

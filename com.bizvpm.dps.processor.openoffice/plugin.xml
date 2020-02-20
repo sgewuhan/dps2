@@ -5,11 +5,92 @@
          point="com.bizvpm.dps.processor">
       <processor
             description="使用Open Office"
-            id="openoffice.openofficeconverter"
+            id="openoffice.converter"
             maxThreadCount="5"
             name="OpenOffice文件转换处理器"
             runnable="com.bizvpm.dps.processor.openoffice.OpenOfficeProcessor"
             processorActivater="com.bizvpm.dps.processor.openoffice.Starter">
+         <parameter
+               description="传入Inputstream"
+               name="file"
+               optional="true"
+               type="uncheck">
+         </parameter>
+         <parameter
+               description="源文件的类型"
+               name="sourceType"
+               optional="false"
+               type="String">
+            <restriction
+                  value="doc">
+            </restriction>
+            <restriction
+                  value="docx">
+            </restriction>
+            <restriction
+                  value="rtf">
+            </restriction>
+            <restriction
+                  value="txt">
+            </restriction>
+            <restriction
+                  value="csv">
+            </restriction>
+            <restriction
+                  value="xls">
+            </restriction>
+            <restriction
+                  value="xlsx">
+            </restriction>
+            <restriction
+                  value="ppt">
+            </restriction>
+            <restriction
+                  value="pptx">
+            </restriction>
+            <restriction
+                  value="html">
+            </restriction>
+         </parameter>
+         <parameter
+               description="目标文件的类型"
+               name="targetType"
+               optional="false"
+               type="String">
+            <restriction
+                  value="doc">
+            </restriction>
+            <restriction
+                  value="docx">
+            </restriction>
+            <restriction
+                  value="rtf">
+            </restriction>
+            <restriction
+                  value="txt">
+            </restriction>
+            <restriction
+                  value="csv">
+            </restriction>
+            <restriction
+                  value="xls">
+            </restriction>
+            <restriction
+                  value="xlsx">
+            </restriction>
+            <restriction
+                  value="ppt">
+            </restriction>
+            <restriction
+                  value="pptx">
+            </restriction>
+            <restriction
+                  value="html">
+            </restriction>
+            <restriction
+                  value="swf">
+            </restriction>
+         </parameter>
       </processor>
    </extension>
    <extension
@@ -20,6 +101,12 @@
             id="com.bizvpm.dps.processor.openoffice.preferences.OpenOfficePreferencePage"
             name="Open Office 转换设置">
       </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="com.bizvpm.dps.processor.openoffice.preferences.PreferenceInitializer">
+      </initializer>
    </extension>
 
 </plugin>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/com.bizvpm.dps.processor.report.feature_1.0.1.201907292236.jar" id="com.bizvpm.dps.processor.report.feature" version="1.0.1.201907292236">
+   <feature url="features/com.bizvpm.dps.processor.report.feature_1.0.1.qualifier.jar" id="com.bizvpm.dps.processor.report.feature" version="1.0.1.qualifier">
       <category name="bizvpm.dps.birt"/>
    </feature>
    <category-def name="bizvpm.dps.birt" label="Birt Report Service"/>
