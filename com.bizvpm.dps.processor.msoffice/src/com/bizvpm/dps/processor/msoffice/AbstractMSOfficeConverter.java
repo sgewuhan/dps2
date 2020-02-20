@@ -58,7 +58,7 @@ public abstract class AbstractMSOfficeConverter {
 		throw new Exception("Unknown File Type");
 	}
 
-	protected static int getFileType(String sourceType) {
+	public static int getFileType(String sourceType) {
 		sourceType = sourceType.toLowerCase();
 		int type = checkFileType(sourceType, WORD_FILE, FILETYPE_WORD_FILE);
 		if (type == FILETYPE_UNKONWN) {

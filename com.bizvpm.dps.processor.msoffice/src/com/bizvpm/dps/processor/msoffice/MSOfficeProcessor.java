@@ -47,7 +47,6 @@ public class MSOfficeProcessor implements IProcessorRunable {
 	private File outputFile;
 	private String sourceType;
 	private String targetType;
-	private File template;
 	private Map<String, String> pics;
 	private Map<String, String> p;
 	private String serverPath;
@@ -58,6 +57,7 @@ public class MSOfficeProcessor implements IProcessorRunable {
 	private boolean returnZIP;
 	private boolean hasImage;
 	private boolean hasAtt;
+	private String templatePath;
 
 	@Override
 	public ProcessResult run(ProcessTask processTask, IProgressMonitor monitor, IProcessContext context)
@@ -78,7 +78,6 @@ public class MSOfficeProcessor implements IProcessorRunable {
 	private void convert() throws Exception {
 		String filename = inputFile.getPath();
 		String toFilename = outputFile.getPath();
-
 		Dispatch dis = null;
 		ActiveXComponent app = null;
 
@@ -86,7 +85,7 @@ public class MSOfficeProcessor implements IProcessorRunable {
 		try {
 			ComThread.InitSTA();
 			app = msOfficeConverter.getActiveXComponent();
-			dis = msOfficeConverter.openDocument(app, filename, template.getPath());
+			dis = msOfficeConverter.openDocument(app, filename, templatePath);
 			msOfficeConverter.convert(app, dis, inputFile.getPath(), toFilename, pics, p);
 		} catch (Exception e) {
 			throw e;
@@ -120,30 +119,23 @@ public class MSOfficeProcessor implements IProcessorRunable {
 
 	@SuppressWarnings("unchecked")
 	private void init(ProcessTask processTask) throws Exception {
-		pics = new HashMap<String, String>();
 		sourceType = (String) processTask.get("sourceType");
 		targetType = (String) processTask.get("targetType");
-
-		serverPath = (String) processTask.get("serverPath");
-
-		String targetName = (String) processTask.get("targetName");
-
-		p = (Map<String, String>) processTask.get("parameter");
 
 		time = new Date().getTime();
 
 		pathName = DPSUtil.getTempDirector(getClass(), true);
-
+		
+		File path = new File(pathName + time);
+		path.mkdirs();
+		
 		inputFile = new File(pathName + time + File.separator + time + "." + sourceType);
 		outputFile = new File(pathName + time + File.separator + time + "." + targetType);
 
-		img = new File(pathName + time + File.separator + "image");
-		img.mkdirs();
-		att = new File(pathName + time + File.separator + "¸½¼þ");
-		att.mkdirs();
-
 		Object file = processTask.get("file");
 		if (file instanceof String) {
+			String targetName = (String) processTask.get("targetName");
+
 			inputFile = new File(pathName + time + File.separator + targetName + "." + sourceType);
 			outputFile = new File(pathName + time + File.separator + targetName + "." + targetType);
 			String html = convertHTML((String) file);
@@ -160,18 +152,34 @@ public class MSOfficeProcessor implements IProcessorRunable {
 		} else {
 			processTask.writeToFile("file", inputFile);
 		}
-		template = new File(pathName + "normal.dotx");
-		Object t = processTask.get("template");
-		if (t instanceof String) {
-			template = new File((String) t);
-		}
-		if (template.isFile()) {
-			processTask.writeToFile("template", template);
-		}
 
-		returnZIP = Boolean.TRUE.equals(processTask.get("returnZIP"));
-		hasImage = Boolean.TRUE.equals(processTask.get("hasImage"));
-		hasAtt = Boolean.TRUE.equals(processTask.get("hasAtt"));
+		int targett = AbstractMSOfficeConverter.getFileType(targetType);
+		if (targett != AbstractMSOfficeConverter.FILETYPE_PDF_FILE) {
+			pics = new HashMap<String, String>();
+			serverPath = (String) processTask.get("serverPath");
+
+			p = (Map<String, String>) processTask.get("parameter");
+
+			img = new File(pathName + time + File.separator + "image");
+			img.mkdirs();
+			att = new File(pathName + time + File.separator + "¸½¼þ");
+			att.mkdirs();
+
+			File template = new File(pathName + "normal.dotx");
+			Object t = processTask.get("template");
+			if (t instanceof String) {
+				template = new File((String) t);
+			}
+			if (template.isFile()) {
+				processTask.writeToFile("template", template);
+			}
+			
+			templatePath = template.getPath();
+
+			returnZIP = Boolean.TRUE.equals(processTask.get("returnZIP"));
+			hasImage = Boolean.TRUE.equals(processTask.get("hasImage"));
+			hasAtt = Boolean.TRUE.equals(processTask.get("hasAtt"));
+		}
 	}
 
 	private String convertHTML(String html) {
