@@ -33,13 +33,14 @@ public class MSWordConverter extends AbstractMSOfficeConverter {
 		} else {
 			dis = app.getProperty("Documents").toDispatch();
 			dis = Dispatch.call(dis, "Open", templatePath).toDispatch();
+			find(app.getProperty("Selection").toDispatch(), "{$docu}");
 		}
 		return dis;
 	}
 
 	@Override
 	public void convert(ActiveXComponent app, Dispatch dis, String fromFilename, String toFilename,
-			Map<String, String> pics) throws Exception {
+			Map<String, String> pics, Map<String, String> p) throws Exception {
 		int targett = getFileType(targetType);
 		if (targett == FILETYPE_PDF_FILE) {
 			Dispatch.call(dis, "ExportAsFixedFormat", toFilename, 17);
@@ -57,6 +58,15 @@ public class MSWordConverter extends AbstractMSOfficeConverter {
 					insertImage(selection, imgPath);
 				}
 			}
+			if (p != null && p.size() > 0) {
+				for (String key : p.keySet()) {
+					Dispatch.call(selection, "HomeKey", new Variant(6));
+					while (find(selection, key)) {
+						Dispatch.put(selection, "Text", p.get(key));
+					}
+				}
+			}
+
 			// 参数new Variant(16)
 			// word
 			// 另存格式参数列表https: //

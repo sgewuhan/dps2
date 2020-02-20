@@ -26,7 +26,7 @@ public abstract class AbstractMSOfficeConverter {
 	public abstract Dispatch openDocument(ActiveXComponent app, String filename, String templatePath) throws Exception;
 
 	public abstract void convert(ActiveXComponent app, Dispatch dis, String fromFilename, String toFilename,
-			Map<String, String> pics) throws Exception;
+			Map<String, String> pics, Map<String, String> p) throws Exception;
 
 	public abstract void dispose(ActiveXComponent app, Dispatch dis) throws Exception;
 

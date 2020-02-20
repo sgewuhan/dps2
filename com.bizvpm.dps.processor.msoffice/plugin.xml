@@ -77,6 +77,10 @@
                name="targetName"
                type="String">
          </parameter>
+         <parameter
+               name="parameter"
+               type="Map">
+         </parameter>
       </processor>
    </extension>
 

@@ -1,5 +1,12 @@
 package com.bizvpm.dps.processor.msoffice;
 
+import java.awt.Graphics;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -17,6 +24,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+
+import javax.swing.ImageIcon;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -40,6 +49,7 @@ public class MSOfficeProcessor implements IProcessorRunable {
 	private String targetType;
 	private File template;
 	private Map<String, String> pics;
+	private Map<String, String> p;
 	private String serverPath;
 	private String pathName;
 	private long time;
@@ -77,7 +87,7 @@ public class MSOfficeProcessor implements IProcessorRunable {
 			ComThread.InitSTA();
 			app = msOfficeConverter.getActiveXComponent();
 			dis = msOfficeConverter.openDocument(app, filename, template.getPath());
-			msOfficeConverter.convert(app, dis, inputFile.getPath(), toFilename, pics);
+			msOfficeConverter.convert(app, dis, inputFile.getPath(), toFilename, pics, p);
 		} catch (Exception e) {
 			throw e;
 		} finally {
@@ -108,6 +118,7 @@ public class MSOfficeProcessor implements IProcessorRunable {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	private void init(ProcessTask processTask) throws Exception {
 		pics = new HashMap<String, String>();
 		sourceType = (String) processTask.get("sourceType");
@@ -116,6 +127,8 @@ public class MSOfficeProcessor implements IProcessorRunable {
 		serverPath = (String) processTask.get("serverPath");
 
 		String targetName = (String) processTask.get("targetName");
+
+		p = (Map<String, String>) processTask.get("parameter");
 
 		time = new Date().getTime();
 
@@ -211,6 +224,7 @@ public class MSOfficeProcessor implements IProcessorRunable {
 	private String downloadImage(int count, String url, String saveDir) throws Exception {
 		// 获取图片下载地址，应该地址为客户端地址，因此转换成服务端地址进行下载。
 		File file;
+		Image image;
 		if (url.indexOf("/bvs/fs") >= 0) {
 			String id = "";
 			String namespace = "";
@@ -237,22 +251,48 @@ public class MSOfficeProcessor implements IProcessorRunable {
 			url = serverPath + "/fs/" + domain + "/" + namespace + "/" + id + "/"
 					+ URLEncoder.encode(fileName, "utf-8");
 			// 下载并将图片存放到临时文件夹中
-			file = new File(saveDir + File.separator + fileName);
-			BufferedImage image = ImageUtil.getBufferedImage(new URL(url));
-			ImageUtil.saveImage(image, file.getPath(), "jpg");
-			return file.getPath();
+			file = new File(saveDir + File.separator + id + ".jpg");
+			image = Toolkit.getDefaultToolkit().getImage(new URL(url));
 		} else if (url.startsWith("http")) {
 			count++;
-			BufferedImage image = ImageUtil.getBufferedImage(new URL(url));
+			image = Toolkit.getDefaultToolkit().getImage(new URL(url));
 			file = new File(saveDir + File.separator + count + ".jpg");
-			ImageUtil.saveImage(image, file.getPath(), "jpg");
-			return file.getPath();
 		} else {
-			BufferedImage image = ImageUtil.getBufferedImage(url);
+			image = Toolkit.getDefaultToolkit().getImage(url);
+			// image = ImageUtil.getBufferedImage(url);
 			file = new File(saveDir + File.separator + count + ".jpg");
-			ImageUtil.saveImage(image, file.getPath(), "jpg");
-			return file.getPath();
 		}
+		ImageUtil.saveImage(toBufferedImage(image), file.getPath(), "jpg");
+		return file.getPath();
+	}
+
+	public BufferedImage toBufferedImage(Image image) {
+		if (image instanceof BufferedImage) {
+			return (BufferedImage) image;
+		}
+		// This code ensures that all the pixels in the image are loaded
+		image = new ImageIcon(image).getImage();
+		BufferedImage bimage = null;
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		try {
+			int transparency = Transparency.OPAQUE;
+			GraphicsDevice gs = ge.getDefaultScreenDevice();
+			GraphicsConfiguration gc = gs.getDefaultConfiguration();
+			bimage = gc.createCompatibleImage(image.getWidth(null), image.getHeight(null), transparency);
+		} catch (Exception e) {
+			// The system does not have a screen
+		}
+		if (bimage == null) {
+			// Create a buffered image using the default color model
+			int type = BufferedImage.TYPE_INT_RGB;
+			bimage = new BufferedImage(image.getWidth(null), image.getHeight(null), type);
+		}
+		// Copy image to buffered image
+		Graphics g = bimage.createGraphics();
+		// Paint the image onto the buffered image
+		g.drawImage(image, 0, 0, null);
+		g.dispose();
+		return bimage;
 	}
 
 	private void downloadFile(String fileName, String url, String saveDir) {
@@ -279,9 +319,9 @@ public class MSOfficeProcessor implements IProcessorRunable {
 				}
 				url = serverPath + "/fs/" + domain + "/" + namespace + "/" + id + "/"
 						+ URLEncoder.encode(fileName, "utf-8");
+				// 下载文件
+				FileUtils.copyURLToFile(new URL(url), new File(saveDir + File.separator + id));
 			}
-			// 下载文件
-			FileUtils.copyURLToFile(new URL(url), new File(saveDir + File.separator + fileName));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

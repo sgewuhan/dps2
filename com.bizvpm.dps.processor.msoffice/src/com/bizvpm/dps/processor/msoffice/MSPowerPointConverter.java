@@ -6,7 +6,7 @@ import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.Dispatch;
 
 public class MSPowerPointConverter extends AbstractMSOfficeConverter {
-	
+
 	public MSPowerPointConverter(String sourceType, String targetType) {
 		super.sourceType = sourceType;
 		super.targetType = targetType;
@@ -24,7 +24,8 @@ public class MSPowerPointConverter extends AbstractMSOfficeConverter {
 	}
 
 	@Override
-	public void convert(ActiveXComponent app, Dispatch dis, String fromFilename, String toFilename,Map<String, String> pics) throws Exception {
+	public void convert(ActiveXComponent app, Dispatch dis, String fromFilename, String toFilename,
+			Map<String, String> pics, Map<String, String> p) throws Exception {
 		Dispatch.call(dis, "SaveAs", toFilename, 32);
 	}
 
