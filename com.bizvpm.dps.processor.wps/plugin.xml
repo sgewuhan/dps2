@@ -4,12 +4,11 @@
    <extension
          point="com.bizvpm.dps.processor">
       <processor
-            description="使用MSOffice软件转换Office格式文件为PDF"
-            id="msoffice.msofficeconverter"
+            description="使用WPS软件转换Office格式文件为PDF"
+            id="wps.wpsconverter"
             maxThreadCount="5"
-            name="MSOffice文件转换处理器"
-            runnable="com.bizvpm.dps.processor.msoffice.MSOfficeProcessor"
-            webpage="desc.html">
+            name="WPS文件转换处理器"
+            runnable="com.bizvpm.dps.processor.wps.WPSProcessor">
          <parameter
                description="需转换的文件"
                name="file"
@@ -27,10 +26,16 @@
                   value="docx">
             </restriction>
             <restriction
+                  value="wps">
+            </restriction>
+            <restriction
                   value="xls">
             </restriction>
             <restriction
                   value="xlsx">
+            </restriction>
+            <restriction
+                  value="et">
             </restriction>
             <restriction
                   value="ppt">
@@ -39,7 +44,7 @@
                   value="pptx">
             </restriction>
             <restriction
-                  value="html">
+                  value="dps">
             </restriction>
          </parameter>
          <parameter
@@ -49,43 +54,6 @@
             <restriction
                   value="pdf">
             </restriction>
-            <restriction
-                  value="docx">
-            </restriction>
-         </parameter>
-         <parameter
-               name="hasImage"
-               optional="true"
-               type="Boolean">
-         </parameter>
-         <parameter
-               name="hasAtt"
-               optional="true"
-               type="Boolean">
-         </parameter>
-         <parameter
-               name="returnZIP"
-               optional="true"
-               type="Boolean">
-         </parameter>
-         <parameter
-               name="template"
-               optional="true"
-               type="uncheck">
-         </parameter>
-         <parameter
-               name="serverPath"
-               optional="true"
-               type="String">
-         </parameter>
-         <parameter
-               name="targetName"
-               optional="true"
-               type="String">
-         </parameter>
-         <parameter
-               name="parameter"
-               type="Map">
          </parameter>
       </processor>
    </extension>

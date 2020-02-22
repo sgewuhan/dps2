@@ -27,7 +27,7 @@ public class MSExcelConverter extends AbstractMSOfficeConverter {
 	}
 
 	@Override
-	public void convert(ActiveXComponent app, Dispatch dis, String fromFilename, String toFilename,Map<String, String> pics) throws Exception {
+	public void convert(ActiveXComponent app, Dispatch dis, String fromFilename, String toFilename,Map<String, String> pics, Map<String, String> p) throws Exception {
 		// 原来的saveas只能打印活动或者指定的一个sheet内容
 		// Dispatch.invoke(dis, "SaveAs", Dispatch.Method, new Object[] {
 		// toFilename, new Variant(57), new Variant(false),
