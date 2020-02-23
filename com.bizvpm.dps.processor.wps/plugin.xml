@@ -4,6 +4,7 @@
    <extension
          point="com.bizvpm.dps.processor">
       <processor
+            catalog="转换器/Office文件"
             description="使用WPS软件转换Office格式文件为PDF"
             id="wps.wpsconverter"
             maxThreadCount="5"

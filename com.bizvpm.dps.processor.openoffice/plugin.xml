@@ -4,12 +4,13 @@
    <extension
          point="com.bizvpm.dps.processor">
       <processor
+            catalog="转换器/Office文件"
             description="使用Open Office"
             id="openoffice.converter"
             maxThreadCount="5"
             name="OpenOffice文件转换处理器"
-            runnable="com.bizvpm.dps.processor.openoffice.OpenOfficeProcessor"
-            processorActivater="com.bizvpm.dps.processor.openoffice.Starter">
+            processorActivater="com.bizvpm.dps.processor.openoffice.Starter"
+            runnable="com.bizvpm.dps.processor.openoffice.OpenOfficeProcessor">
          <parameter
                description="传入Inputstream"
                name="file"

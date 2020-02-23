@@ -4,6 +4,7 @@
    <extension
          point="com.bizvpm.dps.processor">
       <processor
+            catalog="转换器/二维图纸"
             description="使用Acme CAD Converter进行文件转换"
             id="acmecad.acmecadconverter"
             maxThreadCount="5"

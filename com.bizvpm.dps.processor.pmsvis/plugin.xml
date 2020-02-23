@@ -4,6 +4,7 @@
    <extension
          point="com.bizvpm.dps.processor">
       <processor
+            catalog="转换器"
             description="根据记录生成指定文件的PDF文件并写入数据库"
             id="pms.visualservice"
             maxThreadCount="10"
@@ -47,6 +48,7 @@
          </parameter>
       </processor>
       <processor
+            catalog="转换器"
             description="根据记录生成指定文件的PDF文件并返回"
             id="pms.pdfgen"
             maxThreadCount="10"
