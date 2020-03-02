@@ -1,47 +1,52 @@
 package com.bizvpm.dps.processor.tmtsap.etl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
+import com.bizvpm.dps.processor.mongodbds.Domain;
 import com.bizvpm.dps.processor.tmtsap.model.RNDPeriodCost;
 import com.bizvpm.dps.processor.tmtsap.model.WorkOrderPeriodCost;
+import com.bizvpm.dps.processor.tmtsap.tools.Check;
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Aggregates;
+import com.mongodb.client.model.Field;
 
+/**
+ * 使用项目实际开始时间和完成时间进行研发成本分摊 仅用于期初数据的导入
+ * 
+ * @author Administrator
+ * 
+ */
 public class WorkorderPeriodCostAllocate {
 
-	public static final String COSECENTERCODE = "cost"; //$NON-NLS-1$
-	public static final String ACCOUNTNUMERS = "account"; //$NON-NLS-1$
-	public static final String YEAR = "year"; //$NON-NLS-1$
-	public static final String MONTH = "month"; //$NON-NLS-1$
-	public static final String RNDCOST = "rndcost"; //$NON-NLS-1$
+	public static final String COSECENTERCODE = "cost";
+	public static final String ACCOUNTNUMERS = "account";
+	public static final String YEAR = "year";
+	public static final String MONTH = "month";
+	public static final String RNDCOST = "rndcost";
 	private MongoCollection<Document> costAllocateCol;
-	private MongoCollection<Document> workPerformenceCol;
 	private MongoCollection<Document> projectCol;
+	private String domain;
 
-	public WorkorderPeriodCostAllocate() {
-		// costAllocateCol = DBActivator.getCollection(IModelConstants.DB,
-		// IModelConstants.C_RND_PEROIDCOST_ALLOCATION);
-		// workPerformenceCol = DBActivator.getCollection(IModelConstants.DB,
-		// IModelConstants.C_WORKS_PERFORMENCE);
-		// projectCol = DBActivator.getCollection(IModelConstants.DB,
-		// IModelConstants.C_PROJECT);
+	public WorkorderPeriodCostAllocate(String domain) {
+		this.domain = domain;
+		projectCol = Domain.getCollection(domain, "project");
+		costAllocateCol = Domain.getCollection(domain, "rndcostallocation");
 	}
 
-	public Collection<? extends WorkOrderPeriodCost> getData(Map<String, Object> parameter) {
+	public Collection<? extends WorkOrderPeriodCost> getData(Document parameter) {
 
 		Object year = parameter.get(YEAR);
 		Object month = parameter.get(MONTH);
@@ -54,11 +59,6 @@ public class WorkorderPeriodCostAllocate {
 			throw new IllegalArgumentException("成本中心代码 costcode 参数错误");
 		}
 
-		Object account = parameter.get(ACCOUNTNUMERS);
-		if (account != null && !(account instanceof String[])) {
-			throw new IllegalArgumentException("科目表  account 参数错误");
-		}
-
 		Object rndCost = parameter.get(RNDCOST);
 		if (!(rndCost instanceof RNDPeriodCost)) {
 			throw new IllegalArgumentException("成本中心研发成本  rndcost 参数错误");
@@ -66,175 +66,130 @@ public class WorkorderPeriodCostAllocate {
 
 		// 1. 根据成本中心获得组织
 		RNDPeriodCost rndpc = ((RNDPeriodCost) rndCost);
-//		Organization org = rndpc.getOrganization();
-//
-//		if (org == null) {
-//			throw new IllegalArgumentException("成本中心无法获得对应的组织");
-//		}
+		Document org = rndpc.getOrganization();
 
-		// 准备保存工作令号对应工时的数据
-		Map<String, Double> workOrderMapWorks = new HashMap<String, Double>();
+		if (org == null) {
+			throw new IllegalArgumentException("成本中心无法获得对应的组织");
+		}
 
-//		Document company = org.getCompany();
-//		if (company == null) {
-//			throw new IllegalArgumentException("成本中心无法获得对应的公司代码");
-//		}
+		Document company = getCompany(org);
+		if (company == null) {
+			throw new IllegalArgumentException("成本中心无法获得对应的公司代码");
+		}
 
-		// 2. 级联获得组织下非成本中心组织的所有员工userid
-//		Set<String> userIds = getCostCenterUserIdList(org);
-//		String[] userIdArr = userIds.toArray(new String[0]);
+		// 获得组织下级所有正在进行的项目
+		List<Document> list = getOrganizationStructure(company);
+		List<Object> orgids = new ArrayList<Object>();
+		Check.isAssigned(list, l -> l.forEach(doc -> orgids.add(doc.get("_id"))));
 
-		// 3. 获得人员在期间的工时记录
-		BasicDBObject query = new BasicDBObject();
-//		query.put("userid", new BasicDBObject().append("$in", userIdArr)); //$NON-NLS-2$
+		// 承担组织在orgids中,在当月处于进行状态的的项目的工作令号
+		Calendar cal = Calendar.getInstance();
+		cal.set(((Integer) year).intValue(), ((Integer) month).intValue() - 1, 1, 0, 0, 0);
+		Date stop = cal.getTime();
 
-		Date[] period = getStartAndEnd((Integer) year, (Integer) month);
-		long start = period[0].getTime() / (24 * 60 * 60 * 1000);
-		long end = period[1].getTime() / (24 * 60 * 60 * 1000);
+		// 增加取后一月份第一天的数据
+		cal.add(Calendar.MONTH, 1);
+		Date start = cal.getTime();
 
-		BasicDBObject startCondition = new BasicDBObject().append("datecode",
-				new BasicDBObject().append("$gte", new Long(start))); //$NON-NLS-1$
-		BasicDBObject endCondition = new BasicDBObject().append("datecode",
-				new BasicDBObject().append("$lte", new Long(end))); //$NON-NLS-1$
+		Document query = new Document();
+		query.put("launchorg_id", new Document("$in", orgids));
+		query.put("$and", Arrays.asList(new Document("$or", Arrays.asList(
+				// 完成时间为空
+				// 或者完成时间大于前一月的最后一天
+				new Document("actualfinish", null), new Document("actualfinish", new Document("$gte", stop)))),
+				new Document("$or", Arrays.asList(
+						// 开始时间必须不为空
+						// 开始时间必须小于当月的最后一天
+						new Document("actualstart", new Document("$ne", null)),
+						new Document("actualstart", new Document("$lt", start))))));
 
-		query.put("$and", new BasicDBObject[] { startCondition, endCondition }); //$NON-NLS-1$
+		List<String> workorders = projectCol.distinct("workorder", query, String.class).into(new ArrayList<String>());
 
-		DBObject fields = new BasicDBObject();
-		fields.put("datecode", 1);
-		fields.put("works", 1);
-		fields.put("project_id", 1);
+		// 应当归属到本成本中心的工作令号
+		Set<String> effectiveWorkOrders = new HashSet<String>();
 
-		// DBCursor cur = workPerformenceCol.find(query, fields);
-		// while (cur.hasNext()) {
-		// DBObject data = cur.next();
-		// Object projectId = data.get("project_id");
-		// if (projectId == null) {
-		// continue;
-		// }
-		//
-		// // 取工时
-		// Object works = data.get("works");
-		// if (!(works instanceof Number)) {
-		// continue;
-		// }
-		//
-		// // 4. 根据工时记录的项目id逐条查询工作令号
-		// DBObject projectWorkOrderData = projectCol.findOne(new
-		// BasicDBObject().append(Project.F__ID, projectId),
-		// new BasicDBObject().append("workorder", 1));
-		// if (projectWorkOrderData == null) {
-		// continue;
-		// }
-		//
-		// Object workOrders = projectWorkOrderData.get("workorder");
-		// if (!(workOrders instanceof List<?>)) {
-		// continue;
-		// }
-		//
-		// // 应当归属到本成本中心的工作令号
-		// Set<String> effectiveWorkOrders = new HashSet<String>();
-		//
-		// List<?> list = (List<?>) workOrders;
-		// // 如果出现多条工作令号的，检查该组织工作令号的对应是否正确，如果是该成本中心的工作令号，将工时数据保存至该工作令号
-		// for (int i = 0; i < list.size(); i++) {
-		// String workOrder = (String) list.get(i);
-		// if (company.hasWorkOrder(workOrder)) {
-		// effectiveWorkOrders.add(workOrder);
-		// }
-		// }
-		// // 将工时平摊到工作令号
-		// double worksPerOrder = ((Double) works) / (effectiveWorkOrders.size());
-		// Iterator<String> iter = effectiveWorkOrders.iterator();
-		// while (iter.hasNext()) {
-		// String workOrder = iter.next();
-		//
-		// // 累计到工时记录表
-		// Double value = workOrderMapWorks.get(workOrder);
-		// if (value == null) {
-		// value = worksPerOrder;
-		// } else {
-		// value = value.doubleValue() + worksPerOrder;
-		// }
-		// workOrderMapWorks.put(workOrder, value);
-		// }
-		// }
-		// cur.close();
-		//
-		// // 全部处理完,计算总工时数
-		// Iterator<Double> iterator = workOrderMapWorks.values().iterator();
-		// double total = 0d;
-		// while (iterator.hasNext()) {
-		// total += iterator.next();
-		// }
-		//
-		// List<DBObject> toBeInsert = new ArrayList<DBObject>();
-		//
-		// Iterator<String> iter = workOrderMapWorks.keySet().iterator();
-		// while (iter.hasNext()) {
-		// String workOrderNumber = iter.next();
-		// DBObject wopc = new BasicDBObject();
-		// wopc.put(WorkOrderPeriodCost.F_WORKORDER, workOrderNumber);
-		// wopc.put(WorkOrderPeriodCost.F_YEAR, year);
-		// wopc.put(WorkOrderPeriodCost.F_MONTH, month);
-		// wopc.put(WorkOrderPeriodCost.F_COSTCENTERCODE, costCenterCode);
-		//
-		// // 保存工时分配数据
-		// // 获得该工作令号的累计工时
-		// Double works = workOrderMapWorks.get(workOrderNumber);
-		// double ratio = works / total;
-		//
-		// Iterator<String> iter2 = rndpc.get_data().keySet().iterator();
-		// while (iter2.hasNext()) {
-		// String key = iter2.next();
-		// if (!Utils.isNumbers(key)) {// 不是数字类型的字段忽略
-		// continue;
-		// }
-		// Object cost = rndpc.getValue(key);
-		// if (cost == null) {
-		// wopc.put(key, 0d);
-		// } else {
-		// double value = ((Double) cost) * ratio;
-		// wopc.put(key, value);
-		// }
-		// }
-		//
-		// toBeInsert.add(wopc);
-		// }
-		//
-		// if (toBeInsert.size() > 0) {
-		// costAllocateCol.insert(toBeInsert);
-		// }
-		//
-		// // 准备返回
-		 List<WorkOrderPeriodCost> result = new ArrayList<WorkOrderPeriodCost>();
-		// for (int i = 0; i < toBeInsert.size(); i++) {
-		// result.add(ModelService.createModelObject(toBeInsert.get(i),
-		// WorkOrderPeriodCost.class));
-		// }
+		// 如果出现多条工作令号的，检查该组织工作令号的对应是否正确，如果是该成本中心的工作令号，将工时数据保存至该工作令号
+		Check.isAssigned(workorders, l -> l.stream().filter(w -> hasWorkOrder(company, w))
+				.forEach(workOrder -> effectiveWorkOrders.add(workOrder)));
+
+		// 将研发成本平摊到每个工作令号
+		
+		if (effectiveWorkOrders.isEmpty()) {
+			System.out.println("成本中心" + costCenterCode + company + ", 在期间:" + year + month
+					+ " 无可分摊研发成本的工作令号,可能是在该期间没有正在进行的项目可供分摊。");
+			return new ArrayList<WorkOrderPeriodCost>();
+		}
+
+		List<Document> toBeInsert = new ArrayList<Document>();
+		Iterator<?> iter = effectiveWorkOrders.iterator();
+		while (iter.hasNext()) {
+			String workOrderNumber = (String) iter.next();
+			Document wopc = new Document();
+			wopc.put(WorkOrderPeriodCost.F_WORKORDER, workOrderNumber);
+			wopc.put(WorkOrderPeriodCost.F_YEAR, year);
+			wopc.put(WorkOrderPeriodCost.F_MONTH, month);
+			wopc.put(WorkOrderPeriodCost.F_COSTCENTERCODE, costCenterCode);
+
+			Document data = rndpc.get_data();
+			Iterator<String> iter2 = data.keySet().iterator();
+			while (iter2.hasNext()) {
+				String key = iter2.next();
+				if (!Check.isNumbers(key)) {// 不是数字类型的字段忽略
+					continue;
+				}
+				Object cost = data.get(key);
+				if (cost == null) {
+					wopc.put(key, 0d);
+				} else {
+					double value = ((Double) cost) / effectiveWorkOrders.size();
+					wopc.put(key, value);
+				}
+			}
+
+			toBeInsert.add(wopc);
+		}
+
+		List<WorkOrderPeriodCost> result = new ArrayList<WorkOrderPeriodCost>();
+		if (toBeInsert.size() > 0) {
+			costAllocateCol.insertMany(toBeInsert);
+			toBeInsert.forEach(doc -> result.add(new WorkOrderPeriodCost(doc)));
+		}
 
 		return result;
 	}
 
-	/**
-	 * 获得当前组织下所有的员工id, 级联搜索下级非成本中心的组织
-	 * 
-	 * @param org
-	 * @return
-	 */
-	private Set<String> getCostCenterUserIdList(Document org) {
-		Set<String> result = new HashSet<String>();
-//		List<String> ids = org.getMemberIds(false);
-//		result.addAll(ids);
-//
-//		List<Document> childrenOrgs = org.getChildrenOrganization();
-//		for (int i = 0; i < childrenOrgs.size(); i++) {
-//			Document childOrg = (Document) childrenOrgs.get(i);
-//			if (childOrg.getBoolean("costcentercode", false)) {
-//				continue;
-//			}
-//			result.addAll(getCostCenterUserIdList(childOrg));
-//		}
-		return result;
+	private boolean hasWorkOrder(Document company, String workOrder) {
+		long count = Domain.getCollection(domain, "companyworkorders").countDocuments(
+				new BasicDBObject().append("organizationid", company.get("_id")).append("workorderid", workOrder));
+		return count > 0;
+
+	}
+
+	private List<Document> getOrganizationStructure(Document doc) {
+		List<Bson> pipeline = new ArrayList<Bson>();
+		pipeline.add(Aggregates.match(new Document("_id", doc.get("_id"))));
+		pipeline.add(Aggregates.graphLookup("organization", "$_id", "parent_id", "_id", "parent"));
+		pipeline.add(Aggregates.graphLookup("organization", "$_id", "_id", "parent_id", "child"));
+		pipeline.add(Aggregates.addFields(
+				new Field<Document>("structure", new Document("$setUnion", new Document("$parent", "$child")))));
+		pipeline.add(Aggregates.unwind("$structure"));
+		pipeline.add(Aggregates.replaceRoot("$structure"));
+		return Domain.getCollection(domain, "organization").aggregate(pipeline).into(new ArrayList<Document>());
+	}
+
+	private Document getCompany(Document org) {
+		Object companycode = org.get("companycode");
+		if ((!(companycode instanceof List)) || ((List<?>) companycode).isEmpty()) {
+			if (org.get("parent_id") != null) {
+				Document parent = Optional
+						.ofNullable(Domain.getCollection(domain, "organization")
+								.find(new Document("_id", org.get("parent_id"))))
+						.map(mapper -> mapper.first()).orElse(null);
+				return getCompany(parent);
+			}
+			return null;
+		} else
+			return org;
 	}
 
 	public Date[] getStartAndEnd(Integer year, Integer month) {

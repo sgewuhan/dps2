@@ -12,6 +12,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  com.bizvpm.dps,
  org.apache.commons.io;bundle-version="2.2.0",
+ com.sg.sqldb;bundle-version="1.0.0",
+ com.bizvpm.dps.processor.mongodbds;bundle-version="1.0.0",
  org.mongodb.mongo-java-driver;bundle-version="3.8.0"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.bizvpm.dps.processor.tmtsap.Activator

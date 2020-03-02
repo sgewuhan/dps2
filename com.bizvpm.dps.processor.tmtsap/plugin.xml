@@ -18,6 +18,30 @@
             name="TMT SAP处理器"
             processorActivater="com.bizvpm.dps.processor.tmtsap.TMTSAPStarter"
             runnable="com.bizvpm.dps.processor.tmtsap.TMTSAPProcessor">
+         <parameter
+               description="对应PMS6的企业域，也是数据库名"
+               name="domain"
+               optional="false"
+               type="String">
+         </parameter>
+         <parameter
+               description="同步SAP数据的日期（年），默认为当前日期"
+               name="year"
+               optional="true"
+               type="Integer">
+         </parameter>
+         <parameter
+               description="同步SAP数据的日期（月），默认为当前日期"
+               name="month"
+               optional="true"
+               type="Integer">
+         </parameter>
+         <parameter
+               description="同步SAP数据的日期（天），默认为当前日期"
+               name="day"
+               optional="true"
+               type="Integer">
+         </parameter>
       </processor>
    </extension>
    <extension

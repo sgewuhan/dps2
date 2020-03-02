@@ -2,6 +2,7 @@ package com.bizvpm.dps.processor.tmtsap;
 
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.bizvpm.dps.processor.tmtsap.tools.Check;
@@ -87,8 +88,8 @@ public class JCO_ZXFUN_PM_YFFY implements ICostCollector {
 	 * @param costElementArray
 	 * @throws Exception
 	 */
-	public Map<String, Map<String, Double>> getCost(String[] costCodeArray, String[] workordersArray,
-			String[] costElementArray, int year, int month) throws Exception {
+	public Map<String, Map<String, Double>> getCost(List<String> costCodeArray, List<String> workordersArray,
+			List<String> costElementArray, int year, int month) throws Exception {
 
 		Client client = SapJCOToolkit.getSAPClient();
 		IRepository repository = JCO.createRepository(REPOSITORY_NAME, client);
@@ -108,20 +109,24 @@ public class JCO_ZXFUN_PM_YFFY implements ICostCollector {
 
 		ParameterList input_table = function.getTableParameterList();
 		Table tableIn = input_table.getTable(PARAMETER_COST_CENTER);
-		for (int i = 0; costCodeArray != null && i < costCodeArray.length; i++) {
-			tableIn.appendRow();
-			tableIn.setValue(costCodeArray[i], "KOSTL");// 成本中心 //$NON-NLS-1$
-		}
 
-		for (int i = 0; costElementArray != null && i < costElementArray.length; i++) {
-			tableIn.appendRow();
-			tableIn.setValue(costElementArray[i], "KSTAR");// 成本要素 //$NON-NLS-1$
-		}
+		if (costCodeArray != null && costCodeArray.size() > 0)
+			costCodeArray.stream().forEach(kostl -> {
+				tableIn.appendRow();
+				tableIn.setValue(kostl, "KOSTL");// 成本中心
+			});
 
-		for (int i = 0; workordersArray != null && i < workordersArray.length; i++) {
-			tableIn.appendRow();
-			tableIn.setValue(workordersArray[i], "AUFNR");// 工作令号 //$NON-NLS-1$
-		}
+		if (costElementArray != null && costElementArray.size() > 0)
+			costElementArray.stream().forEach(kstar -> {
+				tableIn.appendRow();
+				tableIn.setValue(kstar, "KSTAR");// 成本要素
+			});
+
+		if (workordersArray != null && workordersArray.size() > 0)
+			workordersArray.stream().forEach(aufnr -> {
+				tableIn.appendRow();
+				tableIn.setValue(aufnr, "AUFNR");// 工作令号
+			});
 
 		function.setTableParameterList(input_table);
 

@@ -1,5 +1,7 @@
 package com.bizvpm.dps.processor.tmtsap.model;
 
+import org.bson.Document;
+
 /**
  * 直接记录在工作令号下的研发成本
  * 
@@ -18,23 +20,29 @@ public class WorkOrderPeriodCost implements IAccountPeriod {
 
 	public static final String F__CDATE = "_cdate";
 
-	@Override
-	public Double getAccountValue(String accountNumber) {
-		return null;
+	private Document data;
+
+	public WorkOrderPeriodCost(Document data) {
+		this.data = data;
 	}
 
-	// public String getCostCode() {
-	// return (String) getValue(F_COSTCENTERCODE);
-	// }
-	//
-	// public String getLabel() {
-	// String label = getDesc();
-	// String costCode = getCostCode();
-	// if (label == null) {
-	// return costCode;
-	// } else {
-	// return costCode + label;
-	// }
-	// }
+	@Override
+	public Double getAccountValue(String accountNumber) {
+		return data.getDouble(accountNumber);
+	}
+
+	public String getCostCode() {
+		return data.getString(F_COSTCENTERCODE);
+	}
+
+	public String getLabel() {
+		String label = data.getString("desc");
+		String costCode = getCostCode();
+		if (label == null) {
+			return costCode;
+		} else {
+			return costCode + label;
+		}
+	}
 
 }
