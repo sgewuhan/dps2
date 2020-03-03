@@ -13,7 +13,7 @@
    <extension
          point="com.bizvpm.dps.processor">
       <processor
-            id="tmtreport"
+            id="tmt.sap"
             maxThreadCount="5"
             name="TMT SAP处理器"
             processorActivater="com.bizvpm.dps.processor.tmtsap.TMTSAPStarter"

@@ -91,7 +91,11 @@ public class MSOfficeProcessor implements IProcessorRunable {
 			throw e;
 		} finally {
 			msOfficeConverter.dispose(app, dis);
-			ComThread.Release();
+			try {
+				ComThread.Release();
+			} catch (Exception e) {
+				System.out.println(e);
+			}
 		}
 
 		if (returnZIP) {
@@ -125,10 +129,10 @@ public class MSOfficeProcessor implements IProcessorRunable {
 		time = new Date().getTime();
 
 		pathName = DPSUtil.getTempDirector(getClass(), true);
-		
+
 		File path = new File(pathName + time);
 		path.mkdirs();
-		
+
 		inputFile = new File(pathName + time + File.separator + time + "." + sourceType);
 		outputFile = new File(pathName + time + File.separator + time + "." + targetType);
 
@@ -173,7 +177,7 @@ public class MSOfficeProcessor implements IProcessorRunable {
 			if (template.isFile()) {
 				processTask.writeToFile("template", template);
 			}
-			
+
 			templatePath = template.getPath();
 
 			returnZIP = Boolean.TRUE.equals(processTask.get("returnZIP"));

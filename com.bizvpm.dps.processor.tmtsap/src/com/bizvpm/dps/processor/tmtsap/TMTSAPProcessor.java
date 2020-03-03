@@ -117,7 +117,7 @@ public class TMTSAPProcessor implements IProcessorRunable {
 
 		System.out.println("[组织指标数据]准备更新项目月成本数据:" + year + "-" + month);
 		start = System.currentTimeMillis();
-		doCBSSubject(year, month);
+		doCBSSubject(year, month, costElementArray);
 		end = System.currentTimeMillis();
 		System.out.println("[组织指标数据]更新项目月成本数据完成:" + year + "-" + month + " " + (end - start) / 1000 + " S");
 
@@ -125,29 +125,70 @@ public class TMTSAPProcessor implements IProcessorRunable {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void doCBSSubject(int year, int month) {
+	private void doCBSSubject(int year, int month, List<String> costElementArray) {
 		List<Document> result = new ArrayList<Document>();
-		cbsSubjectCol.find(new BasicDBObject("id", "" + year + String.format("%02d", month))).into(result);
-		projectCol.aggregate(Arrays.asList(Aggregates.lookup("cbs", "_id", "scope_id", "cbs"),
-				Aggregates.addFields(new Field<String>("cbs", "$cbs._id")),
-				Aggregates.lookup("cbsSubject", "cbs", "cbsItem_id", "cbsSubject"))).forEach((Document pj) -> {
-					String wos = pj.getString("workOrder");
-					List<Document> cbsSubject = (List<Document>) pj.get("cbsSubject");
-					if (cbsSubject == null)
-						cbsSubject = new ArrayList<Document>();
-					Check.isAssigned(wos, wo -> {
-						String[] workOrders = wo.split(",");
+		if (Check.isAssigned(costElementArray)) {
+			List<BsonField> group = new ArrayList<BsonField>();
+			costElementArray.forEach(costElement -> new BsonField(costElement,
+					new Document("$sum", new BasicDBObject("$ifNull", Arrays.asList(costElement, 0)))));
 
-//						 rndAllocationCol.aggregate(Arrays.asList(Aggregates.match(new BasicDBObject(""))));
-
-						// workOrderCol.aggregate(Arrays.asList());
+			cbsSubjectCol.find(new BasicDBObject("id", "" + year + String.format("%02d", month))).into(result);
+			projectCol
+					.aggregate(Arrays.asList(Aggregates.lookup("cbs", "_id", "scope_id", "cbs"),
+							Aggregates.addFields(new Field<String>("cbs", "$cbs._id")),
+							Aggregates.lookup("cbsSubject", "cbs", "cbsItem_id", "cbsSubject")))
+					.forEach((Document pj) -> {
+						String wos = pj.getString("workOrder");
+						List<?> cbs = (List<?>) pj.get("cbs");
+						if (Check.isAssigned(cbs)) {
+							Object cbs_id = cbs.get(0);
+							String id = "" + year + String.format("%02d", month);
+							List<Document> cbsSubject = Check.instanceOf(pj.get("cbsSubject"), List.class)
+									.orElse(new ArrayList<Document>());
+							Check.isAssigned(wos, wo -> {
+								String[] workOrders = wo.split(",");
+								rndAllocationCol.aggregate(Arrays.asList(
+										Aggregates.match(
+												new BasicDBObject("workorder", new BasicDBObject("$in", workOrders))
+														.append("year", year).append("month", month)), //
+										Aggregates.group(null, group)//
+								)).forEach(
+										(Document doc) -> addCBSSubject(doc, cbs_id, id, cbsSubject, costElementArray));
+								workOrderCol.aggregate(Arrays.asList(
+										Aggregates.match(
+												new BasicDBObject("workorder", new BasicDBObject("$in", workOrders))
+														.append("year", year).append("month", month)), //
+										Aggregates.group(null, group)//
+								)).forEach(
+										(Document doc) -> addCBSSubject(doc, cbs_id, id, cbsSubject, costElementArray));
+							});
+							if (cbsSubject.size() > 0) {
+								result.addAll(cbsSubject);
+							}
+						}
 					});
-
-				});
-		if (result.size() > 0) {
-			cbsSubjectCol.deleteMany(new BasicDBObject("id", "" + year + String.format("%02d", month)));
-			cbsSubjectCol.insertMany(result);
+			if (result.size() > 0) {
+				cbsSubjectCol.deleteMany(new BasicDBObject("id", "" + year + String.format("%02d", month)));
+				cbsSubjectCol.insertMany(result);
+			}
 		}
+	}
+
+	private void addCBSSubject(Document doc, Object cbs_id, String id, List<Document> cbsSubjects,
+			List<String> costElementArray) {
+		costElementArray.forEach(costElement -> Check.instanceThen(doc.get(costElement), Number.class, cost -> {
+			Document cbsSubject = getCBSSubject(costElement, id, cbsSubjects).append("id", id)
+					.append("cbsItem_id", cbs_id).append("subjectNumber", costElement);
+			Check.instanceThen(cbsSubject.get("cost"), Number.class,
+					c -> cbsSubject.append("cost", c.doubleValue() + ((Number) cost).doubleValue()));
+			cbsSubjects.add(cbsSubject);
+		}));
+	}
+
+	private Document getCBSSubject(String costElement, String id, List<Document> cbsSubjects) {
+		return cbsSubjects.stream()
+				.filter(cbs -> costElement.equals(cbs.get("subjectNumber")) && id.equals(cbs.get("id"))).findFirst()
+				.orElse(new Document());
 	}
 
 	private void doProjectMonthSalesData(int year, int month) {
