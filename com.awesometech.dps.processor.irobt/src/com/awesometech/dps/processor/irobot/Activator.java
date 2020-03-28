@@ -1,10 +1,11 @@
-package com.awesometech.dps.processor.irobt;
+package com.awesometech.dps.processor.irobot;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+
 public class Activator extends AbstractUIPlugin {
-	
+
 	private static Activator plugin;
 
 	@Override
@@ -21,5 +22,4 @@ public class Activator extends AbstractUIPlugin {
 		return plugin;
 	}
 
-	
 }

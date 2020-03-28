@@ -1,5 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension
+         point="com.bizvpm.dps.processor">
+      <processor
+            description="创建job处理器"
+            id="IRobot.createjob"
+            maxThreadCount="5"
+            name="IRobot创建Job"
+            processorActivater="com.awesometech.dps.processor.irobot.preferences.IRobotStarter"
+            runnable="com.awesometech.dps.processor.irobot.Createjob">
+         <parameter
+               description="用以提交到I8的工程文件"
+               name="engineeringFiles"
+               optional="false"
+               type="DataHandler">
+         </parameter>
+         <parameter
+               description="文件后缀名"
+               name="fileType"
+               optional="false"
+               type="String">
+         </parameter>
+      </processor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="processor"
+            class="com.awesometech.dps.processor.irobot.preferences.IRobotPreferencePage"
+            id="com.awesometech.dps.processor.irobot.preferences.IRobotPreferencePage"
+            name="IRobot处理器">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="com.awesometech.dps.processor.irobot.preferences.IRobotPreferenceInitializer">
+      </initializer>
+   </extension>
 
 </plugin>

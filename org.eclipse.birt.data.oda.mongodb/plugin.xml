@@ -52,7 +52,7 @@
 	                  allowsEmptyValueAsNull="true"
 	                  canInherit="true"
 	                  defaultDisplayName="%datasource.property.serverPort"
-	                  defaultValue="27017"
+	                  defaultValue="10001"
 	                  isEncryptable="false"
 	                  name="serverPort"
 	                  type="string">
