@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/com.awesometech.dps.processor.irobot.feature_1.0.0.202003291757.jar" id="com.awesometech.dps.processor.irobot.feature" version="1.0.0.202003291757">
+      <category name="IRobot"/>
+   </feature>
+   <category-def name="IRobot" label="IRobot"/>
+</site>

@@ -1,6 +1,7 @@
 package com.awesometech.dps.processor.irobot.preferences;
 
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
@@ -28,6 +29,8 @@ public class IRobotPreferencePage extends FieldEditorPreferencePage implements I
 				"UserName:", getFieldEditorParent()));
 		addField(new StringFieldEditor(IRobotPreferenceConstants.USERPWD,
 				"UserPassword:", getFieldEditorParent()));
+		addField(new IntegerFieldEditor(IRobotPreferenceConstants.TIMEOUT,
+				"TimeOut:", getFieldEditorParent()));
 	}
 
 	/*

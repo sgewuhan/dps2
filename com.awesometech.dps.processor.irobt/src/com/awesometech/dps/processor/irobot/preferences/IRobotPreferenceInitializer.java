@@ -19,8 +19,9 @@ public class IRobotPreferenceInitializer extends AbstractPreferenceInitializer {
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		store.setDefault(IRobotPreferenceConstants.USERNAME, "admin");
-		store.setDefault(IRobotPreferenceConstants.URL, "localhost");
+		store.setDefault(IRobotPreferenceConstants.URL, "http://localhost:8080/");
 		store.setDefault(IRobotPreferenceConstants.USERPWD, "");
+		store.setDefault(IRobotPreferenceConstants.TIMEOUT, 3000);
 	}
 
 }

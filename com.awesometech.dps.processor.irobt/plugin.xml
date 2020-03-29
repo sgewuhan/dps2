@@ -9,7 +9,7 @@
             maxThreadCount="5"
             name="IRobot创建Job"
             processorActivater="com.awesometech.dps.processor.irobot.preferences.IRobotStarter"
-            runnable="com.awesometech.dps.processor.irobot.Createjob">
+            runnable="com.awesometech.dps.processor.irobot.CreateJob">
          <parameter
                description="用以提交到I8的工程文件"
                name="engineeringFiles"
