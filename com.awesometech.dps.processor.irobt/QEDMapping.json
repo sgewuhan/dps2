@@ -1,0 +1,7 @@
+{
+	"copperlayercount":"ED_LayerCount",
+	"pcbthickness":"ED_BoardThk",
+	"drillholedensity":"ED_DrillHoleDensity",
+	"boardsizex":"ED_PCBUnitLength",
+	"boardsizey":"ED_PCBUnitWidth"
+}

@@ -1,4 +1,4 @@
-package com.awesometech.dps.processor.irobot;
+package com.awesometech.dps.processor.irobot.service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,7 +12,7 @@ import java.util.function.BiConsumer;
  * @author Zhangjc
  *
  */
-public class HttpServices {
+public class HttpService {
 
 	public static void callIRobot(String urlPath, String cookie, int timeOut, BiConsumer<String, String> result)
 			throws IOException {
