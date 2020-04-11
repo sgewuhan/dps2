@@ -1,0 +1,213 @@
+{
+
+            "boardsizex" : "86.100", 
+            "boardsizey" : "49.784", 
+            "copperlayercount" : "6", 
+            "pcbthickness" : "1.662", 
+            "soldermask" : "Both", 
+            "customerpanelsize" : null, 
+            "legend" : "Both", 
+            "smdpadstop" : "1274", 
+            "paste" : "0", 
+            "smdpadsbottom" : "642", 
+            "peeloffmask" : "None", 
+            "smddensitytop" : "2976", 
+            "carbonmask" : "None", 
+            "smddensitybottom" : "1499", 
+            "electricaltest" : "Double Sided", 
+            "numberofnets" : "644", 
+            "drillholedensity" : "2046", 
+            "minimumaspectratio" : "8.2", 
+            "maskcolor" : "Green", 
+            "legendcolor" : "unknown", 
+            "holesinpad" : "Yes", 
+            "edgeconnectors" : "No", 
+            "viascoveredbysoldermask" : "4", 
+            "viaspartlycoveredbysoldermask" : "0", 
+            "thviashalfmask" : "No", 
+            "surfacefinish" : null, 
+            "castellated" : "No", 
+            "ED_CopperLayers" : [
+                {
+                    "type" : "MinTrack", 
+                    "outer" : "0.036", 
+                    "inner" : "0.069"
+                }, 
+                {
+                    "type" : "MinTrackAllCopper", 
+                    "outer" : "0.036", 
+                    "inner" : "0.069"
+                }, 
+                {
+                    "type" : "MinTrackCriticalTrace", 
+                    "outer" : "0.076", 
+                    "inner" : "0.102"
+                }, 
+                {
+                    "type" : "MinTrackAllTrace", 
+                    "outer" : "0.076", 
+                    "inner" : "0.102"
+                }, 
+                {
+                    "type" : "MinGap", 
+                    "outer" : "0.076", 
+                    "inner" : "0.076"
+                }, 
+                {
+                    "type" : "MinSelfSpacing", 
+                    "outer" : "0.020", 
+                    "inner" : "0.060"
+                }, 
+                {
+                    "type" : "MinGapPP", 
+                    "outer" : "0.082", 
+                    "inner" : "0.082"
+                }, 
+                {
+                    "type" : "MinGapPT", 
+                    "outer" : "0.076", 
+                    "inner" : "0.076"
+                }, 
+                {
+                    "type" : "MinGapTT", 
+                    "outer" : "0.076", 
+                    "inner" : "0.076"
+                }, 
+                {
+                    "type" : "MinGapTraceTrace", 
+                    "outer" : "0.076", 
+                    "inner" : "0.076"
+                }, 
+                {
+                    "type" : "MinRing", 
+                    "outer" : "0.127", 
+                    "inner" : "0.127"
+                }, 
+                {
+                    "type" : "MinDistCopperToPlated", 
+                    "outer" : "0.203", 
+                    "inner" : "0.076"
+                }, 
+                {
+                    "type" : "MinDistCopperToNonPlated", 
+                    "outer" : "0.102", 
+                    "inner" : "0.076"
+                }, 
+                {
+                    "type" : "MinDistCopperToBackdrill", 
+                    "outer" : "", 
+                    "inner" : ""
+                }, 
+                {
+                    "type" : "MinDistCopperToOutline", 
+                    "outer" : "0.165", 
+                    "inner" : "0.137"
+                }, 
+                {
+                    "type" : "MinDistCopperToOutlinePads", 
+                    "outer" : "0.271", 
+                    "inner" : "0.318"
+                }, 
+                {
+                    "type" : "MinDistCopperToOutlineTracks", 
+                    "outer" : "0.444", 
+                    "inner" : "0.375"
+                }, 
+                {
+                    "type" : "MinDistCopperToOutlineRegions", 
+                    "outer" : "0.165", 
+                    "inner" : "0.137"
+                }, 
+                {
+                    "type" : "MinDistCopperToScoredOutline", 
+                    "outer" : "0.165", 
+                    "inner" : "0.137"
+                }, 
+                {
+                    "type" : "MinDistViaPlug", 
+                    "outer" : "", 
+                    "inner" : ""
+                }
+            ], 
+            "ED_DrillSummary" : [
+                {
+                    "type" : "Span", 
+                    "total" : "", 
+                    "PTH" : "", 
+                    "NPTH" : ""
+                }, 
+                {
+                    "type" : "Tools", 
+                    "total" : "17.0", 
+                    "PTH" : "11", 
+                    "NPTH" : "6"
+                }, 
+                {
+                    "type" : "MinEndDia", 
+                    "total" : "0.203", 
+                    "PTH" : "0.203", 
+                    "NPTH" : "0.600"
+                }, 
+                {
+                    "type" : "MaxEndDia", 
+                    "total" : "3.250", 
+                    "PTH" : "2.700", 
+                    "NPTH" : "3.250"
+                }, 
+                {
+                    "type" : "Holes", 
+                    "total" : "876.0", 
+                    "PTH" : "867", 
+                    "NPTH" : "9"
+                }, 
+                {
+                    "type" : "MinRingOnOuter", 
+                    "total" : "0.127", 
+                    "PTH" : "0.127", 
+                    "NPTH" : ""
+                }, 
+                {
+                    "type" : "MinRingOnInner", 
+                    "total" : "0.127", 
+                    "PTH" : "0.127", 
+                    "NPTH" : ""
+                }, 
+                {
+                    "type" : "MinClrCopper", 
+                    "total" : "0.076", 
+                    "PTH" : "0.076", 
+                    "NPTH" : "0.076"
+                }, 
+                {
+                    "type" : "MinClr", 
+                    "total" : "0.254", 
+                    "PTH" : "0.254", 
+                    "NPTH" : ""
+                }, 
+                {
+                    "type" : "OverlappingHoles", 
+                    "total" : "", 
+                    "PTH" : "No", 
+                    "NPTH" : "No"
+                }, 
+                {
+                    "type" : "MinClrInnerSpan", 
+                    "total" : "0.381", 
+                    "PTH" : "", 
+                    "NPTH" : "0.381"
+                }, 
+                {
+                    "type" : "MinClrOutline", 
+                    "total" : "0.398", 
+                    "PTH" : "0.398", 
+                    "NPTH" : "0.409"
+                }, 
+                {
+                    "type" : "MinClrOutlineTracks", 
+                    "total" : "", 
+                    "PTH" : "", 
+                    "NPTH" : ""
+                }
+            ]
+        
+}

@@ -62,8 +62,10 @@ public class IRobotJobService {
 	
 	private String domain;
 	
-	public void saveJob(String rfq_id, int jobId, String hostId) {
-		Document job = new Document().append("jobId", jobId).append("status", JOB_STATUS_NEW)
+	private boolean mockup; 
+	
+	public void saveJob(String rfq_id, String jobId, String fileName, String hostId) {
+		Document job = new Document().append("jobId", jobId).append("status", JOB_STATUS_NEW).append("fileName", fileName)
 				.append("createDate", new Date()).append("hostId", hostId).append("rfqId", rfq_id);
 		Activator.db().getCollection("irobotJob").insertOne(job);
 	}
@@ -73,10 +75,12 @@ public class IRobotJobService {
 		List<Document> activeJobs = getActiveJobs(serverIp);
 		// 先处理job，再将处理结果返回到PDM的数据
 		List<Document> jobDataList = activeJobs.stream().map(j ->handlerStatus(j)).collect(Collectors.toList());
-		String pUrl = pdmUrl.replace("<IP>", pdmIp).replace("<PORT>", pdmPort);
-		PdmClient.pushToPDM(pUrl, domain, jobDataList);
-		// TODO 需要考虑PDM的接收情况
-		jobDataList.forEach(j -> updateJob(j));
+		if (null != jobDataList && jobDataList.size() > 0) {
+			String pUrl = pdmUrl.replace("<IP>", pdmIp).replace("<PORT>", pdmPort);
+			PdmClient.pushToPDM(pUrl, domain, jobDataList);
+			// TODO 需要考虑PDM的接收情况,如果推送失败，需要下次推送，但是job不需要做再解析
+			jobDataList.forEach(j -> updateJob(j));
+		} 
 	}
 	
 	public void updateJob(Document doc) {
@@ -97,9 +101,18 @@ public class IRobotJobService {
 
 	// 按不同的状态分别对job进行单独处理
 	private Document handlerStatus(Document job) {
+		// Mockup Data
+		if (mockup) {
+			Document irobotQed = AdapterTool.readJsonFile("MockUpIRobotQed.json");
+			Document qed = AdapterTool.readJsonFile("MockUpQed.json");
+			job.append("status", JOB_STATUS_COMPLETED);
+			job.append("qedData", new Document().append("irobotQed", irobotQed).append("qed", qed));
+			return job;
+		} 
+		
 		// 用来存储http请求的返回值，response[0]是返回的数据，response[1]是返回的cookie
 		String[] response = new String[2];
-		String jobId = String.valueOf(job.get("jobId"));
+		String jobId = job.getString("jobId");
 		String statusUrl = getStatusUrl.replace("<IP>", serverIp).replace("<PORT>", serverPort).replace("<JOBID>", jobId)
 				.replace("<USERNAME>", userName).replace("<PASSWORD>", userPwd);
 		QedService qedService = new QedService();
@@ -166,6 +179,7 @@ public class IRobotJobService {
 		pdmIp = Activator.getDefault().getPreferenceStore().getString(IRobotPreferenceConstants.PDM_IP);
 		pdmPort = Activator.getDefault().getPreferenceStore().getString(IRobotPreferenceConstants.PDM_PORT);
 		domain = Activator.getDefault().getPreferenceStore().getString(IRobotPreferenceConstants.PDM_DOMAIN);
+		mockup = Activator.getDefault().getPreferenceStore().getBoolean(IRobotPreferenceConstants.MOCKUP);
 //		qedWorkPath = Activator.getDefault().getPreferenceStore().getString(IRobotPreferenceConstants.IRobot_QED_PATH);
 	}
 

@@ -39,6 +39,7 @@ public class IRobotPreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(IRobotPreferenceConstants.PDM_IP, "127.0.0.1");
 		store.setDefault(IRobotPreferenceConstants.PDM_PORT, "9158");
 		store.setDefault(IRobotPreferenceConstants.PDM_DOMAIN, "MYDL_1E2TAH2FA");
+		store.setDefault(IRobotPreferenceConstants.MOCKUP, false);
 	}
 
 }

@@ -2,33 +2,20 @@ package com.awesometech.dps.processor.irobot.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigDecimal;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-
-import org.bson.BasicBSONObject;
 import org.bson.Document;
 
 import com.awesometech.dps.processor.irobot.Activator;
 import com.awesometech.dps.processor.irobot.preferences.IRobotPreferenceConstants;
-import com.mongodb.BasicDBList;
 
 /**
  * QED处理类
@@ -52,8 +39,6 @@ public class QedService {
 		init(jobId, fileName);
 		Document irobotQed = XmlBsonTool.xmlFileToBSONObject(qedPath);
 		Document qed = qedAdapter(irobotQed, new Document());
-		print(irobotQed.toJson());
-		print(qed.toJson());
 		Document doc = new Document();
 		doc.append("irobotQed", irobotQed);
 		doc.append("qed", qed);
@@ -100,7 +85,8 @@ public class QedService {
 	public void summaryParameterAdapter(Document qed,List<Document> summaryParameterList) {
 		summaryParameterList.stream().forEach(c -> {
 			// TODO 需要做名称的adapter，将其适配成我方QED的名称
-			qed.append(c.getString("name"),BasicObjectAdapterTool.adapterSummary(c.getString("name"), c.getString("value")));
+			qed.append(AdapterTool.mappingName(c.getString("name")),
+					AdapterTool.adapterSummary(c.getString("name"), c.getString("value")));
 		});
 	}
 	
@@ -135,11 +121,6 @@ public class QedService {
 		    <xsd:attribute name="layerOrGroupRef" type="xsd:string" use="required"/>
 		  </xsd:complexType>
 	 */
-	// CopperLayer  下为一个Document List，里面的Document由layerOrGroupRef标识所在层，其余元素用于描述该层的特征属性
-	// 				铜层涉及到了最小值的计算，我们需要的是一张统计表，统计分内层和外层，然后分别获取内外层每个参数的最小值
-	// 处理办法：对铜层进行内外层分组，然后计算每组的每个参数的最小值，然后adapter成我们的QED对象
-	// TODO:计算规则需要等UCAMCO的确认规则
-	@SuppressWarnings("unchecked")
 	public void copperLayerAdapter(Document qed, List<Document> copperLayerList) {
 		// 用以区分是否top层和bottom层
 		List<String> layerOrGroupRef = Arrays.asList(new String[] { "top", "bot" }); // 类型为 string,无特殊处理方法
@@ -153,8 +134,8 @@ public class QedService {
 		List<String> minCopperAreaList = Arrays.asList(new String[] { "CopperArea" });  // 类型为T_CopperArea
 		List<String> decStringList = Arrays.asList(new String[] { "EtchCompensation" }); // 类型为T_DecString
 
-		BasicObjectAdapterTool boat = new BasicObjectAdapterTool();
-		boat.setMinResultList(minResultList).setMinCopperAreaList(minCopperAreaList).setDecStringList(decStringList);
+		AdapterTool atl = new AdapterTool();
+		atl.setMinResultList(minResultList).setMinCopperAreaList(minCopperAreaList).setDecStringList(decStringList);
 		
 		Document minIn = new Document();
 		Document minOut = new Document();
@@ -164,7 +145,7 @@ public class QedService {
 			boolean isTopBot = layerOrGroupRef.contains(cp.getString("layerOrGroupRef"));
 			cp.forEach((k, v) -> {
 				// 数据处理，抓取每个参数的值
-				String value = boat.getValue(k, v);
+				String value = atl.getValue(k, v);
 				// 数据处理，对数据进行分类，判断是out还是in，然后取出里面的值，和minIn与minOut里面的值进行比对,获取其中的最小值
 				if (isTopBot) {
 					minOut.append(k, getMin(minOut.getString(k),value));
@@ -255,10 +236,10 @@ public class QedService {
 		List<String> spanList = Arrays.asList(new String[] { "Span" }); // 类型为T_Span
 		List<String> drillSequenceTypeList = Arrays.asList(new String[] { "T_DrillSequenceType" }); // 类型为T_DrillSequenceType
 
-		String[] types = new String[] { "PTH", "NPTH", "blind", "buried", "backdrill" };
+//		String[] types = new String[] { "PTH", "NPTH", "blind", "buried", "backdrill" };
 
-		BasicObjectAdapterTool boat = new BasicObjectAdapterTool();
-		boat.setMinResultList(minResultList).setDecStringList(decStringList).setBasicStrList(basicStrList)
+		AdapterTool atl = new AdapterTool();
+		atl.setMinResultList(minResultList).setDecStringList(decStringList).setBasicStrList(basicStrList)
 				.setSpanList(spanList).setDrillSequenceTypeList(drillSequenceTypeList);
 
 		Map<String, Document> dataMap = new LinkedHashMap<String, Document>();   
@@ -279,7 +260,7 @@ public class QedService {
 				doc.remove("type"); // 这里是因为要将type提取出来作为列名,将其他属性key作为行名,拼装成为一个表格，所以将它remove掉
 				doc.forEach((k, v) -> {
 					// 获取实际值
-					String data = boat.getValue(k, v);
+					String data = atl.getValue(k, v);
 					// TODO 需要做名称映射的转换
 					drillLayer.append(k, data);
 					if (null == dataMap.get(k)) {
@@ -296,7 +277,7 @@ public class QedService {
 		dataMap.forEach((k, v) -> {
 			// 计算total值，对不同类型的字段属性计算方式是有差异的
 			// TODO 具体计算规则需要ucamco的资料确认，现在按解析数据对比出的结果进行计算，可能不太准确
-			String total = boat.calcDrilllTotal(k,(Document)v);
+			String total = atl.calcDrilllTotal(k,(Document)v);
 			Document doc = new Document();
 			doc.append("type", k);
 			doc.append("total", total);
@@ -354,7 +335,7 @@ public class QedService {
 	}
 
 	// 将字符串转换成double，然后进行大小比对，返回最小值，如果其中一个不为数字，则将那个为数值的返回
-	public String getMin (String str1, String str2) {
+	 private String getMin (String str1, String str2) {
 		if(isNumeric(str1) && isNumeric(str2)) {
 			if(Double.valueOf(str1) < Double.valueOf(str2)) {
 				return str1;
@@ -386,10 +367,6 @@ public class QedService {
 			return false;
 		}
 		return true;
-	}
-
-	private void print(Object obj) {
-		System.out.println(obj);
 	}
 
 }

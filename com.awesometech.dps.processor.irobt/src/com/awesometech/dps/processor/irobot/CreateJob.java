@@ -33,6 +33,8 @@ public class CreateJob implements IProcessorRunable {
 	
 	private String rfqId;
 	
+	private boolean mockup;
+	
 	private String loginUrl = "http://<IP>:<PORT>/Login.do?LoginName=<USERNAME>&Password=<PASSWORD>&state=processLogin";
 	
 	private String submitUrl = "http://<IP>:<PORT>/QueueWorkflow.do?state=queueWorkflow&workflowClass=com.maniabarco.autoflow.workflow.JobProfilerWorkflow&action=upload"
@@ -43,21 +45,26 @@ public class CreateJob implements IProcessorRunable {
 			throws Exception {
 		// TODO Auto-generated method stub
 		ProcessResult r = new ProcessResult();
-		int jobId = -1;
+		String jobId = "-1";
+		String fileName = "";
 		init(processTask);
 		if (inputFile.exists()) {
 			try {
-				jobId = createJob();
+				fileName = inputFile.getName();
+				if (mockup) {
+					jobId = String.valueOf(System.currentTimeMillis());
+				}else {
+					jobId = createJob();
+				}
 			}catch(Exception e) {
 				throw e;
 			}finally {
-				// 文件提交操作结束后，如果临时文件还存在，则将其干掉
+				// 文件提交操作结束后，如果临时文件还存在，则将其干掉(如果提交成功的，临时文件会被I8自己清除掉)
 				if (inputFile.exists())
 					inputFile.delete();
 			}
-
 		}
-		new IRobotJobService().saveJob(rfqId,jobId,serverIp);
+		new IRobotJobService().saveJob(rfqId,jobId,fileName,serverIp);
 		r.put("jobId", jobId);
 		return r;
 	}
@@ -74,12 +81,13 @@ public class CreateJob implements IProcessorRunable {
 		userName = Activator.getDefault().getPreferenceStore().getString(IRobotPreferenceConstants.IRobot_USERNAME);
 		userPwd = Activator.getDefault().getPreferenceStore().getString(IRobotPreferenceConstants.IRobot_USERPWD);
 		timeOut = Activator.getDefault().getPreferenceStore().getInt(IRobotPreferenceConstants.IRobot_TIMEOUT);
+		mockup = Activator.getDefault().getPreferenceStore().getBoolean(IRobotPreferenceConstants.MOCKUP);
 		processTask.writeToFile("engineeringFiles", inputFile);
 
 	}
 
-	// TODO 创建Job，返回jobid，如果jobid为空，返回-1
-	private int createJob() throws Exception {
+	// 创建Job，返回jobid，如果jobid为空，返回-1
+	private String createJob() throws Exception {
 		String[] response = new String[2]; // 用来存储http请求的返回值，response[0]是返回的数据，response[1]是返回的cookie
 
 		// 登录，请求获取Cookie
@@ -112,9 +120,9 @@ public class CreateJob implements IProcessorRunable {
 	 * @return
 	 */
 	// TODO 需要让第三方软件改进，这里直接返回的是一个结构化的数据，或者就直接返回一个job的id，其他东西都不要，则下面的逻辑可以做简化
-	private int getJobNumber(String response) {
+	private String getJobNumber(String response) {
 		if(null == response) {
-			return -1;
+			return "-1";
 		}
 		String pattern = "(Queued workflow having JobNumber:\\s+\\d+</td>)";
 		String pattern2 =  "\\d+";
@@ -124,10 +132,10 @@ public class CreateJob implements IProcessorRunable {
 			r = Pattern.compile(pattern2);
 			m = r.matcher(m.group(0));
 			if (m.find()) {
-				return Integer.valueOf(m.group(0));
+				return m.group(0);
 			}
 		} 
-		return -1;
+		return "-1";
 	}
 
 }

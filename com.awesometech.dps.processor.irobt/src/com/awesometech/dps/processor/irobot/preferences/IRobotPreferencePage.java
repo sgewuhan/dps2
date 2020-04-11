@@ -1,5 +1,6 @@
 package com.awesometech.dps.processor.irobot.preferences;
 
+import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.jface.preference.StringFieldEditor;
@@ -63,6 +64,8 @@ public class IRobotPreferencePage extends FieldEditorPreferencePage implements I
 				"PDM PORT:", parent));
 		addField(new StringFieldEditor(IRobotPreferenceConstants.PDM_DOMAIN,
 				"PDM DOMAIN:", parent));
+		addField(new BooleanFieldEditor(IRobotPreferenceConstants.MOCKUP,
+				"MOCKUP:", parent));
 	}
 
 	/*

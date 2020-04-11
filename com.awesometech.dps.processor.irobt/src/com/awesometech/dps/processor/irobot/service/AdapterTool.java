@@ -23,7 +23,7 @@ import org.bson.Document;
  * @author ThinkPad
  *
  */
-public class BasicObjectAdapterTool {
+public class AdapterTool {
 	
 	private List<String> minResultList = new ArrayList<String>();
 	private List<String> minCopperAreaList = new ArrayList<String>();
@@ -32,7 +32,7 @@ public class BasicObjectAdapterTool {
 	private List<String> spanList = new ArrayList<String>();
 	private List<String> drillSequenceTypeList = new ArrayList<String>();
 	
-	private Document nameMapping;
+	private static Document nameMapping;
 	
 	// 取出基础对象的值
 	@SuppressWarnings("unchecked")
@@ -41,9 +41,9 @@ public class BasicObjectAdapterTool {
 		if(value instanceof List) {
 			List<Document> valueList = (List<Document>)value;
 			if(minResultList.contains(key)) {
-				data = getMinValue(valueList,BasicObjectAdapterTool::minResultAdapter);
+				data = getMinValue(valueList,AdapterTool::minResultAdapter);
 			}else if(minCopperAreaList.contains(key)) {
-				data = getMinValue(valueList,BasicObjectAdapterTool::copperAreaAdapter);
+				data = getMinValue(valueList,AdapterTool::copperAreaAdapter);
 			}else if(decStringList.contains(key)) {
 				
 			}else if(basicStrList.contains(key)) {
@@ -266,47 +266,73 @@ public class BasicObjectAdapterTool {
 	}
 	
 	
-	public Document getNameMapping() {
+	public static Document getNameMapping() {
 		if(null == nameMapping) {
-			String content = XmlBsonTool.readXmlFile("QEDMapping.json");
-			nameMapping = Document.parse(content);
+			nameMapping = readJsonFile("QEDMapping.json");
 		}
 		return nameMapping;
 	}
 
-	public String mappingName(String pre) {
+	// 对QED文件处理进行转换，
+	public static String mappingName(String pre) {
 		if(null != getNameMapping().getString(pre)) {
 			return nameMapping.getString(pre);
 		}
 		return pre;
 	}
 	
-	public BasicObjectAdapterTool setMinResultList(List<String> minResultList) {
+	public static Document readJsonFile(String fileName) {
+		InputStream is = null;
+		BufferedReader reader = null;
+		try {
+			is = AdapterTool.class.getResourceAsStream(fileName);
+			reader = new BufferedReader(new InputStreamReader(is, "utf-8"));
+			String line = null;
+			String content = "";
+			while ((line = reader.readLine()) != null) {
+				content += line + "\n";
+			}
+			reader.close();
+			Document data = Document.parse(content);
+			return data;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			try {
+				if (is != null)
+					is.close();
+				if (reader != null)
+					reader.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public AdapterTool setMinResultList(List<String> minResultList) {
 		this.minResultList = minResultList;
 		return this;
 	}
-	public BasicObjectAdapterTool setDecStringList(List<String> decStrList) {
+	public AdapterTool setDecStringList(List<String> decStrList) {
 		this.decStringList = decStrList;
 		return this;
 	}
-	public BasicObjectAdapterTool setBasicStrList(List<String> basicStrList) {
+	public AdapterTool setBasicStrList(List<String> basicStrList) {
 		this.basicStrList = basicStrList;
 		return this;
 	}
-	public BasicObjectAdapterTool setSpanList(List<String> spanList) {
+	public AdapterTool setSpanList(List<String> spanList) {
 		this.spanList = spanList;
 		return this;
 	}
-	public BasicObjectAdapterTool setMinCopperAreaList(List<String> minCopperAreaList) {
+	public AdapterTool setMinCopperAreaList(List<String> minCopperAreaList) {
 		this.minCopperAreaList = minCopperAreaList;
 		return this;
 	}
-	public BasicObjectAdapterTool setDrillSequenceTypeList(List<String> drillSequenceTypeList) {
+	public AdapterTool setDrillSequenceTypeList(List<String> drillSequenceTypeList) {
 		this.drillSequenceTypeList = drillSequenceTypeList;
 		return this;
-	}
-	private void print(Object obj) {
-		System.out.println(obj);
 	}
 
 }
