@@ -12,12 +12,12 @@ import com.eclipsesource.jaxrs.consumer.ConsumerFactory;
 public class PdmClient {
 
 	// QED处理完成后，将QED返回到PDM
-	public static void pushToPDM(String host,String domain,List<Document> jobList) {
+	public static void pushToPDM(String host,List<Document> jobList) {
 		try {
 			ClientConfig config = new ClientConfig().register(new BsonProvider<Object>());
 			EngnisQuotationService service = ConsumerFactory.createConsumer(host, config,
 					EngnisQuotationService.class);
-			service.updateJobData(jobList, domain);
+			service.updateJobData(jobList);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

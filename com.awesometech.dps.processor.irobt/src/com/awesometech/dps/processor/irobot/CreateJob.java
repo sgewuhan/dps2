@@ -35,6 +35,8 @@ public class CreateJob implements IProcessorRunable {
 	
 	private boolean mockup;
 	
+	private String domain;
+	
 	private String loginUrl = "http://<IP>:<PORT>/Login.do?LoginName=<USERNAME>&Password=<PASSWORD>&state=processLogin";
 	
 	private String submitUrl = "http://<IP>:<PORT>/QueueWorkflow.do?state=queueWorkflow&workflowClass=com.maniabarco.autoflow.workflow.JobProfilerWorkflow&action=upload"
@@ -64,7 +66,7 @@ public class CreateJob implements IProcessorRunable {
 					inputFile.delete();
 			}
 		}
-		new IRobotJobService().saveJob(rfqId,jobId,fileName,serverIp);
+		new IRobotJobService().saveJob(rfqId,jobId,fileName,serverIp,domain);
 		r.put("jobId", jobId);
 		return r;
 	}
@@ -74,6 +76,7 @@ public class CreateJob implements IProcessorRunable {
 		long time = new Date().getTime();
 		String pathName = DPSUtil.getTempDirector(getClass(), true);
 		String fileType = (String) processTask.get("fileType");
+		domain =  (String) processTask.get("domain");
 		rfqId = (String) processTask.get("rfqId");
 		inputFile = new File(pathName + time + "." + fileType);
 		serverIp = Activator.getDefault().getPreferenceStore().getString(IRobotPreferenceConstants.IRobot_IP);
