@@ -36,7 +36,7 @@ public class IRobotPreferenceConstants {
 	
 	public static final String PDM_PORT = "pdmPort";
 	
-	public static final String PDM_DOMAIN = "pdmDomain";
+//	public static final String PDM_DOMAIN = "pdmDomain";
 	
 	public static final String MOCKUP = "mockup"; 
 }

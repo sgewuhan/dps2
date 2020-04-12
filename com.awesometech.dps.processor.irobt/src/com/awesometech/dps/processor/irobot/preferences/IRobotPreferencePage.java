@@ -32,12 +32,14 @@ public class IRobotPreferencePage extends FieldEditorPreferencePage implements I
 				"IRobot PORT:", parent));
 		addField(new StringFieldEditor(IRobotPreferenceConstants.IRobot_USERNAME,
 				"IRobot User Name:", parent));
-		addField(new StringFieldEditor(IRobotPreferenceConstants.IRobot_USERPWD,
-				"IRobot User Password:", parent));
+		StringFieldEditor pwdEditor = new StringFieldEditor(IRobotPreferenceConstants.IRobot_USERPWD,
+				"IRobot User Password:", parent);
+		pwdEditor.getTextControl(parent).setEchoChar('*');
+		addField(pwdEditor);
 		addField(new IntegerFieldEditor(IRobotPreferenceConstants.IRobot_TIMEOUT,
-				"IRobot Connect TimeOut:", parent));
+				"IRobot Connect Timeout:", parent));
 		addField(new IntegerFieldEditor(IRobotPreferenceConstants.IRobot_JOBTIMEOUT,
-				"IRobot JOB TimeOut:", parent));
+				"IRobot JOB Timeout:", parent));
 		addField(new IntegerFieldEditor(IRobotPreferenceConstants.IRobot_MONITOR_INTERVAL,
 				"IRobot JOB Monitor Interval:", parent));
 		addField(new StringFieldEditor(IRobotPreferenceConstants.IRobot_WORK_PATH,
@@ -62,8 +64,8 @@ public class IRobotPreferencePage extends FieldEditorPreferencePage implements I
 				"PDM IP:", parent));
 		addField(new StringFieldEditor(IRobotPreferenceConstants.PDM_PORT,
 				"PDM PORT:", parent));
-		addField(new StringFieldEditor(IRobotPreferenceConstants.PDM_DOMAIN,
-				"PDM DOMAIN:", parent));
+//		addField(new StringFieldEditor(IRobotPreferenceConstants.PDM_DOMAIN,
+//				"PDM DOMAIN:", parent));
 		addField(new BooleanFieldEditor(IRobotPreferenceConstants.MOCKUP,
 				"MOCKUP:", parent));
 	}

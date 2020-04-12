@@ -58,15 +58,13 @@ public class IRobotJobService {
 	
 	private String pdmUrl = "http://<IP>:<PORT>/services";
 	
-	private String qedWorkPath = "";
-	
-	private String domain;
+//	private String domain;
 	
 	private boolean mockup; 
 	
-	public void saveJob(String rfq_id, String jobId, String fileName, String hostId) {
+	public void saveJob(String rfq_id, String jobId, String fileName, String hostId,String domain) {
 		Document job = new Document().append("jobId", jobId).append("status", JOB_STATUS_NEW).append("fileName", fileName)
-				.append("createDate", new Date()).append("hostId", hostId).append("rfqId", rfq_id);
+				.append("createDate", new Date()).append("hostId", hostId).append("rfqId", rfq_id).append("domain", domain);
 		Activator.db().getCollection("irobotJob").insertOne(job);
 	}
 
@@ -77,7 +75,7 @@ public class IRobotJobService {
 		List<Document> jobDataList = activeJobs.stream().map(j ->handlerStatus(j)).collect(Collectors.toList());
 		if (null != jobDataList && jobDataList.size() > 0) {
 			String pUrl = pdmUrl.replace("<IP>", pdmIp).replace("<PORT>", pdmPort);
-			PdmClient.pushToPDM(pUrl, domain, jobDataList);
+			PdmClient.pushToPDM(pUrl, jobDataList);
 			// TODO 需要考虑PDM的接收情况,如果推送失败，需要下次推送，但是job不需要做再解析
 			jobDataList.forEach(j -> updateJob(j));
 		} 
@@ -178,7 +176,7 @@ public class IRobotJobService {
 		jobTimeOut = Activator.getDefault().getPreferenceStore().getInt(IRobotPreferenceConstants.IRobot_JOBTIMEOUT);
 		pdmIp = Activator.getDefault().getPreferenceStore().getString(IRobotPreferenceConstants.PDM_IP);
 		pdmPort = Activator.getDefault().getPreferenceStore().getString(IRobotPreferenceConstants.PDM_PORT);
-		domain = Activator.getDefault().getPreferenceStore().getString(IRobotPreferenceConstants.PDM_DOMAIN);
+//		domain = Activator.getDefault().getPreferenceStore().getString(IRobotPreferenceConstants.PDM_DOMAIN);
 		mockup = Activator.getDefault().getPreferenceStore().getBoolean(IRobotPreferenceConstants.MOCKUP);
 //		qedWorkPath = Activator.getDefault().getPreferenceStore().getString(IRobotPreferenceConstants.IRobot_QED_PATH);
 	}
