@@ -28,6 +28,7 @@ public class TestIRobot {
 			task.setName("IRobot´´½¨Job");
 			task.setPriority(Task.PRIORITY_1);
 			task.setValue("fileType", "zip");
+			task.setValue("rfqId", "5e7dc47315cfd928488f583a");
 			task.setFileValue("engineeringFiles", new File("D:/I8input/Example/test.zip"));
 
 			Result result = manager.runTask(task, type[0]);

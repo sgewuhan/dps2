@@ -1,0 +1,1187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+© Copyright 2016 Ucamco NV, Gent, Belgium
+All rights reserved. The material, information and instructions for use contained herein are the property of Ucamco NV.
+No part of this document may be communicated, reproduced, stored in a data base or retrieval system, or published, in any form or in any way,
+electronically, mechanically, by print, photoprint, microfilm or any other means without prior written permission from Ucamco NV.
+This document supersedes all previous versions. The information contained herein is subject to change without notice.
+There are no warranties granted or extended by this document. The material, information and instructions are provided on an AS IS basis.
+Furthermore, Ucamco NV does not warrant, guarantee or make any representations regarding the use, or the results of the use of the software or the information contained herein.
+Ucamco NV shall not be liable for any direct, indirect, consequential or incidental damages arising out of the use or inability to use the information contained herein.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:simpleType name="T_CadUnits">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="MILLIMETER"/>
+      <xsd:enumeration value="MICRON"/>
+      <xsd:enumeration value="INCH"/>
+      <xsd:enumeration value="MIL"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_ClassText">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="-"/>
+      <xsd:enumeration value="NA"/>
+      <xsd:enumeration value="false"/>
+      <xsd:enumeration value="true"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_Context">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="BOARD"/>
+      <xsd:enumeration value="BOARDPANEL"/>
+      <xsd:enumeration value="ASSEMBLY"/>
+      <xsd:enumeration value="ASSEMBLYARRAY"/>
+      <xsd:enumeration value="DOCUMENTATION"/>
+      <xsd:enumeration value="TOOLING"/>
+      <xsd:enumeration value="COUPON"/>
+      <xsd:enumeration value="MISC"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_CouponPosition">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="t"/>
+      <xsd:enumeration value="b"/>
+      <xsd:enumeration value="l"/>
+      <xsd:enumeration value="r"/>
+      <xsd:enumeration value="ch"/>
+      <xsd:enumeration value="cv"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_DecString">
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="-?\d+(\.\d*)?|NA|NE|NR|disabled|unknown|-"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_Drill">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="CARBIDE"/>
+      <xsd:enumeration value="ROUTER"/>
+      <xsd:enumeration value="LASER"/>
+      <xsd:enumeration value="FLATNOSE"/>
+      <xsd:enumeration value="EXTENSION"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_DrillSequenceType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="backdrill"/>
+      <xsd:enumeration value="buried"/>
+      <xsd:enumeration value="blind"/>
+      <xsd:enumeration value="NPTH"/>
+      <xsd:enumeration value="PTH"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_Email">
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="[^@]+@[^\.]+\..+|NA|unknown"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_IntString">
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="-?\d+|NA|NR|unknown"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_LayerFunction">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="BOARDOUTLINE"/>
+      <xsd:enumeration value="COATINGCOND"/>
+      <xsd:enumeration value="COATINGNONCOND"/>
+      <xsd:enumeration value="DIELBASE"/>
+      <xsd:enumeration value="DIELCORE"/>
+      <xsd:enumeration value="DIELPREG"/>
+      <xsd:enumeration value="DIELADHV"/>
+      <xsd:enumeration value="COMPONENT"/>
+      <xsd:enumeration value="COURTYARD"/>
+      <xsd:enumeration value="SOLDERBUMP"/>
+      <xsd:enumeration value="PASTEMASK"/>
+      <xsd:enumeration value="HOLEFILL"/>
+      <xsd:enumeration value="SIGNAL"/>
+      <xsd:enumeration value="POWER_GROUND"/>
+      <xsd:enumeration value="MIXED"/>
+      <xsd:enumeration value="RESISTIVE"/>
+      <xsd:enumeration value="CAPACITIVE"/>
+      <xsd:enumeration value="SILKSCREEN"/>
+      <xsd:enumeration value="SOLDERPASTE"/>
+      <xsd:enumeration value="SOLDERMASK"/>
+      <xsd:enumeration value="DRILL"/>
+      <xsd:enumeration value="GLUE"/>
+      <xsd:enumeration value="ROUT"/>
+      <xsd:enumeration value="LEGEND"/>
+      <xsd:enumeration value="GRAPHIC"/>
+      <xsd:enumeration value="PROBE"/>
+      <xsd:enumeration value="PIN"/>
+      <xsd:enumeration value="REWORK"/>
+      <xsd:enumeration value="DOCUMENT"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_NonNegativeDouble">
+    <xsd:restriction base="xsd:double">
+      <xsd:minInclusive value="0.0"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_Polarity">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="POSITIVE"/>
+      <xsd:enumeration value="NEGATIVE"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_Present">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="yes"/>
+      <xsd:enumeration value="no"/>
+      <xsd:enumeration value="unknown"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_Side">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="TOP"/>
+      <xsd:enumeration value="BOTTOM"/>
+      <xsd:enumeration value="INNER"/>
+      <xsd:enumeration value="BOTH"/>
+      <xsd:enumeration value="NONE"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_UnitOfArea">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="mm"/>
+      <xsd:enumeration value="mil"/>
+      <xsd:enumeration value="inch"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_UnitOfDistance">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value=""/>
+      <xsd:enumeration value="mm"/>
+      <xsd:enumeration value="mil"/>
+      <xsd:enumeration value="inch"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_UnitMode">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="DISTANCE"/>
+      <xsd:enumeration value="AREA"/>
+      <xsd:enumeration value="RESISTANCE"/>
+      <xsd:enumeration value="CAPACITANCE"/>
+      <xsd:enumeration value="IMPEDANCE"/>
+      <xsd:enumeration value="PERCENTAGE"/>
+      <xsd:enumeration value="SIZE"/>
+      <xsd:enumeration value="NONE"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_WhereMeasured">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="LAMINATE"/>
+      <xsd:enumeration value="METAL"/>
+      <xsd:enumeration value="MASK"/>
+      <xsd:enumeration value="OTHER"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ST_ToolFunction">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="via"/>
+      <xsd:enumeration value="laservia"/>
+      <xsd:enumeration value="component"/>
+      <xsd:enumeration value="mechanical"/>
+      <xsd:enumeration value="castellated"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="T_Array">
+    <xsd:attribute name="nrInX" type="xsd:string" use="required"/>
+    <xsd:attribute name="nrInY" type="xsd:string" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_BareBoardTestCharacteristics">
+    <xsd:sequence>
+      <xsd:element name="Units" type="T_Units" minOccurs="0"/>
+      <xsd:element name="BareBoardTestLayer" type="T_BareBoardTestLayer" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="nbNets" type="xsd:integer" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_BareBoardTestLayer">
+    <xsd:attribute name="layerOrGroupRef" type="xsd:string" use="required"/>
+    <xsd:attribute name="testablePads" type="xsd:string"/>
+    <xsd:attribute name="maxTPDensity" type="xsd:string"/>
+    <xsd:attribute name="nrOfSMDs" type="xsd:string"/>
+    <xsd:attribute name="smallestSMDPitch" type="T_DecString"/>
+    <xsd:attribute name="smallestSMDSize" type="T_DecString"/>
+    <xsd:attribute name="nrOfSmallestSMDSize" type="T_IntString"/>
+    <xsd:attribute name="nrEdgeConnectorFingers" type="xsd:integer" use="optional"/>
+    <xsd:attribute name="edgeConnectorWidth" type="T_DecString" use="optional"/>
+    <xsd:attribute name="edgeConnectorHeight" type="T_DecString" use="optional"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_BoardCharacteristics">
+    <xsd:sequence>
+      <xsd:element name="Units" type="T_Units" minOccurs="0"/>
+      <xsd:element name="Dimension" type="T_Dimension" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="T_Border">
+    <xsd:attribute name="bottom" type="xsd:decimal"/>
+    <xsd:attribute name="left" type="xsd:decimal"/>
+    <xsd:attribute name="right" type="xsd:decimal"/>
+    <xsd:attribute name="top" type="xsd:decimal"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_CadData">
+    <xsd:annotation>
+      <xsd:documentation>IPC2581 CadDataType without StepList element</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="LayerDesc" type="T_LayerDesc"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="T_CadHeader">
+    <xsd:annotation>
+      <xsd:documentation>IPC2581 CadHeaderType without Spec, SurfaceFinish,ChangeRec elements</xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="units" type="T_CadUnits" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_Carbon">
+    <xsd:sequence>
+      <xsd:element name="CarbonCharacteristics" type="T_CarbonCharacteristics" minOccurs="0"/>
+    </xsd:sequence>
+    <xsd:attribute name="presence" type="xsd:string" use="required"/>
+    <xsd:attribute name="nblayers" type="xsd:integer" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_CarbonCharacteristics">
+    <xsd:sequence>
+      <xsd:element name="CarbonLayer" type="T_CarbonLayer" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="T_CarbonLayer">
+    <xsd:sequence>
+      <xsd:element name="MinTrack" type="T_MinResult" minOccurs="0"/>
+      <xsd:element name="MinGap" type="T_MinResult" minOccurs="0"/>
+      <xsd:element name="MinDistToPlated" type="T_MinResult" minOccurs="0"/>
+      <xsd:element name="MinDistToOutline" type="T_MinResult" minOccurs="0"/>
+      <xsd:element name="LayerArea" type="T_LayerArea" minOccurs="0"/>
+    </xsd:sequence>
+    <xsd:attribute name="layerOrGroupRef" type="xsd:string"/>
+    <xsd:attribute name="side" type="xsd:string"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_Class">
+    <xsd:simpleContent>
+      <xsd:extension base="T_ClassText">
+        <xsd:attribute name="id" use="required"/>
+        <xsd:attribute name="label" use="required"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:complexType name="T_Clearance">
+    <xsd:attribute name="x" type="xsd:decimal" use="required"/>
+    <xsd:attribute name="y" type="xsd:decimal" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_Contact">
+    <xsd:sequence>
+      <xsd:element name="Email" type="T_Email"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="T_CopperArea">
+    <xsd:simpleContent>
+      <xsd:extension base="T_DecString">
+        <xsd:attribute name="unitMode" type="T_UnitMode" use="required"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:complexType name="T_CopperCharacteristics">
+    <xsd:sequence>
+      <xsd:element name="Units" type="T_Units" minOccurs="0"/>
+      <xsd:element name="CopperLayer" type="T_CopperLayer" maxOccurs="unbounded"/>
+      <xsd:element name="CopperRingByLayerAndTool" type="T_CopperRingByLayerAndTool" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="CopperRingByLayerAndToolFunction" type="T_CopperRingByLayerAndToolFunction" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="CopperToDrillClearance" type="T_CopperToDrillClearance" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="id" type="xsd:string" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_CopperLayer">
+    <xsd:sequence>
+      <xsd:element name="MinTrack" type="T_MinResult"/>
+      <xsd:element name="MinTrackAllCopper" type="T_MinResult"/>
+      <xsd:element name="MinTrackCriticalTrace" type="T_MinResult"/>
+      <xsd:element name="MinTrackAllTrace" type="T_MinResult"/>
+      <xsd:element name="MinGap" type="T_MinResult"/>
+      <xsd:element name="MinSelfSpacing" type="T_MinResult"/>
+      <xsd:element name="MinGapPP" type="T_MinResult"/>
+      <xsd:element name="MinGapPT" type="T_MinResult"/>
+      <xsd:element name="MinGapTT" type="T_MinResult"/>
+      <xsd:element name="MinGapTraceTrace" type="T_MinResult" minOccurs="0"/>
+      <xsd:element name="MinRing" type="T_MinResult"/>
+      <xsd:element name="MinDistCopperToPlated" type="T_MinResult"/>
+      <xsd:element name="MinDistCopperToNonPlated" type="T_MinResult"/>
+      <xsd:element name="MinDistCopperToBackdrill" type="T_MinResult"/>
+      <xsd:element name="MinDistCopperToOutline" type="T_MinResult"/>
+      <xsd:element name="MinDistCopperToOutlinePads" type="T_MinResult" minOccurs="0"/>
+      <xsd:element name="MinDistCopperToOutlineTracks" type="T_MinResult" minOccurs="0"/>
+      <xsd:element name="MinDistCopperToOutlineRegions" type="T_MinResult" minOccurs="0"/>
+      <xsd:element name="MinDistCopperToScoredOutline" type="T_MinResult" maxOccurs="4"/>
+      <xsd:element name="MinDistViaPlug" type="T_MinResult"/>
+      <xsd:element name="CopperArea" type="T_CopperArea"/>
+      <xsd:element name="EtchCompensation" type="T_DecString" minOccurs="0"/>
+    </xsd:sequence>
+    <xsd:attribute name="layerOrGroupRef" type="xsd:string" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_CopperRingByLayerAndTool">
+    <xsd:sequence>
+      <xsd:element name="MinRing" type="T_MinRingByLayerAndTool" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="layerOrGroupRef" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_CopperRingByLayerAndToolFunction">
+    <xsd:sequence>
+      <xsd:element name="MinRing" type="T_MinRingByLayerAndToolFunction" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="layerOrGroupRef" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_CopperToDrillClearance">
+    <xsd:sequence>
+      <xsd:element name="MinClrByLayerAndTool" type="T_MinClrByLayerAndTool" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="id_Type" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="PadToPlated"/>
+          <xsd:enumeration value="TrackToPlated"/>
+          <xsd:enumeration value="PadToNonPlated"/>
+          <xsd:enumeration value="TrackToNonPlated"/>
+          <xsd:enumeration value="PadToBackdrill"/>
+          <xsd:enumeration value="TrackToBackdrill"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="T_Coupon">
+    <xsd:sequence>
+      <xsd:element name="Size" type="T_Size"/>
+      <xsd:element name="Array" type="T_Array"/>
+      <xsd:element name="CouponCouponClearance" type="T_Clearance"/>
+      <xsd:element name="CouponPcbClearance" type="T_Clearance"/>
+      <xsd:element name="Position" type="T_CouponPosition"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="T_Customer">
+    <xsd:sequence>
+      <xsd:element name="Name" type="xsd:string"/>
+      <xsd:element name="Contact" type="T_Contact" maxOccurs="unbounded"/>
+      <xsd:element name="BoardRef" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="T_CustomerPanel">
+    <xsd:sequence>
+      <xsd:element name="CustomerPanelIn" type="T_CustomerPanelPresent"/>
+      <xsd:element name="CustomerPanelOut" type="T_CustomerPanelPresent"/>
+      <xsd:element name="Units" type="T_Units" minOccurs="0"/>
+      <xsd:element name="PanelSize" type="T_Size" minOccurs="0"/>
+      <xsd:element name="Offset" type="T_Offset" minOccurs="0"/>
+      <xsd:element name="Spacing" type="T_Size" minOccurs="0"/>
+      <xsd:element name="Array" type="T_Array" minOccurs="0"/>
+    </xsd:sequence>
+    <xsd:attribute name="ref" type="xsd:string"/>
+    <xsd:attribute name="present" type="xsd:boolean"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_CustomerPanelPresent">
+    <xsd:attribute name="present" type="T_Present" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_Dfm">
+    <xsd:sequence>
+      <xsd:element name="Rule" type="T_DfmRule" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="id" type="xsd:string" use="required"/>
+    <xsd:attribute name="class" type="xsd:integer" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_DfmRule">
+    <xsd:sequence>
+      <xsd:element name="Class" type="T_Class" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="id" type="xsd:string" use="required"/>
+    <xsd:attribute name="group" type="xsd:string" use="required"/>
+    <xsd:attribute name="name" type="xsd:string" use="required"/>
+    <xsd:attribute name="value" type="xsd:string" use="required"/>
+    <xsd:attribute name="applicable" type="xsd:boolean" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_Dimension">
+    <xsd:sequence>
+      <xsd:element name="Width" type="T_DecString"/>
+      <xsd:element name="Height" type="T_DecString"/>
+      <xsd:element name="Type" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="Perimeter" type="T_DecString"/>
+      <xsd:element name="Area" type="T_LayerArea"/>
+    </xsd:sequence>
+    <xsd:attribute name="source" type="xsd:string" use="required"/>
+    <xsd:attribute name="layerOrGroupRef" type="xsd:string" use="optional"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_DrillCharacteristics">
+    <xsd:sequence>
+      <xsd:element name="Units" type="T_Units" minOccurs="0"/>
+      <xsd:element name="DrillGroup" type="T_DrillGroup" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="id" type="xsd:string" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_DrillGroup">
+    <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+      <xsd:element name="DrillUse" type="T_DrillUse"/>
+    </xsd:sequence>
+    <xsd:attribute name="layerOrGroupRef" type="xsd:string" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_DrillSequence">
+    <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+      <xsd:element name="Span" type="T_Span" minOccurs="0"/>
+      <xsd:element name="Tools" type="xsd:integer"/>
+      <xsd:element name="MinEndDia" type="T_DecString"/>
+      <xsd:element name="MaxEndDia" type="T_DecString"/>
+      <xsd:element name="MinToolDia" type="T_DecString" minOccurs="0"/>
+      <xsd:element name="MaxToolDia" type="T_DecString" minOccurs="0"/>
+      <xsd:element name="Holes" type="xsd:integer"/>
+      <xsd:element name="MinRingOnOuter" type="T_MinResult"/>
+      <xsd:element name="MinRingOnInner" type="T_MinResult"/>
+      <xsd:element name="MinClrCopper" type="T_MinResult"/>
+      <xsd:element name="MinClr" type="T_MinResult" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>Optional by license</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="OverlappingHoles" type="xsd:string" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>Optional by license</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="MinClrInnerSpan" type="T_MinResult" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>Optional by license</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="MinClrOutline" type="T_MinResult"/>
+      <xsd:element name="MinClrOutlineTracks" type="T_MinResult" minOccurs="0"/>
+    </xsd:sequence>
+    <xsd:attribute name="type" type="T_DrillSequenceType" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_DrillSequences">
+    <xsd:sequence>
+      <xsd:element name="DrillSequence" type="T_DrillSequence" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="id" type="xsd:string" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_DrillTool">
+    <xsd:attribute name="number" type="xsd:double" use="required"/>
+    <xsd:attribute name="name" type="xsd:string" use="required"/>
+    <xsd:attribute name="type" type="T_Drill" use="optional"/>
+    <xsd:attribute name="tolPlus" type="T_DecString" use="required"/>
+    <xsd:attribute name="tolMinus" type="T_DecString" use="required"/>
+    <xsd:attribute name="finishSize" type="T_DecString" use="required"/>
+    <xsd:attribute name="drillSize" type="T_DecString" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_DrillUse">
+    <xsd:attribute name="drillToolRef" use="required"/>
+    <xsd:attribute name="type" use="required"/>
+    <xsd:attribute name="count" use="required"/>
+    <xsd:attribute name="moves" use="required"/>
+    <xsd:attribute name="method" use="required"/>
+    <xsd:attribute name="filledVia" use="required"/>
+    <xsd:attribute name="countered" use="required"/>
+    <xsd:attribute name="doubles" use="required"/>
+    <xsd:attribute name="predrillHits" use="required"/>
+    <xsd:attribute name="minRing" use="required"/>
+    <xsd:attribute name="minRingOnInner" use="required"/>
+    <xsd:attribute name="minRingOnOuter" use="required"/>
+    <xsd:attribute name="minPadSize" use="required"/>
+    <xsd:attribute name="platedToolWithMissingCopperRings" use="optional"/>
+    <xsd:attribute name="NPTHToolTouchingFunctionalCopper" use="optional"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_EdgeConnectors">
+    <xsd:sequence>
+      <xsd:element name="EdgeConnectorsByLayer" type="T_EdgeConnectorByLayer" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="T_EdgeConnectorByLayer">
+    <xsd:attribute name="layerOrGroupRef" type="xsd:string" use="required"/>
+    <xsd:attribute name="nrEdgeConnectorFingers" type="xsd:integer" use="optional"/>
+    <xsd:attribute name="edgeConnectorWidth" type="T_DecString" use="optional"/>
+    <xsd:attribute name="edgeConnectorHeight" type="T_DecString" use="optional"/>
+    <xsd:attribute name="maskCalculated" use="optional"/>
+    <xsd:attribute name="side" use="optional"/>
+    <xsd:attribute name="area" use="optional"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_ExposedCopper">
+    <xsd:sequence>
+      <xsd:element name="Units" type="T_Units" minOccurs="0"/>
+      <xsd:element name="Area" maxOccurs="5">
+        <xsd:complexType>
+          <xsd:simpleContent>
+            <xsd:extension base="T_DecString">
+              <xsd:attribute name="layerOrGroupRef"/>
+              <xsd:attribute name="side"/>
+              <xsd:attribute name="unitMode"/>
+            </xsd:extension>
+          </xsd:simpleContent>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="boardThickness"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_Frames">
+    <xsd:sequence>
+      <xsd:element name="Frame" type="T_PanelFrame" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="T_GeneratedBy">
+    <xsd:attribute name="user" use="required"/>
+    <xsd:attribute name="softwareVersion" use="required"/>
+    <xsd:attribute name="softwarePackage" use="required"/>
+    <xsd:attribute name="libraryVersion" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_GeneratedFrom">
+    <xsd:attribute name="path" use="required"/>
+    <xsd:attribute name="name" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_GeneratedOn">
+    <xsd:attribute name="dateTime" type="xsd:dateTime" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_Gold">
+    <xsd:sequence>
+      <xsd:element name="GoldCharacteristics" type="T_GoldCharacteristics" minOccurs="0"/>
+    </xsd:sequence>
+    <xsd:attribute name="presence" type="xsd:string" use="required"/>
+    <xsd:attribute name="nblayers" type="xsd:integer" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_GoldCharacteristics">
+    <xsd:sequence>
+      <xsd:element name="GoldLayer" type="T_GoldLayer" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="T_GoldLayer">
+    <xsd:sequence>
+      <xsd:element name="MinGap" type="T_MinResult" minOccurs="0"/>
+      <xsd:element name="MinDistToOutline" type="T_MinResult" minOccurs="0"/>
+      <xsd:element name="LayerArea" type="T_LayerArea" minOccurs="0"/>
+    </xsd:sequence>
+    <xsd:attribute name="layerOrGroupRef" type="xsd:string"/>
+    <xsd:attribute name="side" type="xsd:string"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_Header">
+    <xsd:sequence>
+      <xsd:element name="GeneratedBy" type="T_GeneratedBy"/>
+      <xsd:element name="GeneratedOn" type="T_GeneratedOn"/>
+      <xsd:element name="GeneratedFrom" type="T_GeneratedFrom"/>
+      <xsd:element name="Job" type="T_HeaderJob"/>
+      <xsd:element name="Customer" type="T_HeaderCustomer"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="T_HeaderCustomer">
+    <xsd:attribute name="ref" type="xsd:string" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_HeaderJob">
+    <xsd:attribute name="id" use="required"/>
+    <xsd:attribute name="ref" use="required"/>
+    <xsd:attribute name="revision" type="xsd:string"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_Heatsink">
+    <xsd:sequence>
+      <xsd:element name="HeatsinkCharacteristics" type="T_HeatsinkCharacteristics" minOccurs="0"/>
+    </xsd:sequence>
+    <xsd:attribute name="presence" type="xsd:string" use="required"/>
+    <xsd:attribute name="nblayers" type="xsd:integer" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_HeatsinkCharacteristics">
+    <xsd:sequence>
+      <xsd:element name="HeatsinkLayer" type="T_HeatsinkLayer" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="T_HeatsinkLayer">
+    <xsd:sequence>
+      <xsd:element name="MinGap" type="T_MinResult" minOccurs="0"/>
+      <xsd:element name="MinDistToOutline" type="T_MinResult" minOccurs="0"/>
+      <xsd:element name="LayerArea" type="T_LayerArea" minOccurs="0"/>
+    </xsd:sequence>
+    <xsd:attribute name="layerOrGroupRef" type="xsd:string"/>
+    <xsd:attribute name="side" type="xsd:string"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_Layer">
+    <xsd:sequence>
+      <xsd:element name="LayerArea" type="T_LayerArea" minOccurs="0"/>
+      <xsd:element name="Span" type="T_Span" minOccurs="0"/>
+      <xsd:element name="DrillTool" type="T_DrillTool" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="name" type="xsd:string" use="required"/>
+    <xsd:attribute name="context" type="T_Context" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>Obsolete IPC-2581 draft residu</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="layerFunction" type="T_LayerFunction" use="required"/>
+    <xsd:attribute name="side" type="T_Side" use="required"/>
+    <xsd:attribute name="polarity" type="T_Polarity" use="required"/>
+    <xsd:attribute name="color" type="xsd:string" use="optional"/>
+    <xsd:attribute name="mirroring" type="xsd:string" use="optional"/>
+    <xsd:attribute name="thickness" type="xsd:string" use="optional"/>
+    <xsd:attribute name="materialType" type="xsd:string" use="optional"/>
+    <xsd:attribute name="alias" type="xsd:string" use="optional"/>
+    <xsd:attribute name="class" type="xsd:string" use="optional"/>
+    <xsd:attribute name="subClass" type="xsd:string" use="optional"/>
+    <xsd:attribute name="index" type="xsd:string" use="optional"/>
+    <xsd:attribute name="from" type="xsd:string" use="optional"/>
+    <xsd:attribute name="to" type="xsd:string" use="optional"/>
+    <!-- 'context' attribute is a pre-IPC2581A residu, hence made optional iso. required (20130731cvo) -->
+    <!-- 'alias' usually contains the original or a previous name of the layer -->
+    <!-- 'class' is a UCAM major layer classification such as (copper) layer, drill or extra -->
+    <!-- 'subClass' is a user defined UCAM minor layer classification such as loetstop, legend... -->
+    <!-- 'index' is relative position in group of copper, drill or specific extra layers -->
+    <!-- 'from' and 'to' are the drill spans by numbered copper layer position -->
+  </xsd:complexType>
+  <xsd:complexType name="T_LayerArea">
+    <xsd:simpleContent>
+      <xsd:extension base="T_DecString">
+        <xsd:attribute name="unitMode" type="T_UnitMode" use="required"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:complexType name="T_LayerDesc">
+    <xsd:sequence>
+      <xsd:element name="Layer" type="T_Layer" maxOccurs="unbounded"/>
+      <xsd:element name="Stackup" type="T_Stackup" minOccurs="0"/>
+    </xsd:sequence>
+    <xsd:attribute name="name" type="xsd:string" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_Legend">
+    <xsd:sequence>
+      <xsd:element name="LegendCharacteristics" type="T_LegendCharacteristics" minOccurs="0"/>
+    </xsd:sequence>
+    <xsd:attribute name="presence" type="xsd:string" use="required"/>
+    <xsd:attribute name="nblayers" type="xsd:integer" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_LegendCharacteristics">
+    <xsd:sequence>
+      <xsd:element name="LegendLayer" type="T_LegendLayer" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="T_LegendLayer">
+    <xsd:sequence>
+      <xsd:element name="MinTrack" type="T_MinResult" minOccurs="0"/>
+      <xsd:element name="MinGap" type="T_MinResult" minOccurs="0"/>
+      <xsd:element name="MinDistToPlated" type="T_MinResult" minOccurs="0"/>
+      <xsd:element name="MinDistToOutline" type="T_MinResult" minOccurs="0"/>
+      <xsd:element name="MinClrToCompSMDBGAPad" type="T_MinResult" minOccurs="0"/>
+      <xsd:element name="LayerArea" type="T_LayerArea" minOccurs="0"/>
+    </xsd:sequence>
+    <xsd:attribute name="layerOrGroupRef" type="xsd:string"/>
+    <xsd:attribute name="side" type="xsd:string"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_MinClrByLayerAndTool">
+    <xsd:sequence>
+      <xsd:element name="MinClr" type="T_MinClrToDrill" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="layerOrGroupRef" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_MinClrToDrill">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="threshold" type="xsd:string"/>
+        <xsd:attribute name="thresholdExceeded" type="xsd:boolean"/>
+        <xsd:attribute name="drillLayerRef" type="xsd:string" use="required"/>
+        <xsd:attribute name="toolNr" type="xsd:string" use="required"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:complexType name="T_MinResult">
+    <xsd:simpleContent>
+      <xsd:extension base="T_DecString">
+        <xsd:attribute name="threshold" type="xsd:string"/>
+        <xsd:attribute name="thresholdExceeded" type="xsd:boolean"/>
+        <xsd:attribute name="orientation" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:complexType name="T_MinRingByLayerAndTool">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="threshold" type="xsd:string"/>
+        <xsd:attribute name="thresholdExceeded" type="xsd:boolean"/>
+        <xsd:attribute name="type" type="xsd:string"/>
+        <xsd:attribute name="drillLayerRef" type="xsd:string"/>
+        <xsd:attribute name="toolNr" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:complexType name="T_MinRingByLayerAndToolFunction">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="threshold" type="xsd:string"/>
+        <xsd:attribute name="thresholdExceeded" type="xsd:boolean"/>
+        <xsd:attribute name="toolFunction" type="ST_ToolFunction"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:complexType name="T_Offset">
+    <xsd:attribute name="top" type="xsd:string" use="required"/>
+    <xsd:attribute name="bottom" type="xsd:string" use="required"/>
+    <xsd:attribute name="left" type="xsd:string" use="required"/>
+    <xsd:attribute name="right" type="xsd:string" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_PanelClearance">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="x" type="xsd:string" use="required"/>
+        <xsd:attribute name="y" type="xsd:string" use="required"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:complexType name="T_PanelFrame">
+    <xsd:sequence>
+      <xsd:element name="Size" type="T_Size"/>
+      <xsd:element name="UsefulArea" type="T_Size"/>
+      <xsd:element name="Clearance" type="T_PanelClearance" minOccurs="0"/>
+      <xsd:element name="PCBsPerPanel" type="xsd:integer" minOccurs="0"/>
+      <xsd:element name="TotalPanels" type="xsd:integer" minOccurs="0"/>
+      <xsd:element name="TotalPCBs" type="xsd:integer" minOccurs="0"/>
+      <xsd:element name="Surplus" type="xsd:integer" minOccurs="0"/>
+      <xsd:element name="Fill" type="xsd:decimal" minOccurs="0"/>
+      <xsd:element name="Usage" type="xsd:decimal" minOccurs="0"/>
+      <xsd:element name="Yield" type="xsd:decimal" minOccurs="0"/>
+      <xsd:element name="Coupon" type="T_Coupon" minOccurs="0"/>
+    </xsd:sequence>
+    <xsd:attribute name="id" use="required"/>
+    <xsd:attribute name="selected" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_PanelSetup">
+    <xsd:sequence>
+      <xsd:element name="Units" type="T_Units" minOccurs="0"/>
+      <xsd:element name="Auto"/>
+      <xsd:element name="Clearance" type="T_PanelClearance"/>
+      <xsd:element name="Rotation"/>
+      <xsd:element name="Quantity" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="T_Parameter">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="name" use="required"/>
+        <xsd:attribute name="group" use="required"/>
+        <xsd:attribute name="subgroup" use="required"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:complexType name="T_Peelable">
+    <xsd:sequence>
+      <xsd:element name="PeelableCharacteristics" type="T_PeelableCharacteristics" minOccurs="0"/>
+    </xsd:sequence>
+    <xsd:attribute name="presence" type="xsd:string" use="required"/>
+    <xsd:attribute name="nblayers" type="xsd:integer" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_PeelableCharacteristics">
+    <xsd:sequence>
+      <xsd:element name="PeelableLayer" type="T_PeelableLayer" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="T_PeelableLayer">
+    <xsd:sequence>
+      <xsd:element name="MinTrack" type="T_MinResult" minOccurs="0"/>
+      <xsd:element name="MinGap" type="T_MinResult" minOccurs="0"/>
+      <xsd:element name="MinDistToPlated" type="T_MinResult" minOccurs="0"/>
+      <xsd:element name="MinDistToOutline" type="T_MinResult" minOccurs="0"/>
+      <xsd:element name="LayerArea" type="T_LayerArea" minOccurs="0"/>
+    </xsd:sequence>
+    <xsd:attribute name="layerOrGroupRef" type="xsd:string"/>
+    <xsd:attribute name="side" type="xsd:string"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_Percentage">
+    <xsd:simpleContent>
+      <xsd:extension base="T_DecString"/>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:complexType name="T_ProcessParameters">
+    <xsd:sequence>
+      <xsd:element name="Parameter" type="T_Parameter" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="T_ProductionPanels">
+    <xsd:sequence>
+      <xsd:element name="Setup" type="T_PanelSetup"/>
+      <xsd:element name="Frames" type="T_Frames" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="T_RoutCharacteristics">
+    <xsd:sequence>
+      <xsd:element name="RoutGroup" type="T_RoutGroup" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="id" type="xsd:string" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_RoutGroup">
+    <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+      <xsd:element name="RoutUse" type="T_RoutUse"/>
+    </xsd:sequence>
+    <xsd:attribute name="layerOrGroupRef" type="xsd:string" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_RoutUse">
+    <xsd:attribute name="drillToolRef" use="required"/>
+    <xsd:attribute name="type" use="required"/>
+    <xsd:attribute name="endDiameter" use="required"/>
+    <xsd:attribute name="moves" use="required"/>
+    <xsd:attribute name="length" use="required"/>
+    <xsd:attribute name="nibbleCount" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_RoutedHolesCharacteristics">
+    <xsd:sequence>
+      <xsd:element name="Instances" type="xsd:integer"/>
+      <xsd:element name="Length" type="xsd:decimal"/>
+      <xsd:element name="NibbleCount" type="xsd:integer"/>
+      <xsd:element name="RoutedHolesGroup" type="T_RoutedHolesGroup" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="id" type="xsd:string" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_RoutedHolesGroup">
+    <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+      <xsd:element name="RoutedHole" type="T_RoutedHole"/>
+    </xsd:sequence>
+    <xsd:attribute name="layerOrGroupRef" type="xsd:string" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_RoutedHole">
+    <xsd:attribute name="id" use="required"/>
+    <xsd:attribute name="instances" use="required"/>
+    <xsd:attribute name="xSize" use="required"/>
+    <xsd:attribute name="ySize" use="required"/>
+    <xsd:attribute name="length" use="required"/>
+    <xsd:attribute name="nibbleCount" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_QED">
+    <xsd:choice maxOccurs="unbounded">
+      <xsd:element name="Header" type="T_Header"/>
+      <xsd:element name="Summary" type="T_Summary"/>
+      <xsd:element name="Customer" type="T_Customer" minOccurs="0"/>
+      <xsd:element name="ProcessParameters" type="T_ProcessParameters" minOccurs="0"/>
+      <xsd:element name="CadHeader" type="T_CadHeader"/>
+      <xsd:element name="CadData" type="T_CadData"/>
+      <xsd:element name="BoardCharacteristics" type="T_BoardCharacteristics" maxOccurs="unbounded"/>
+      <xsd:element name="CopperCharacteristics" type="T_CopperCharacteristics" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>Optional by license</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="DrillCharacteristics" type="T_DrillCharacteristics" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>Optional by license</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="DrillSequences" type="T_DrillSequences" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>Optional by license</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="RoutCharacteristics" type="T_RoutCharacteristics" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>Optional by license</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="RoutedHolesCharacteristics" type="T_RoutedHolesCharacteristics" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>Optional by license</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ExposedCopper" type="T_ExposedCopper" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>Optional by license</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ExposedCopperOpenVias" type="T_ExposedCopper" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>Optional by license</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ExposedGold" type="T_ExposedCopper" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>Optional by license</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ExposedSilver" type="T_ExposedCopper" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>Optional by license</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ExposedEdgeConnector" type="T_ExposedCopper" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>Optional by license</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="BareCopper" type="T_ExposedCopper" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>Optional by license</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="EdgeConnectors" type="T_EdgeConnectors"/>
+      <xsd:element name="SMDSCharacteristics" type="T_SMDSCharacteristics"/>
+      <xsd:element name="SolderMaskCharacteristics" type="T_SolderMaskCharacteristics" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>Optional by license</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="BareBoardTestCharacteristics" type="T_BareBoardTestCharacteristics" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>Optional by license</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ViaPlugInfo" type="T_ViaPlugInfo" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>Optional by license</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="CustomerPanel" type="T_CustomerPanel" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>Optional by license</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ProductionPanels" type="T_ProductionPanels" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>Optional by license</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Dfm" type="T_Dfm" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>Optional by license</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="SheetOptimizerResult" type="T_SheetOptimizerResult" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>Optional by license</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Thickness" type="T_Thickness" minOccurs="0"/>
+      <xsd:element name="Technology" type="T_Technology" minOccurs="0"/>
+      <xsd:element name="Comment" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="Remarks" type="T_Remarks" minOccurs="0"/>
+    </xsd:choice>
+    <xsd:attribute name="version" type="T_DecString" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_Remarks">
+    <xsd:sequence>
+      <xsd:element name="JobRemarks" type="T_RemarksContainer"/>
+      <xsd:element name="InputRemarks" type="T_RemarksContainer"/>
+      <xsd:element name="Anomalies" type="T_RemarksContainer"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="T_RemarksContainer">
+    <xsd:sequence>
+      <xsd:element name="Remark" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="T_Routing">
+    <xsd:attribute name="present" type="xsd:boolean" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_Scoring">
+    <xsd:attribute name="present" type="xsd:boolean" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_SheetSolution">
+    <xsd:sequence>
+      <xsd:element name="Size" type="T_Size"/>
+      <xsd:element name="UsageWorkingPanel" type="T_Percentage">
+        <xsd:annotation>
+          <xsd:documentation>Area of WorkingPanels versus Sheet area</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="UsageShippingPanel" type="T_Percentage">
+        <xsd:annotation>
+          <xsd:documentation>Area of ShippingPanels versus Sheet area</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="UsagePCB" type="T_Percentage">
+        <xsd:annotation>
+          <xsd:documentation>Area of PCBs versus Sheet area</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="PCBCount" type="xsd:integer"/>
+    </xsd:sequence>
+    <xsd:attribute name="vendor" type="xsd:string"/>
+    <xsd:attribute name="material" type="xsd:string"/>
+    <xsd:attribute name="mixedRotation" type="xsd:boolean"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_SheetOptimizerResult">
+    <xsd:annotation>
+      <xsd:documentation>SheetOptimizer calculation result</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="Units" type="T_Units"/>
+      <xsd:element name="Solution" type="T_SheetOptimizerSolution" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="T_SheetOptimizerSolution">
+    <xsd:sequence>
+      <xsd:element name="Sheet" type="T_SheetSolution" minOccurs="0"/>
+      <xsd:element name="WorkingPanel" type="T_WorkingPanelSolution"/>
+      <xsd:element name="ShippingPanel" type="T_ShippingPanelSolution"/>
+    </xsd:sequence>
+    <xsd:attribute name="id" type="xsd:integer" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_ShippingPanelSolution">
+    <xsd:sequence>
+      <xsd:element name="Size" type="T_Size"/>
+      <xsd:element name="Border" type="T_Border"/>
+      <xsd:element name="Clearance" type="T_Clearance"/>
+      <xsd:element name="Usage" type="T_Percentage">
+        <xsd:annotation>
+          <xsd:documentation>Area of PCBs versus ShippingPanel area</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="PCBCount" type="xsd:integer"/>
+    </xsd:sequence>
+    <xsd:attribute name="uniformRotation" type="xsd:boolean"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_Size">
+    <xsd:attribute name="source"/>
+    <xsd:attribute name="x" type="xsd:string" use="required"/>
+    <xsd:attribute name="y" type="xsd:string" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_SMDSCharacteristics">
+    <xsd:sequence>
+      <xsd:element name="SMDSByLayer" type="T_SMDSLayer" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="T_SMDSLayer">
+    <xsd:attribute name="layerOrGroupRef" type="xsd:string" use="required"/>
+    <xsd:attribute name="nrOfSMDs" type="xsd:string"/>
+    <xsd:attribute name="smallestSMDSize" type="T_DecString"/>
+    <xsd:attribute name="smallestSMDPitch" type="T_DecString"/>
+    <xsd:attribute name="nrOfNonBGAs" type="xsd:string"/>
+    <xsd:attribute name="nrOfBGAs" type="xsd:string"/>
+    <xsd:attribute name="smallestBGAPitch" type="T_DecString" use="optional"/>
+    <xsd:attribute name="smallestBGASize" type="T_DecString" use="optional"/>
+    <xsd:attribute name="nrOfCuDefs" type="xsd:string" use="optional"/>
+    <xsd:attribute name="nrOfSMDefs" type="xsd:string" use="optional"/>
+    <xsd:attribute name="bgaTracksCentered" type="xsd:string" use="optional"/>
+    <xsd:attribute name="bgaDrilledPads" type="xsd:string" use="optional"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_SolderMaskCharacteristics">
+    <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+      <xsd:element name="SolderMaskLayer" type="T_SolderMaskLayer"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="T_SolderMaskLayer">
+    <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+      <xsd:element name="MinClr" type="T_MinResult"/>
+      <xsd:element name="MinRing" type="T_MinResult"/>
+      <xsd:element name="MinNegRing" type="T_MinResult"/>
+      <xsd:element name="MinWeb" type="T_MinResult"/>
+      <xsd:element name="MinClr2Copper" type="T_MinResult"/>
+      <xsd:element name="MinOpening" type="T_MinResult"/>
+      <xsd:element name="ViasCoveredBySoldermask" type="xsd:string"/>
+      <xsd:element name="ViasPartlyCoveredBySoldermask" type="xsd:string"/>
+    </xsd:sequence>
+    <xsd:attribute name="layerOrGroupRef" type="xsd:string" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_Span">
+    <xsd:attribute name="fromLayer" type="xsd:string"/>
+    <xsd:attribute name="toLayer" type="xsd:string"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_Stackup">
+    <xsd:annotation>
+      <xsd:documentation>IPC2581 StackupType without StackupImpedance element</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="StackupGroup" type="T_StackupGroup" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="overallThickness" type="xsd:string" use="required"/>
+    <xsd:attribute name="tolPlus" type="T_NonNegativeDouble" use="required"/>
+    <xsd:attribute name="tolMinus" type="T_NonNegativeDouble" use="required"/>
+    <xsd:attribute name="whereMeasured" type="T_WhereMeasured" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_StackupGroup">
+    <xsd:sequence>
+      <xsd:element name="StackupLayer" type="T_StackupLayer" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="stackupGroupName" type="xsd:string" use="required"/>
+    <xsd:attribute name="thickness" type="xsd:decimal" use="required"/>
+    <xsd:attribute name="tolPlus" type="xsd:decimal" use="required"/>
+    <xsd:attribute name="tolMinus" type="xsd:decimal" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_StackupLayer">
+    <xsd:attribute name="layerOrGroupRef" type="xsd:string" use="required"/>
+    <xsd:attribute name="materialType" type="xsd:string" use="required"/>
+    <xsd:attribute name="thickness" type="T_NonNegativeDouble" use="required"/>
+    <xsd:attribute name="baseThickness" type="T_NonNegativeDouble"/>
+    <xsd:attribute name="description" type="xsd:string"/>
+    <xsd:attribute name="dielectricConstant" type="T_NonNegativeDouble"/>
+    <xsd:attribute name="stockNumber" type="xsd:string"/>
+    <xsd:attribute name="weight" type="T_NonNegativeDouble"/>
+    <xsd:attribute name="coating" type="xsd:string"/>
+    <xsd:attribute name="comment" type="xsd:string"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_Summary">
+    <xsd:sequence>
+      <xsd:element name="SummaryParameter" type="T_SummaryParameter" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="T_SummaryParameter">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="name" use="required"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:complexType name="T_Technology">
+    <xsd:sequence>
+      <xsd:element name="Carbon" type="T_Carbon"/>
+      <xsd:element name="Legend" type="T_Legend"/>
+      <xsd:element name="Peelable" type="T_Peelable"/>
+      <xsd:element name="Gold" type="T_Gold" minOccurs="0"/>
+      <xsd:element name="Heatsink" type="T_Heatsink" minOccurs="0"/>
+      <xsd:element name="Scoring" type="T_Scoring"/>
+      <xsd:element name="Routing" type="T_Routing"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="T_Thickness">
+    <xsd:sequence>
+      <xsd:element name="Unit" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="Board" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="BuildupType" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="Core" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="OuterTotal" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="OuterFoil" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="Inner" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="PressingStages" type="xsd:string" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="T_Units">
+    <xsd:attribute name="unitOfDistance" type="T_UnitOfDistance" use="required"/>
+    <xsd:attribute name="unitOfArea" type="T_UnitOfArea" use="optional"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_ViaPlug">
+    <xsd:sequence>
+      <xsd:element name="ViaPlugElement" type="T_ViaPlugElement" minOccurs="2" maxOccurs="2"/>
+    </xsd:sequence>
+    <xsd:attribute name="layer" type="xsd:string"/>
+    <xsd:attribute name="stackedVias" type="xsd:string"/>
+    <xsd:attribute name="overlappedVias" type="xsd:string"/>
+    <xsd:attribute name="minClr" type="xsd:string"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_ViaPlugElement">
+    <xsd:attribute name="side" type="xsd:string"/>
+    <xsd:attribute name="layer" type="xsd:string"/>
+    <xsd:attribute name="tool" type="xsd:string"/>
+    <xsd:attribute name="diameter" type="xsd:string"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_ViaPlugInfo">
+    <xsd:sequence>
+      <xsd:element name="ViaPlug" type="T_ViaPlug" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="id" type="xsd:string" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="T_WorkingPanelSolution">
+    <xsd:sequence>
+      <xsd:element name="Size" type="T_Size"/>
+      <!--<xsd:element name="SizeOptimized" type="T_Size"/>-->
+      <xsd:element name="Border" type="T_Border"/>
+      <!--<xsd:element name="BorderOptimized" type="T_Border"/>-->
+      <xsd:element name="Clearance" type="T_Clearance"/>
+      <xsd:element name="Usage" type="T_Percentage">
+        <xsd:annotation>
+          <xsd:documentation>Area of Shipping units, whether Shipping panels or PCBs, versus WorkingPanel area</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="UsagePCB" type="T_Percentage">
+        <xsd:annotation>
+          <xsd:documentation>Area of PCBs versus WorkingPanel area</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="PCBCount" type="xsd:integer"/>
+    </xsd:sequence>
+    <xsd:attribute name="mixedRotation" type="xsd:boolean"/>
+  </xsd:complexType>
+  <xsd:element name="QED" type="T_QED">
+    <xsd:annotation>
+      <xsd:documentation>Root element of this Quotation Engineering Data - Revision v2.19</xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+</xsd:schema>

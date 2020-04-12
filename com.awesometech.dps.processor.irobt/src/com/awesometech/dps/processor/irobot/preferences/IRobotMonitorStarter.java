@@ -3,7 +3,7 @@ package com.awesometech.dps.processor.irobot.preferences;
 import com.awesometech.dps.processor.irobot.Activator;
 import com.bizvpm.dps.runtime.IProcessorActivator;
 
-public class IRobotStarter implements IProcessorActivator {
+public class IRobotMonitorStarter implements IProcessorActivator {
 
 	@Override
 	public void startCheck() throws Exception {
@@ -15,6 +15,10 @@ public class IRobotStarter implements IProcessorActivator {
 		int timeOut = Activator.getDefault().getPreferenceStore().getInt(IRobotPreferenceConstants.IRobot_TIMEOUT);
 		if ("".equals(serverIp)) {
 			throw new Exception("IRobot处理器启动失败，请在属性页面中设置IRobot IP的值");
+		}
+		// 需要用IP地址标志所在服务器，所以不允许其填写localhost和127.0.0.1
+		if("127.0.0.1".equals(serverIp) || "localhost".equals(serverIp)) {
+			throw new Exception("IRobot处理器启动失败，IRobot IP请填写当前网络分配的IP");
 		}
 		if ("".equals(serverPort)) {
 			throw new Exception("IRobot处理器启动失败，请在属性页面中设置IRobot PORT的值");
@@ -30,12 +34,14 @@ public class IRobotStarter implements IProcessorActivator {
 
 	@Override
 	public void start() throws Exception {
-		
+		Activator.getDefault().getDB();
+		Activator.getDefault().createMonitorJob();
 	}
 
 	@Override
 	public void stop() throws Exception {
-		
+		Activator.getDefault().stopMonitorJob();
+//		Activator.getDefault().dbClientClose();  
 	}
 
 }

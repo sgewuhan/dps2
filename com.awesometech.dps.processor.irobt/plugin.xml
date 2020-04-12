@@ -22,6 +22,20 @@
                optional="false"
                type="String">
          </parameter>
+         <parameter
+               description="rfq的ObjectID"
+               name="rfqId"
+               optional="false"
+               type="String">
+         </parameter>
+      </processor>
+      <processor
+            description="IRobotJob状态监控(后台定时任务在跑，无需启动)"
+            id="IRobot.monitorjob"
+            maxThreadCount="1"
+            name="IRobotJob状态监控"
+            processorActivater="com.awesometech.dps.processor.irobot.preferences.IRobotMonitorStarter"
+            runnable="com.awesometech.dps.processor.irobot.MonitorJob">
       </processor>
    </extension>
    <extension
