@@ -3,6 +3,7 @@ package com.bizvpm.dps.processor.pmsvis;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.Optional;
 
 import org.bson.types.ObjectId;
 import org.eclipse.core.runtime.Assert;
@@ -88,13 +89,14 @@ public abstract class AbstractVisualService implements IProcessorRunable {
 		subTask.setPriority(10);
 		subTask.put("sourceType", sourceType);
 		subTask.put("targetType", targetType);
-		subTask.put("file", pT.get("file"));
+		subTask.put("file", os);
 		// ¸½¼Ó²ÎÊý
-		subTask.put("autoZoomExtend", pT.get("autoZoomExtend"));
-		subTask.put("rasterPixel", pT.get("rasterPixel"));
-		subTask.put("backgroundColor", pT.get("backgroundColor"));
-		subTask.put("lineWeight", pT.get("lineWeight"));
-		subTask.put("autoSize", pT.get("autoSize"));
+
+		subTask.put("autoZoomExtend", Optional.ofNullable(pT.get("autoZoomExtend")).orElse(Boolean.TRUE));
+		subTask.put("rasterPixel", Optional.ofNullable(pT.get("rasterPixel")).orElse(1));
+		subTask.put("backgroundColor", Optional.ofNullable(pT.get("backgroundColor")).orElse(7));
+		subTask.put("lineWeight", Optional.ofNullable(pT.get("lineWeight")).orElse(1));
+		subTask.put("autoSize", Optional.ofNullable(pT.get("autoSize")).orElse(Boolean.TRUE));
 		subTask.put("rasterWidth", pT.get("rasterWidth"));
 		subTask.put("rasterHeight", pT.get("rasterHeight"));
 		subTask.put("layoutPaperSize", pT.get("layoutPaperSize"));
