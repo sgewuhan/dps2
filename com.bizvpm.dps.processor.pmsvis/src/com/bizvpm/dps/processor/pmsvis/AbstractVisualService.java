@@ -3,8 +3,12 @@ package com.bizvpm.dps.processor.pmsvis;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 import org.bson.types.ObjectId;
 import org.eclipse.core.runtime.Assert;
@@ -53,7 +57,7 @@ public abstract class AbstractVisualService implements IProcessorRunable {
 		ProcessResult result = null;
 
 		// 如果设置了配置文件，按照配置文件读取转换器
-		String mappedProcessorId = getMappedConvertor(pT, ext);
+		String mappedProcessorId = getMappedConvertor(pT, fileName);
 		if (mappedProcessorId != null) {
 			result = runGenericConvertor(pT, os, file, context, mappedProcessorId);
 		} else if (isOfficeFile(ext)) {// 如果是office文件
@@ -81,14 +85,34 @@ public abstract class AbstractVisualService implements IProcessorRunable {
 		return handleTransferedFile(pT, file, pdfs);
 	}
 
-	private String getMappedConvertor(ProcessTask pT, String ext) {
-		Object convertorMap = pT.get("convertorMap");
-		if (convertorMap instanceof Map<?, ?>) {
-			Object c = ((Map<?, ?>) convertorMap).get(ext);
-			if (c != null)
-				return c.toString();
+	private String getMappedConvertor(ProcessTask pT, String fileName) {
+		Object convertorMap = pT.get("convertorConfig");
+		if (convertorMap instanceof List<?>) {
+			try {
+				Iterator<?> iter = (((List<?>) convertorMap)).iterator();
+				while (iter.hasNext()) {
+					List<?> en = (List<?>) iter.next();
+					String processodId = (String) en.get(0);
+					en.remove(0);
+					if (match(fileName, en.toArray(new String[0]))) {
+						return processodId;
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return null;
+	}
+
+	private static boolean match(String fileName, String[] regexs) {
+		for (int i = 0; i < regexs.length; i++) {
+			Pattern p = Pattern.compile(regexs[i], Pattern.CASE_INSENSITIVE);
+			boolean find = p.matcher(fileName).find();
+			if (find)
+				return true;
+		}
+		return false;
 	}
 
 	protected abstract ProcessResult handleTransferedFile(ProcessTask pT, GridFSFile file, InputStream pdfs)

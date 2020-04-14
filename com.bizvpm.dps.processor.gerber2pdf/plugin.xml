@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="com.bizvpm.dps.processor">
+      <processor
+            catalog="转换器/Gerber文件"
+            description="转换Gerber文件为PDF文件"
+            id="gerber2pdf.gerber2pdfconvertor"
+            maxThreadCount="5"
+            name="Gerber文件转换处理器"
+            processorActivater="com.bizvpm.dps.processor.gerber2pdf.ConvertorStarter"
+            runnable="com.bizvpm.dps.processor.gerber2pdf.ConvertorProcessor">
+         <parameter
+               description="需转换文件"
+               name="file"
+               optional="false"
+               type="DataHandler">
+         </parameter>
+      </processor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="processor"
+            class="com.bizvpm.dps.processor.gerber2pdf.PreferencePage"
+            id="com.bizvpm.dps.processor.gerber2pdf.PreferencePage"
+            name="Gerber2PDF转换器">
+      </page>
+   </extension>
+
+</plugin>

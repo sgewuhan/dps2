@@ -46,6 +46,12 @@
                optional="true"
                type="String">
          </parameter>
+         <parameter
+               description="文件转换器配置"
+               name="convertorConfig"
+               optional="true"
+               type="List">
+         </parameter>
       </processor>
       <processor
             catalog="转换器"
@@ -83,6 +89,12 @@
                name="dwgConvertor"
                optional="true"
                type="String">
+         </parameter>
+         <parameter
+               description="文件转换器配置"
+               name="convertorConfig"
+               optional="true"
+               type="List">
          </parameter>
       </processor>
    </extension>
