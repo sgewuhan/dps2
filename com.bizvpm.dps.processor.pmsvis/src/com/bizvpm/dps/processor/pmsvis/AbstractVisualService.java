@@ -3,6 +3,7 @@ package com.bizvpm.dps.processor.pmsvis;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;
@@ -50,20 +51,24 @@ public abstract class AbstractVisualService implements IProcessorRunable {
 		String fileName = file.getFilename();
 		String ext = getExtensionName(fileName).toLowerCase();
 		ProcessResult result = null;
-		// 如果是office文件
-		if (isOfficeFile(ext)) {
+
+		// 如果设置了配置文件，按照配置文件读取转换器
+		String mappedProcessorId = getMappedConvertor(pT, ext);
+		if (mappedProcessorId != null) {
+			result = runGenericConvertor(pT, os, file, context, mappedProcessorId);
+		} else if (isOfficeFile(ext)) {// 如果是office文件
 			result = runOffice(pT, os, file, context);
 		} else if (isDWGFile(ext)) {
 			// 如果是DWG文件
 			result = runDWG(pT, os, file, context);
-		} else if(isImageFile(ext)){
+		} else if (isImageFile(ext)) {
 			result = runGenericConvertor(pT, os, file, context, DEFAULT_GENERIC);
 		} else {
 			result = runGenericConvertor(pT, os, file, context, DEFAULT_GENERIC);
-//			updateResult(_id, db, colName, null, "不支持此类型源文件的可视化");
-//			result = new ProcessResult();
-//			result.put("result", "不支持此类型源文件的可视化");
-//			return result;
+			// updateResult(_id, db, colName, null, "不支持此类型源文件的可视化");
+			// result = new ProcessResult();
+			// result.put("result", "不支持此类型源文件的可视化");
+			// return result;
 		}
 
 		InputStream pdfs = result.getInputStream("file");
@@ -76,7 +81,18 @@ public abstract class AbstractVisualService implements IProcessorRunable {
 		return handleTransferedFile(pT, file, pdfs);
 	}
 
-	protected abstract ProcessResult handleTransferedFile(ProcessTask pT, GridFSFile file, InputStream pdfs) throws IOException;
+	private String getMappedConvertor(ProcessTask pT, String ext) {
+		Object convertorMap = pT.get("convertorMap");
+		if (convertorMap instanceof Map<?, ?>) {
+			Object c = ((Map<?, ?>) convertorMap).get(ext);
+			if (c != null)
+				return c.toString();
+		}
+		return null;
+	}
+
+	protected abstract ProcessResult handleTransferedFile(ProcessTask pT, GridFSFile file, InputStream pdfs)
+			throws IOException;
 
 	protected abstract void updateResult(ObjectId _id, MongoDatabase db, String colName, ObjectId v_id, String msg);
 
@@ -139,7 +155,7 @@ public abstract class AbstractVisualService implements IProcessorRunable {
 		String processorTypeId = (String) pT.get("officeConvertor");
 		if (processorTypeId == null || processorTypeId.isEmpty())
 			processorTypeId = DEFAULT_GENERIC;
-		
+
 		return runGenericConvertor(pT, inputstream, file, context, processorTypeId);
 	}
 
@@ -162,15 +178,16 @@ public abstract class AbstractVisualService implements IProcessorRunable {
 	}
 
 	private boolean isOfficeFile(String ext) {
-		return Arrays.asList("doc", "docx", "rtf", "txt", "csv", "xls", "xlsx", "ppt", "pptx", "html","htm").contains(ext);
+		return Arrays.asList("doc", "docx", "rtf", "txt", "csv", "xls", "xlsx", "ppt", "pptx", "html", "htm")
+				.contains(ext);
 	}
 
 	private boolean isDWGFile(String ext) {
 		return Arrays.asList("dwg", "dxf", "dwf").contains(ext);
 	}
-	
+
 	private boolean isImageFile(String ext) {
-		return Arrays.asList("jpg", "gif", "png","bpm","jpeg","svg").contains(ext);
+		return Arrays.asList("jpg", "gif", "png", "bpm", "jpeg", "svg").contains(ext);
 	}
 
 	private static String getExtensionName(String filename) {
