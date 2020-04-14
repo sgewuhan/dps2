@@ -23,7 +23,7 @@ import com.mongodb.client.model.Filters;
 
 public abstract class AbstractVisualService implements IProcessorRunable {
 
-	private static final String DEFAULT_MSOFFICE = "com.bizvpm.dps.processor.openoffice:openoffice.converter";
+	private static final String DEFAULT_GENERIC = "com.bizvpm.dps.processor.openoffice:openoffice.converter";
 	private static final String DEFAULT_DWG = "com.bizvpm.dps.processor.acmecad:acmecad.acmecadconverter";
 
 	@Override
@@ -56,11 +56,14 @@ public abstract class AbstractVisualService implements IProcessorRunable {
 		} else if (isDWGFile(ext)) {
 			// 如果是DWG文件
 			result = runDWG(pT, os, file, context);
+		} else if(isImageFile(ext)){
+			result = runGenericConvertor(pT, os, file, context, DEFAULT_GENERIC);
 		} else {
-			updateResult(_id, db, colName, null, "不支持此类型源文件的可视化");
-			result = new ProcessResult();
-			result.put("result", "不支持此类型源文件的可视化");
-			return result;
+			result = runGenericConvertor(pT, os, file, context, DEFAULT_GENERIC);
+//			updateResult(_id, db, colName, null, "不支持此类型源文件的可视化");
+//			result = new ProcessResult();
+//			result.put("result", "不支持此类型源文件的可视化");
+//			return result;
 		}
 
 		InputStream pdfs = result.getInputStream("file");
@@ -132,6 +135,16 @@ public abstract class AbstractVisualService implements IProcessorRunable {
 
 	private ProcessResult runOffice(ProcessTask pT, GridFSDownloadStream inputstream, GridFSFile file,
 			IProcessContext context) throws Exception {
+		// 调用转换处理器
+		String processorTypeId = (String) pT.get("officeConvertor");
+		if (processorTypeId == null || processorTypeId.isEmpty())
+			processorTypeId = DEFAULT_GENERIC;
+		
+		return runGenericConvertor(pT, inputstream, file, context, processorTypeId);
+	}
+
+	private ProcessResult runGenericConvertor(ProcessTask pT, GridFSDownloadStream inputstream, GridFSFile file,
+			IProcessContext context, String processorTypeId) throws Exception {
 		// 更改文件名
 		String srcFilename = file.getFilename();
 		String sourceType = getExtensionName(srcFilename).toLowerCase();
@@ -145,19 +158,19 @@ public abstract class AbstractVisualService implements IProcessorRunable {
 		subTask.put("sourceType", sourceType);
 		subTask.put("targetType", targetType);
 
-		// 调用转换处理器
-		String processorTypeId = (String) pT.get("officeConvertor");
-		if (processorTypeId == null || processorTypeId.isEmpty())
-			processorTypeId = DEFAULT_MSOFFICE;
 		return context.runTask(subTask, processorTypeId);
 	}
 
 	private boolean isOfficeFile(String ext) {
-		return Arrays.asList("doc", "docx", "rtf", "txt", "csv", "xls", "xlsx", "ppt", "pptx", "html").contains(ext);
+		return Arrays.asList("doc", "docx", "rtf", "txt", "csv", "xls", "xlsx", "ppt", "pptx", "html","htm").contains(ext);
 	}
 
 	private boolean isDWGFile(String ext) {
 		return Arrays.asList("dwg", "dxf", "dwf").contains(ext);
+	}
+	
+	private boolean isImageFile(String ext) {
+		return Arrays.asList("jpg", "gif", "png","bpm","jpeg","svg").contains(ext);
 	}
 
 	private static String getExtensionName(String filename) {

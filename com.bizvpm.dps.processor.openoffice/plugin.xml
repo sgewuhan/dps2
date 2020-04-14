@@ -22,36 +22,6 @@
                name="sourceType"
                optional="false"
                type="String">
-            <restriction
-                  value="doc">
-            </restriction>
-            <restriction
-                  value="docx">
-            </restriction>
-            <restriction
-                  value="rtf">
-            </restriction>
-            <restriction
-                  value="txt">
-            </restriction>
-            <restriction
-                  value="csv">
-            </restriction>
-            <restriction
-                  value="xls">
-            </restriction>
-            <restriction
-                  value="xlsx">
-            </restriction>
-            <restriction
-                  value="ppt">
-            </restriction>
-            <restriction
-                  value="pptx">
-            </restriction>
-            <restriction
-                  value="html">
-            </restriction>
          </parameter>
          <parameter
                description="目标文件的类型"
