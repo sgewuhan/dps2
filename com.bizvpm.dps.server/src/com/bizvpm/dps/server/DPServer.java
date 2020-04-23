@@ -47,6 +47,8 @@ public class DPServer implements IPersistenceConstants {
 		DBCollection col = db.getCollection(DPS_COLLECTION);
 		BasicDBObject query = new BasicDBObject().append(F_STATUS, 1);
 		DBObject data = col.findOne(query);
+		if (data == null)
+			throw new RuntimeException("Cannot find process service");
 		String host = (String) data.get(F_HOSTNAME);
 		return getNamedProcessService(host);
 	}
@@ -59,8 +61,7 @@ public class DPServer implements IPersistenceConstants {
 		query.put(F_HOSTNAME, pattern);
 		DBObject d = col.findOne(query);
 		if (d != null) {
-			return "http://" + d.get(F_HOSTIP) + ":" + d.get(F_HOSTPORT)
-					+ "/processor?wsdl";
+			return "http://" + d.get(F_HOSTIP) + ":" + d.get(F_HOSTPORT) + "/processor?wsdl";
 		} else {
 			return "";
 		}
