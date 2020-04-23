@@ -123,7 +123,7 @@ a. 遵守购买本软件时您所在国家/地区的法律。
          id="com.ibm.icu"
          download-size="0"
          install-size="0"
-         version="54.1.1.v201501272100"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
@@ -137,7 +137,7 @@ a. 遵守购买本软件时您所在国家/地区的法律。
          id="javax.annotation"
          download-size="0"
          install-size="0"
-         version="1.2.0.v201401042248"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
@@ -277,348 +277,348 @@ a. 遵守购买本软件时您所在国家/地区的法律。
          id="org.eclipse.birt.chart.engine"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.chart.engine.extension"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.chart.reportitem"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.core"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.data"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.data.aggregation"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.data.oda.pojo"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.report.data.adapter"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.report.data.bidi.utils"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.report.data.oda.excel"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.report.data.oda.hive"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.report.data.oda.jdbc"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"/>
+         version="0.0.0"/>
 
    <plugin
          id="org.eclipse.birt.report.data.oda.xml"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.report.engine"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.report.engine.emitter.config"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.report.engine.emitter.config.docx"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.report.engine.emitter.config.excel"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.report.engine.emitter.config.html"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.report.engine.emitter.config.odp"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.report.engine.emitter.config.ods"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.report.engine.emitter.config.odt"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.report.engine.emitter.config.pdf"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.report.engine.emitter.config.postscript"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.report.engine.emitter.config.ppt"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.report.engine.emitter.config.pptx"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.report.engine.emitter.config.wpml"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.report.engine.emitter.docx"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.report.engine.emitter.html"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.report.engine.emitter.odp"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.report.engine.emitter.ods"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.report.engine.emitter.odt"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.report.engine.emitter.pdf"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.report.engine.emitter.postscript"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.report.engine.emitter.ppt"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.report.engine.emitter.pptx"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.report.engine.emitter.prototype.excel"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.report.engine.emitter.wpml"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.report.engine.fonts"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"/>
+         version="0.0.0"/>
 
    <plugin
          id="org.eclipse.birt.report.engine.odf"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.report.engine.ooxml"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.report.engine.script.javascript"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.report.item.crosstab.core"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.report.model"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.report.model.adapter.oda"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.datatools.connectivity"
          download-size="0"
          install-size="0"
-         version="1.2.11.v201401230755"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.datatools.connectivity.oda"
          download-size="0"
          install-size="0"
-         version="3.4.3.v201405301249"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.datatools.connectivity.oda.consumer"
          download-size="0"
          install-size="0"
-         version="3.2.6.v201403131814"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.datatools.connectivity.oda.design"
          download-size="0"
          install-size="0"
-         version="3.3.6.v201403131814"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.datatools.connectivity.oda.profile"
          download-size="0"
          install-size="0"
-         version="3.2.9.v201403131814"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.datatools.enablement.oda.xml"
          download-size="0"
          install-size="0"
-         version="1.2.5.v201403131825"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
@@ -681,48 +681,48 @@ a. 遵守购买本软件时您所在国家/地区的法律。
          id="org.w3c.sac"
          download-size="0"
          install-size="0"
-         version="1.3.0.v201506092134"/>
+         version="0.0.0"/>
 
    <plugin
          id="ch.qos.logback.classic"
          download-size="0"
          install-size="0"
-         version="1.0.7.v20121108-1250"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.chart.device.extension"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.chart.device.svg"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.birt.chart.device.swt"
          download-size="0"
          install-size="0"
-         version="4.5.0.v201506092134"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="ch.qos.logback.core"
          download-size="0"
          install-size="0"
-         version="1.0.7.v20121108-1250"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="ch.qos.logback.slf4j"
          download-size="0"
          install-size="0"
-         version="1.0.7.v201505121915"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -730,7 +730,7 @@ a. 遵守购买本软件时您所在国家/地区的法律。
          id="org.slf4j.api"
          download-size="0"
          install-size="0"
-         version="1.7.2.v20121108-1250"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
