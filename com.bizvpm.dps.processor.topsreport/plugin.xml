@@ -18,6 +18,13 @@
                type="String">
          </parameter>
       </processor>
+      <processor
+            id="drawing.fishbonediagram"
+            maxThreadCount="5"
+            name="创建鱼骨图"
+            processorActivater="com.bizvpm.dps.processor.drawing.FishboneDiagramStarter"
+            runnable="com.bizvpm.dps.processor.drawing.CreateFishboneDiagram">
+      </processor>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
