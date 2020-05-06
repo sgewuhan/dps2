@@ -15,8 +15,15 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 
-public class CreateFishboneDiagram {
+import com.bizvpm.dps.runtime.IProcessContext;
+import com.bizvpm.dps.runtime.IProcessorRunable;
+import com.bizvpm.dps.runtime.ProcessResult;
+import com.bizvpm.dps.runtime.ProcessTask;
+
+
+public class CreateFishboneDiagram implements IProcessorRunable  {
 
 	private static final String DRAW_LINE_X1="drawLinex1";//获取线的第一个点的x轴
 	private static final String DRAW_LINE_X2="drawLinex2";//获取线的第二个点的x轴
@@ -33,13 +40,19 @@ public class CreateFishboneDiagram {
 	private static final String DRAW_STRING_Y="drawstringy";//获取线文字第一个点的Y轴
 	
 	private static final Integer DRAW_FONT_SIZI=12;//字体大小
-	
+
+	@Override
 	@SuppressWarnings("unchecked")
-	public File fishboneDiagram(Map<String,Object> map,String name)
+	public ProcessResult run(ProcessTask processTask, IProgressMonitor monitor, IProcessContext context)
 			throws Exception {
+		ProcessResult r = new ProcessResult();
 		File file=new File("鱼骨图.jpg");
 		int width = 600;
 		int height = 400;
+
+		//获取数据源
+		Map<String,Object> map=(Map<String,Object>)processTask.get("data");
+		String name=(String) processTask.get("name");
 		
 		//计算图片长宽
 		for (String key : map.keySet()) {
@@ -72,7 +85,9 @@ public class CreateFishboneDiagram {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-        return file;
+	    r.putByteArray("file", file);
+	    file.delete();
+		return r;
 	}
 	
 	/**
@@ -338,6 +353,7 @@ public class CreateFishboneDiagram {
 		triangle.closePath();
 		g2.fill(triangle);
 	}
+
 
 
 }
