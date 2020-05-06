@@ -2,6 +2,7 @@ package com.bizvpm.dps.processor.topsreport;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,9 +29,11 @@ public class TOPSReportProcessor implements IProcessorRunable {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public ProcessResult run(ProcessTask processTask, IProgressMonitor monitor, IProcessContext context)
 			throws Exception {
 
+		File file=new CreateFishboneDiagram().fishboneDiagram((Map<String,Object>)processTask.get("data"),processTask.get("name").toString());
 		InputStream inputStream = processTask.getInputStream(PARA_REPORT_FILE);
 		String host = (String) processTask.get(PARA_REPORT_SERVERPATH);
 		String html = IOUtils.toString(inputStream, "utf-8");
@@ -38,6 +41,7 @@ public class TOPSReportProcessor implements IProcessorRunable {
 		ProcessResult result = new ProcessResult();
 		result.put("result", html);
 		result.putFile("template", new File(Activator.getDefault().getTemplatePath()));
+		result.putFile("fishboneDiagram", file);
 		result.put("serverPath", Activator.getDefault().getServer());
 		return result;
 	}

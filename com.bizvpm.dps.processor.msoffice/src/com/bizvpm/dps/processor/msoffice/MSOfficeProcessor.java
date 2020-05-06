@@ -136,27 +136,6 @@ public class MSOfficeProcessor implements IProcessorRunable {
 		inputFile = new File(pathName + time + File.separator + time + "." + sourceType);
 		outputFile = new File(pathName + time + File.separator + time + "." + targetType);
 
-		Object file = processTask.get("file");
-		if (file instanceof String) {
-			String targetName = (String) processTask.get("targetName");
-
-			inputFile = new File(pathName + time + File.separator + targetName + "." + sourceType);
-			outputFile = new File(pathName + time + File.separator + targetName + "." + targetType);
-			String html = convertHTML((String) file);
-			ByteArrayInputStream ins = new ByteArrayInputStream(html.getBytes("UTF-8"));
-			OutputStream os = new FileOutputStream(inputFile);
-			int bytesRead = 0;
-			byte[] buffer = new byte[8192];
-			while ((bytesRead = ins.read(buffer, 0, 8192)) != -1) {
-				os.write(buffer, 0, bytesRead);
-			}
-			os.close();
-			ins.close();
-
-		} else {
-			processTask.writeToFile("file", inputFile);
-		}
-
 		int targett = AbstractMSOfficeConverter.getFileType(targetType);
 		if (targett != AbstractMSOfficeConverter.FILETYPE_PDF_FILE) {
 			pics = new HashMap<String, String>();
@@ -183,6 +162,27 @@ public class MSOfficeProcessor implements IProcessorRunable {
 			returnZIP = Boolean.TRUE.equals(processTask.get("returnZIP"));
 			hasImage = Boolean.TRUE.equals(processTask.get("hasImage"));
 			hasAtt = Boolean.TRUE.equals(processTask.get("hasAtt"));
+		}
+		
+		Object file = processTask.get("file");
+		if (file instanceof String) {
+			String targetName = (String) processTask.get("targetName");
+
+			inputFile = new File(pathName + time + File.separator + targetName + "." + sourceType);
+			outputFile = new File(pathName + time + File.separator + targetName + "." + targetType);
+			String html = convertHTML((String) file);
+			ByteArrayInputStream ins = new ByteArrayInputStream(html.getBytes("UTF-8"));
+			OutputStream os = new FileOutputStream(inputFile);
+			int bytesRead = 0;
+			byte[] buffer = new byte[8192];
+			while ((bytesRead = ins.read(buffer, 0, 8192)) != -1) {
+				os.write(buffer, 0, bytesRead);
+			}
+			os.close();
+			ins.close();
+
+		} else {
+			processTask.writeToFile("file", inputFile);
 		}
 	}
 
