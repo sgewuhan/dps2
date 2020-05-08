@@ -21,7 +21,7 @@ import com.mongodb.client.model.BsonField;
 import com.mongodb.client.model.Field;
 import com.mongodb.client.model.Variable;
 
-public class PorductMonthETLService implements IProcessorRunable {
+public class ProductMonthETLService implements IProcessorRunable {
 
 	@Override
 	public ProcessResult run(ProcessTask pT, IProgressMonitor monitor, IProcessContext context) throws Exception {

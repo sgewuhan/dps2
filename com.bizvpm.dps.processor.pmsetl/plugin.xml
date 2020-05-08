@@ -80,10 +80,10 @@
       </processor>
       <processor
             catalog="ETL"
-            id="pms.porductMonthETL"
+            id="pms.productMonthETL"
             maxThreadCount="10"
             name="PMS 物料月度ETL"
-            runnable="com.bizvpm.dps.processor.pmsetl.PorductMonthETLService">
+            runnable="com.bizvpm.dps.processor.pmsetl.ProductMonthETLService">
          <parameter
                description="对应PMS6的企业域，也是数据库名"
                name="domain"
