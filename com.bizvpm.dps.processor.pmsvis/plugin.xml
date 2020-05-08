@@ -97,6 +97,106 @@
                type="List">
          </parameter>
       </processor>
+      <processor
+            catalog="ETL"
+            id="pms.projectMonthETL"
+            maxThreadCount="10"
+            name="PMS 项目月度ETL"
+            runnable="com.bizvpm.dps.processor.pmsvis.etl.ProjectMonthETLService">
+         <parameter
+               description="对应PMS6的企业域，也是数据库名"
+               name="domain"
+               optional="false"
+               type="String">
+         </parameter>
+         <parameter
+               description="年"
+               name="year"
+               optional="false"
+               type="Integer">
+         </parameter>
+         <parameter
+               description="月"
+               name="month"
+               optional="false"
+               type="Integer">
+         </parameter>
+      </processor>
+      <processor
+            catalog="ETL"
+            id="pms.organizationMonthETL"
+            maxThreadCount="10"
+            name="PMS 组织月度ETL"
+            runnable="com.bizvpm.dps.processor.pmsvis.etl.OrganizationMonthETLService">
+         <parameter
+               description="对应PMS6的企业域，也是数据库名"
+               name="domain"
+               optional="false"
+               type="String">
+         </parameter>
+         <parameter
+               description="年"
+               name="year"
+               optional="false"
+               type="Integer">
+         </parameter>
+         <parameter
+               description="月"
+               name="month"
+               optional="false"
+               type="Integer">
+         </parameter>
+      </processor>
+      <processor
+            catalog="ETL"
+            id="pms.EPSMonthETL"
+            maxThreadCount="10"
+            name="PMS EPS月度ETL"
+            runnable="com.bizvpm.dps.processor.pmsvis.etl.EPSMonthETLService">
+         <parameter
+               description="对应PMS6的企业域，也是数据库名"
+               name="domain"
+               optional="false"
+               type="String">
+         </parameter>
+         <parameter
+               description="年"
+               name="year"
+               optional="false"
+               type="Integer">
+         </parameter>
+         <parameter
+               description="月"
+               name="month"
+               optional="false"
+               type="Integer">
+         </parameter>
+      </processor>
+      <processor
+            catalog="ETL"
+            id="pms.porductMonthETL"
+            maxThreadCount="10"
+            name="PMS 物料月度ETL"
+            runnable="com.bizvpm.dps.processor.pmsvis.etl.PorductMonthETLService">
+         <parameter
+               description="对应PMS6的企业域，也是数据库名"
+               name="domain"
+               optional="false"
+               type="String">
+         </parameter>
+         <parameter
+               description="年"
+               name="year"
+               optional="false"
+               type="Integer">
+         </parameter>
+         <parameter
+               description="月"
+               name="month"
+               optional="false"
+               type="Integer">
+         </parameter>
+      </processor>
    </extension>
 
 </plugin>
