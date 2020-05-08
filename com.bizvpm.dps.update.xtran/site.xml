@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/com.bizvpm.dps.processor.dispatch.feature_1.0.0.qualifier.jar" id="com.bizvpm.dps.processor.dispatch.feature" version="1.0.0.qualifier">
+   <feature url="features/com.bizvpm.dps.processor.dispatch.feature_1.0.0.202004231531.jar" id="com.bizvpm.dps.processor.dispatch.feature" version="1.0.0.202004231531">
       <category name="bizvpm.dps.dispatch"/>
    </feature>
-   <feature url="features/com.bizvpm.dps.processor.email.feature_1.0.0.qualifier.jar" id="com.bizvpm.dps.processor.email.feature" version="1.0.0.qualifier">
+   <feature url="features/com.bizvpm.dps.processor.email.feature_1.0.0.202004231531.jar" id="com.bizvpm.dps.processor.email.feature" version="1.0.0.202004231531">
       <category name="bizvpm.dps.communication"/>
    </feature>
-   <feature url="features/com.bizvpm.dps.processor.acmecad.feature_1.0.0.qualifier.jar" id="com.bizvpm.dps.processor.acmecad.feature" version="1.0.0.qualifier">
+   <feature url="features/com.bizvpm.dps.processor.acmecad.feature_1.0.0.202004231531.jar" id="com.bizvpm.dps.processor.acmecad.feature" version="1.0.0.202004231531">
       <category name="bizvpm.dps.transfer"/>
    </feature>
-   <feature url="features/com.bizvpm.dps.processor.msoffice.feature_1.0.0.qualifier.jar" id="com.bizvpm.dps.processor.msoffice.feature" version="1.0.0.qualifier">
+   <feature url="features/com.bizvpm.dps.processor.msoffice.feature_1.0.0.202004231531.jar" id="com.bizvpm.dps.processor.msoffice.feature" version="1.0.0.202004231531">
+      <category name="bizvpm.dps.transfer"/>
+   </feature>
+   <feature url="features/com.bizvpm.dps.processor.openoffice.feature_1.0.0.202004231531.jar" id="com.bizvpm.dps.processor.openoffice.feature" version="1.0.0.202004231531">
+      <category name="bizvpm.dps.transfer"/>
+   </feature>
+   <feature url="features/com.bizvpm.dps.processor.wps.feature_1.0.0.202004231531.jar" id="com.bizvpm.dps.processor.wps.feature" version="1.0.0.202004231531">
+      <category name="bizvpm.dps.transfer"/>
+   </feature>
+   <feature url="features/com.bizvpm.dps.processor.gerber2pdf.feature_1.0.0.202004231531.jar" id="com.bizvpm.dps.processor.gerber2pdf.feature" version="1.0.0.202004231531">
       <category name="bizvpm.dps.transfer"/>
    </feature>
    <category-def name="bizvpm.dps.transfer" label="Distribute File Transfer Service"/>

@@ -2,6 +2,7 @@ package com.bizvpm.dps.processor.topsreport;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,9 +29,9 @@ public class TOPSReportProcessor implements IProcessorRunable {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public ProcessResult run(ProcessTask processTask, IProgressMonitor monitor, IProcessContext context)
 			throws Exception {
-
 		InputStream inputStream = processTask.getInputStream(PARA_REPORT_FILE);
 		String host = (String) processTask.get(PARA_REPORT_SERVERPATH);
 		String html = IOUtils.toString(inputStream, "utf-8");
