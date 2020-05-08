@@ -1,4 +1,4 @@
-package com.bizvpm.dps.processor.pmsvis.etl;
+package com.bizvpm.dps.processor.pmsetl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,8 +26,8 @@ public class PorductMonthETLService implements IProcessorRunable {
 	@Override
 	public ProcessResult run(ProcessTask pT, IProgressMonitor monitor, IProcessContext context) throws Exception {
 		MongoDatabase db = Domain.getDatabase((String) pT.get("domain"));
-		String year = "" + pT.get("year");
-		String month = String.format("%03d", pT.get("month"));
+		String year =  (String) pT.get("year");
+		String month = (String) pT.get("month");
 
 		MongoCollection<Document> prjColl = db.getCollection("project");
 		MongoCollection<Document> sMDCol = db.getCollection("salesMonthData");

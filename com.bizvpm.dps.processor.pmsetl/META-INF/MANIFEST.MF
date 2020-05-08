@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Pmsetl
+Bundle-SymbolicName: com.bizvpm.dps.processor.pmsetl;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-Vendor: BIZVPM
+Bundle-ActivationPolicy: lazy
+Bundle-Activator: com.bizvpm.dps.processor.pmsetl.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ com.bizvpm.dps;bundle-version="1.0.0",
+ com.bizvpm.dps.processor.mongodbds,
+ org.mongodb.mongo-java-driver;bundle-version="3.8.0"
