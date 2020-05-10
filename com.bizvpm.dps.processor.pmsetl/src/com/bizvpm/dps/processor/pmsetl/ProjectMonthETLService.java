@@ -49,7 +49,7 @@ public class ProjectMonthETLService extends AbstractMonthETLService {
 	private void createProjectMonthData(MongoCollection<Document> prjColl, MongoCollection<Document> pMDCol,
 			Double discountRate, String year, String month) {
 		// 获取项目月绩效数据
-		List<Bson> pipeline = Arrays
+		List<? extends Bson> pipeline = Arrays
 				.asList(new Document("$addFields", new Document("discountRate", discountRate).append("nowYear", year)
 						.append("sDate", year + month)),
 						new Document("$lookup", new Document("from", "salesforecast")
@@ -196,39 +196,33 @@ public class ProjectMonthETLService extends AbstractMonthETLService {
 																										"$presentRevenue")))))),
 												new Document("$sort", new Document("_id", 1.0))))
 								.append("as", "salesForecastYearData")),
-						new Document(
-								"$lookup",
-								new Document("from", "salesMonthData").append("let",
-										new Document("project_id", "$_id").append("discountRate", "$discountRate")
-												.append("nowYear", "$nowYear").append("sDate", "$sDate"))
+						new Document("$lookup",
+								new Document("from", "salesMonthData")
+										.append("let",
+												new Document("project_id", "$_id")
+														.append("discountRate", "$discountRate")
+														.append("nowYear", "$nowYear").append("sDate", "$sDate"))
 										.append("pipeline", Arrays.asList(
 												new Document("$match",
-														new Document("$expr",
-																new Document("$and", Arrays.asList(
-																		new Document("$eq",
-																				Arrays.asList("$project_id",
-																						"$$project_id")),
-																		new Document("$lte", Arrays.asList(
+														new Document("$expr", new Document("$and", Arrays.asList(
+																new Document("$eq",
+																		Arrays.asList("$project_id", "$$project_id")),
+																new Document("$lte",
+																		Arrays.asList(
 																				new Document("$concat",
 																						Arrays.asList("$GJAHR",
 																								"$PERDE")),
 																				"$$sDate")))))),
 												new Document("$group", new Document("_id", "$GJAHR").append("revenue",
-														new Document("$sum", "$VV010")).append("cost",
-																new Document("$sum",
-																		new Document("$add",
-																				Arrays.asList("$VV030", "$VV040"))))
-														.append("profit",
-																new Document("$sum",
-																		new Document("$subtract", Arrays.asList(
-																				"$VV010",
-																				new Document("$add",
-																						Arrays.asList("$VV030",
-																								"$VV040"))))))),
-												new Document("$addFields",
-														new Document("exponent", new Document("$subtract",
-																Arrays.asList(new Document("$toInt", "$_id"),
-																		new Document("$toInt", "$$nowYear"))))),
+														new Document("$sum", "$revenue"))
+														.append("cost", new Document("$sum", "$cost"))
+														.append("profit", new Document("$sum", "$profit"))),
+												new Document(
+														"$addFields",
+														new Document("exponent",
+																new Document("$subtract",
+																		Arrays.asList(new Document("$toInt", "$_id"),
+																				new Document("$toInt", "$$nowYear"))))),
 												new Document("$addFields", new Document("presentRevenue",
 														new Document("$cond", Arrays.asList(
 																new Document("$gte", Arrays.asList("$exponent", 0.0)),
@@ -462,166 +456,134 @@ public class ProjectMonthETLService extends AbstractMonthETLService {
 																																						"$exponent"))))))))),
 												new Document("$sort", new Document("_id", 1.0))))
 								.append("as", "cbsYearData")),
-						new Document(
-								"$lookup",
-								new Document("from", "salesMonthData").append("let",
-										new Document("project_id", "$_id").append("discountRate", "$discountRate")
-												.append("nowYear", "$nowYear").append("sDate", "$sDate"))
-										.append("pipeline", Arrays.asList(
-												new Document("$match",
-														new Document("$expr",
-																new Document("$and", Arrays.asList(
-																		new Document("$eq",
-																				Arrays.asList("$project_id",
-																						"$$project_id")),
-																		new Document("$lte", Arrays.asList(
-																				new Document("$concat",
-																						Arrays.asList("$GJAHR",
-																								"$PERDE")),
-																				"$$sDate")))))),
-												new Document("$group", new Document("_id", "$GJAHR").append("revenue",
-														new Document("$sum", "$VV010")).append("cost",
-																new Document("$sum",
-																		new Document("$add",
-																				Arrays.asList("$VV030", "$VV040"))))
-														.append("profit",
-																new Document("$sum",
-																		new Document("$subtract", Arrays.asList(
-																				"$VV010",
-																				new Document("$add",
-																						Arrays.asList("$VV030",
-																								"$VV040"))))))),
-												new Document("$addFields",
-														new Document("exponent", new Document("$subtract",
-																Arrays.asList(new Document("$toInt", "$_id"),
-																		new Document("$toInt", "$$nowYear"))))),
-												new Document("$addFields", new Document("presentRevenue",
-														new Document("$cond", Arrays.asList(
-																new Document("$gte", Arrays.asList("$exponent", 0.0)),
-																new Document("$divide", Arrays.asList("$revenue",
-																		new Document("$pow", Arrays.asList(
-																				new Document("$add",
-																						Arrays.asList(1.0,
-																								"$$discountRate")),
+						new Document("$lookup", new Document("from", "salesMonthData")
+								.append("let", new Document("project_id", "$_id")
+										.append("discountRate", "$discountRate").append("nowYear", "$nowYear")
+										.append("sDate", "$sDate"))
+								.append("pipeline", Arrays.asList(
+										new Document("$match", new Document("$expr", new Document("$and", Arrays.asList(
+												new Document("$eq", Arrays.asList("$project_id", "$$project_id")),
+												new Document("$lte",
+														Arrays.asList(new Document("$concat",
+																Arrays.asList("$GJAHR", "$PERDE")), "$$sDate")))))),
+										new Document("$group", new Document("_id", "$GJAHR").append("revenue",
+												new Document("$sum", "$revenue")).append("cost",
+														new Document("$sum", "$cost"))
+												.append("profit", new Document("$sum", "$profit"))),
+										new Document("$addFields", new Document("exponent",
+												new Document("$subtract", Arrays.asList(new Document("$toInt", "$_id"),
+														new Document("$toInt", "$$nowYear"))))),
+										new Document("$addFields", new Document("presentRevenue", new Document("$cond",
+												Arrays.asList(new Document("$gte", Arrays.asList("$exponent", 0.0)),
+														new Document("$divide", Arrays.asList("$revenue",
+																new Document("$pow",
+																		Arrays.asList(new Document("$add",
+																				Arrays.asList(1.0, "$$discountRate")),
 																				new Document("$abs", "$exponent"))))),
-																new Document("$multiply", Arrays.asList("$revenue",
-																		new Document("$pow", Arrays.asList(
-																				new Document("$add",
-																						Arrays.asList(1.0,
-																								"$$discountRate")),
-																				new Document("$abs", "$exponent"))))))))
-																						.append("presentCost",
-																								new Document("$cond",
-																										Arrays.asList(
-																												new Document(
-																														"$gte",
-																														Arrays.asList(
-																																"$exponent",
-																																0.0)),
-																												new Document(
-																														"$divide",
-																														Arrays.asList(
-																																"$cost",
-																																new Document(
-																																		"$pow",
-																																		Arrays.asList(
-																																				new Document(
-																																						"$add",
-																																						Arrays.asList(
-																																								1.0,
-																																								"$$discountRate")),
-																																				new Document(
-																																						"$abs",
-																																						"$exponent"))))),
-																												new Document(
-																														"$multiply",
-																														Arrays.asList(
-																																"$cost",
-																																new Document(
-																																		"$pow",
-																																		Arrays.asList(
-																																				new Document(
-																																						"$add",
-																																						Arrays.asList(
-																																								1.0,
-																																								"$$discountRate")),
-																																				new Document(
-																																						"$abs",
-																																						"$exponent"))))))))
-																						.append("presentProfit",
-																								new Document(
-																										"$cond",
-																										Arrays.asList(
-																												new Document(
-																														"$gte",
-																														Arrays.asList(
-																																"$exponent",
-																																0.0)),
-																												new Document(
-																														"$divide",
-																														Arrays.asList(
-																																"$profit",
-																																new Document(
-																																		"$pow",
-																																		Arrays.asList(
-																																				new Document(
-																																						"$add",
-																																						Arrays.asList(
-																																								1.0,
-																																								"$$discountRate")),
-																																				new Document(
-																																						"$abs",
-																																						"$exponent"))))),
-																												new Document(
-																														"$multiply",
-																														Arrays.asList(
-																																"$profit",
-																																new Document(
-																																		"$pow",
-																																		Arrays.asList(
-																																				new Document(
-																																						"$add",
-																																						Arrays.asList(
-																																								1.0,
-																																								"$$discountRate")),
-																																				new Document(
-																																						"$abs",
-																																						"$exponent"))))))))),
-												new Document("$group", new Document("_id", null)
-														.append("revenue", new Document("$sum", "$revenue"))
-														.append("cost", new Document("$sum", "$cost"))
-														.append("profit", new Document("$sum", "$profit"))
-														.append("presentRevenue",
-																new Document("$sum", "$presentRevenue"))
-														.append("presentCost", new Document("$sum", "$presentCost"))
-														.append("presentProfit", new Document("$sum", "$presentProfit"))
-														.append("avgProfit", new Document("$avg", "$profit"))
-														.append("presentAvgProfit",
-																new Document("$avg", "$presentProfit"))),
-												new Document("$addFields",
-														new Document("profitRate", new Document("$cond", Arrays.asList(
-																new Document("$eq",
-																		Arrays.asList(new Document(
-																				"$ifNull",
-																				Arrays.asList("$revenue", 0.0)), 0.0)),
-																0.0,
-																new Document("$divide",
-																		Arrays.asList("$profit", "$revenue"))))).append(
-																				"presentProfitRate",
-																				new Document("$cond", Arrays.asList(
-																						new Document("$eq", Arrays
-																								.asList(new Document(
-																										"$ifNull",
-																										Arrays.asList(
-																												"$presentRevenue",
-																												0.0)),
+														new Document("$multiply", Arrays.asList("$revenue",
+																new Document("$pow", Arrays.asList(
+																		new Document("$add",
+																				Arrays.asList(1.0, "$$discountRate")),
+																		new Document("$abs", "$exponent")))))))).append(
+																				"presentCost", new Document("$cond",
+																						Arrays.asList(new Document(
+																								"$gte", Arrays.asList(
+																										"$exponent",
 																										0.0)),
-																						0.0,
-																						new Document("$divide",
+																								new Document(
+																										"$divide",
+																										Arrays.asList(
+																												"$cost",
+																												new Document(
+																														"$pow",
+																														Arrays.asList(
+																																new Document(
+																																		"$add",
+																																		Arrays.asList(
+																																				1.0,
+																																				"$$discountRate")),
+																																new Document(
+																																		"$abs",
+																																		"$exponent"))))),
+																								new Document(
+																										"$multiply",
+																										Arrays.asList(
+																												"$cost",
+																												new Document(
+																														"$pow",
+																														Arrays.asList(
+																																new Document(
+																																		"$add",
+																																		Arrays.asList(
+																																				1.0,
+																																				"$$discountRate")),
+																																new Document(
+																																		"$abs",
+																																		"$exponent"))))))))
+																				.append("presentProfit", new Document(
+																						"$cond",
+																						Arrays.asList(new Document(
+																								"$gte",
 																								Arrays.asList(
-																										"$presentProfit",
-																										"$presentRevenue"))))))))
-										.append("as", "salesRealityTotalData")),
+																										"$exponent",
+																										0.0)),
+																								new Document(
+																										"$divide",
+																										Arrays.asList(
+																												"$profit",
+																												new Document(
+																														"$pow",
+																														Arrays.asList(
+																																new Document(
+																																		"$add",
+																																		Arrays.asList(
+																																				1.0,
+																																				"$$discountRate")),
+																																new Document(
+																																		"$abs",
+																																		"$exponent"))))),
+																								new Document(
+																										"$multiply",
+																										Arrays.asList(
+																												"$profit",
+																												new Document(
+																														"$pow",
+																														Arrays.asList(
+																																new Document(
+																																		"$add",
+																																		Arrays.asList(
+																																				1.0,
+																																				"$$discountRate")),
+																																new Document(
+																																		"$abs",
+																																		"$exponent"))))))))),
+										new Document("$group", new Document("_id", null)
+												.append("revenue", new Document("$sum", "$revenue"))
+												.append("cost", new Document("$sum", "$cost"))
+												.append("profit", new Document("$sum", "$profit")).append(
+														"presentRevenue", new Document("$sum", "$presentRevenue"))
+												.append("presentCost", new Document("$sum", "$presentCost")).append(
+														"presentProfit", new Document("$sum", "$presentProfit"))
+												.append("avgProfit", new Document("$avg", "$profit"))
+												.append("presentAvgProfit", new Document("$avg", "$presentProfit"))),
+										new Document("$addFields",
+												new Document("profitRate", new Document("$cond", Arrays.asList(
+														new Document("$eq",
+																Arrays.asList(new Document("$ifNull",
+																		Arrays.asList("$revenue", 0.0)), 0.0)),
+														0.0,
+														new Document("$divide", Arrays.asList("$profit", "$revenue")))))
+																.append("presentProfitRate", new Document("$cond",
+																		Arrays.asList(new Document("$eq",
+																				Arrays.asList(new Document("$ifNull",
+																						Arrays.asList("$presentRevenue",
+																								0.0)),
+																						0.0)),
+																				0.0,
+																				new Document("$divide", Arrays.asList(
+																						"$presentProfit",
+																						"$presentRevenue"))))))))
+								.append("as", "salesRealityTotalData")),
 						new Document("$unwind",
 								new Document("path", "$salesRealityTotalData").append("preserveNullAndEmptyArrays",
 										true)),
@@ -962,23 +924,16 @@ public class ProjectMonthETLService extends AbstractMonthETLService {
 														new Document("$expr", new Document("$and", Arrays.asList(
 																new Document("$eq",
 																		Arrays.asList("$project_id", "$$project_id")),
-																new Document(
-																		"$eq",
+																new Document("$eq",
 																		Arrays.asList(
 																				new Document("$concat",
 																						Arrays.asList("$GJAHR",
 																								"$PERDE")),
 																				"$$sDate")))))),
 												new Document("$group", new Document("_id", null)
-														.append("revenue", new Document("$sum", "$VV010"))
-														.append("cost",
-																new Document("$sum",
-																		new Document("$add",
-																				Arrays.asList("$VV030", "$VV040"))))
-														.append("profit", new Document("$sum",
-																new Document("$subtract", Arrays.asList("$VV010",
-																		new Document("$add",
-																				Arrays.asList("$VV030", "$VV040"))))))),
+														.append("revenue", new Document("$sum", "$revenue"))
+														.append("cost", new Document("$sum", "$cost"))
+														.append("profit", new Document("$sum", "$profit"))),
 												new Document("$addFields",
 														new Document("profitRate", new Document("$cond", Arrays.asList(
 																new Document("$eq",
@@ -1179,6 +1134,7 @@ public class ProjectMonthETLService extends AbstractMonthETLService {
 																								"$presentCost")),
 																				"$realityPresentProfit")),
 																		"$presentCost")))))));
+
 		List<Document> projectMonthDatas = new ArrayList<Document>();
 		prjColl.aggregate(pipeline).map(doc -> {
 			doc.append("project_id", doc.get("_id"));
