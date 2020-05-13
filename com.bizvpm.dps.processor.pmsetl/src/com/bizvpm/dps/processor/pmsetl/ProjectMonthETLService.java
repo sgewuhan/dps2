@@ -49,18 +49,16 @@ public class ProjectMonthETLService extends AbstractMonthETLService {
 	private void createProjectMonthData(MongoCollection<Document> prjColl, MongoCollection<Document> pMDCol,
 			Double discountRate, String year, String month) {
 		// 获取项目月绩效数据
-		List<? extends Bson> pipeline = Arrays.asList(
-				new Document().append("$addFields", new Document().append("discountRate", discountRate).append(
-						"nowYear", year).append("sDate", year + month)),
+		List<Bson> pipeline = Arrays.asList(new Document().append("$addFields", new Document()
+				.append("discountRate", discountRate).append("nowYear", year).append("sDate", year + month)),
 				new Document().append("$lookup", new Document().append("from", "salesforecast").append("let",
-						new Document().append("project_id", "$_id").append("discountRate", "$discountRate")
-								.append("nowYear", "$nowYear").append("sDate", "$sDate"))
-						.append("pipeline", Arrays.asList(new Document().append("$match",
-								new Document().append("$expr", new Document().append("$and", Arrays.asList(
-										new Document().append("$eq", Arrays.asList("$project_id", "$$project_id")),
-										new Document().append("$lte",
-												Arrays.asList(new Document().append("$concat",
-														Arrays.asList("$GJAHR", "$PERDE")), "$$sDate")))))),
+						new Document().append("project_id", "$_id").append("discountRate", "$discountRate").append(
+								"nowYear", "$nowYear"))
+						.append("pipeline", Arrays.asList(
+								new Document().append("$match", new Document().append("$expr", new Document().append(
+										"$and",
+										Arrays.asList(new Document().append("$eq",
+												Arrays.asList("$project_id", "$$project_id")))))),
 								new Document().append("$group", new Document().append("_id", "$GJAHR")
 										.append("revenue", new Document().append("$sum", "$VV010"))
 										.append("cost",
@@ -530,139 +528,145 @@ public class ProjectMonthETLService extends AbstractMonthETLService {
 										.append("as", "salesRealityTotalData")),
 				new Document().append("$unwind", new Document().append("path", "$salesRealityTotalData").append(
 						"preserveNullAndEmptyArrays", true)),
-				new Document().append("$lookup", new Document().append("from", "cbsSubject")
-						.append("let",
-								new Document().append("project_id", "$_id").append("discountRate", "$discountRate")
-										.append("nowYear", "$nowYear").append("sDate", "$sDate"))
-						.append("pipeline", Arrays.asList(
-								new Document().append("$lookup",
-										new Document().append("from", "cbs").append("localField", "cbsItem_id")
-												.append("foreignField", "_id").append("as", "cbs")),
-								new Document().append("$unwind", "$cbs"),
-								new Document().append("$graphLookup", new Document().append("from", "cbs")
-										.append("startWith", "$cbs._id").append("connectFromField", "parent_id")
-										.append("connectToField", "_id").append("as", "cbs")),
-								new Document().append("$lookup",
-										new Document().append("from", "work").append("localField", "cbs.scope_id")
-												.append("foreignField", "_id").append("as", "work")),
-								new Document().append("$unwind",
-										new Document().append("path", "$work").append("preserveNullAndEmptyArrays",
-												true)),
-								new Document().append("$lookup",
-										new Document().append("from", "project").append("localField", "cbs.scope_id")
-												.append("foreignField", "_id").append("as", "project")),
-								new Document().append("$unwind",
-										new Document().append("path", "$project").append("preserveNullAndEmptyArrays",
-												true)),
-								new Document().append("$addFields",
-										new Document().append("project_id",
-												new Document().append("$ifNull",
-														Arrays.asList("$work.project_id", "$project._id")))),
-								new Document().append("$lookup",
-										new Document().append("from", "project").append("localField", "project_id")
-												.append("foreignField", "_id").append("as", "project")),
-								new Document().append("$unwind", new Document().append("path", "$project")),
-								new Document().append("$project", new Document().append("id", true)
-										.append("budget",
-												new Document().append("$ifNull", Arrays.asList("$budget", 0.0)))
-										.append("cost", new Document().append("$ifNull", Arrays.asList("$cost", 0.0)))
-										.append("project_id", true)),
-								new Document().append("$match",
-										new Document().append("$expr",
-												new Document().append("$and", Arrays.asList(
-														new Document().append("$eq",
-																Arrays.asList("$project_id", "$$project_id")),
-														new Document().append("$lte",
-																Arrays.asList("$id",
-																		new Document().append("$concat", Arrays.asList(
-																				new Document().append("$substr",
-																						Arrays.asList("$$sDate", 0.0,
-																								4.0)),
-																				new Document().append("$substr",
-																						Arrays.asList("$$sDate", 5.0,
-																								2.0)))))))))),
-								new Document().append("$group",
-										new Document()
-												.append("_id",
-														new Document().append("$substr",
-																Arrays.asList("$id", 0.0, 4.0)))
-												.append("budget", new Document().append("$sum", "$budget"))
-												.append("cost", new Document().append("$sum", "$cost"))),
-								new Document().append("$addFields",
-										new Document().append("exponent", new Document()
-												.append("$subtract", Arrays
-														.asList(new Document().append("$toInt", "$_id"),
-																new Document().append("$toInt", "$$nowYear"))))),
-								new Document().append("$addFields", new Document()
-										.append("presentBudget",
-												new Document().append("$cond", Arrays.asList(
-														new Document().append("$gte", Arrays.asList("$exponent", 0.0)),
-														new Document().append("$divide",
-																Arrays.asList("$budget",
-																		new Document().append("$pow", Arrays.asList(
-																				new Document().append(
-																						"$add",
-																						Arrays.asList(1.0,
-																								"$$discountRate")),
-																				new Document().append("$abs",
-																						"$exponent"))))),
-														new Document().append("$multiply",
-																Arrays.asList("$budget",
-																		new Document().append("$pow", Arrays.asList(
-																				new Document().append("$add",
-																						Arrays.asList(1.0,
-																								"$$discountRate")),
-																				new Document().append("$abs",
-																						"$exponent"))))))))
-										.append("presentCost",
-												new Document().append("$cond", Arrays.asList(
-														new Document().append("$gte", Arrays.asList("$exponent", 0.0)),
-														new Document().append("$divide",
-																Arrays.asList("$cost",
-																		new Document().append("$pow", Arrays.asList(
-																				new Document().append(
-																						"$add",
-																						Arrays.asList(1.0,
-																								"$$discountRate")),
-																				new Document().append("$abs",
-																						"$exponent"))))),
-														new Document().append("$multiply",
-																Arrays.asList("$cost",
-																		new Document().append("$pow", Arrays.asList(
-																				new Document().append("$add",
-																						Arrays.asList(1.0,
-																								"$$discountRate")),
-																				new Document().append("$abs",
-																						"$exponent"))))))))),
-								new Document().append("$group",
-										new Document().append("_id", null)
-												.append("budget", new Document().append("$sum", "$budget"))
-												.append("cost", new Document().append("$sum", "$cost"))
-												.append("presentBudget",
-														new Document().append("$sum", "$presentBudget"))
-												.append("presentCost", new Document().append("$sum", "$presentCost")))))
-						.append("as", "cbsTotalData")),
+				new Document()
+						.append("$lookup",
+								new Document()
+										.append("from", "cbsSubject").append(
+												"let",
+												new Document().append("project_id",
+														"$_id").append("discountRate", "$discountRate")
+														.append("nowYear", "$nowYear"))
+										.append("pipeline", Arrays.asList(new Document().append("$lookup",
+												new Document().append("from", "cbs").append("localField",
+														"cbsItem_id").append("foreignField", "_id")
+														.append("as", "cbs")),
+												new Document().append("$unwind", "$cbs"),
+												new Document().append(
+														"$graphLookup", new Document().append("from", "cbs")
+																.append("startWith", "$cbs._id").append(
+																		"connectFromField", "parent_id")
+																.append("connectToField", "_id").append("as", "cbs")),
+												new Document().append("$lookup", new Document().append("from", "work")
+														.append("localField", "cbs.scope_id")
+														.append("foreignField", "_id").append("as", "work")),
+												new Document().append("$unwind",
+														new Document().append("path", "$work")
+																.append("preserveNullAndEmptyArrays", true)),
+												new Document()
+														.append("$lookup", new Document().append("from", "project")
+																.append("localField", "cbs.scope_id")
+																.append("foreignField", "_id").append("as", "project")),
+												new Document().append("$unwind",
+														new Document().append("path", "$project").append(
+																"preserveNullAndEmptyArrays", true)),
+												new Document().append("$addFields", new Document().append("project_id",
+														new Document().append("$ifNull", Arrays.asList(
+																"$work.project_id", "$project._id")))),
+												new Document()
+														.append("$lookup", new Document().append("from", "project")
+																.append("localField",
+																		"project_id")
+																.append("foreignField", "_id").append("as", "project")),
+												new Document().append("$unwind",
+														new Document().append("path", "$project")),
+												new Document().append("$project", new Document().append("id", true)
+														.append("budget",
+																new Document().append("$ifNull",
+																		Arrays.asList("$budget", 0.0)))
+														.append("cost",
+																new Document().append("$ifNull",
+																		Arrays.asList("$cost", 0.0)))
+														.append("project_id", true)),
+												new Document().append("$match",
+														new Document().append("$expr", new Document().append("$and",
+																Arrays.asList(new Document().append("$eq",
+																		Arrays.asList("$project_id",
+																				"$$project_id")))))),
+												new Document().append("$group",
+														new Document().append("_id", new Document().append("$substr",
+																Arrays.asList("$id", 0.0, 4.0))).append(
+																		"budget",
+																		new Document().append("$sum", "$budget"))
+																.append("cost",
+																		new Document().append("$sum", "$cost"))),
+												new Document().append("$addFields", new Document().append("exponent",
+														new Document().append("$subtract",
+																Arrays.asList(new Document().append("$toInt", "$_id"),
+																		new Document().append("$toInt",
+																				"$$nowYear"))))),
+												new Document().append("$addFields", new Document()
+														.append("presentBudget", new Document().append("$cond",
+																Arrays.asList(new Document()
+																		.append("$gte",
+																				Arrays.asList("$exponent", 0.0)),
+																		new Document().append("$divide", Arrays.asList(
+																				"$budget",
+																				new Document().append("$pow", Arrays
+																						.asList(new Document().append(
+																								"$add",
+																								Arrays.asList(1.0,
+																										"$$discountRate")),
+																								new Document().append(
+																										"$abs",
+																										"$exponent"))))),
+																		new Document().append("$multiply",
+																				Arrays.asList("$budget", new Document()
+																						.append("$pow", Arrays.asList(
+																								new Document().append(
+																										"$add",
+																										Arrays.asList(
+																												1.0,
+																												"$$discountRate")),
+																								new Document().append(
+																										"$abs",
+																										"$exponent"))))))))
+														.append("presentCost",
+																new Document().append("$cond", Arrays.asList(
+																		new Document().append("$gte",
+																				Arrays.asList("$exponent", 0.0)),
+																		new Document().append("$divide", Arrays.asList(
+																				"$cost",
+																				new Document().append("$pow", Arrays
+																						.asList(new Document().append(
+																								"$add",
+																								Arrays.asList(1.0,
+																										"$$discountRate")),
+																								new Document().append(
+																										"$abs",
+																										"$exponent"))))),
+																		new Document().append("$multiply", Arrays
+																				.asList("$cost", new Document().append(
+																						"$pow",
+																						Arrays.asList(
+																								new Document().append(
+																										"$add",
+																										Arrays.asList(
+																												1.0,
+																												"$$discountRate")),
+																								new Document().append(
+																										"$abs",
+																										"$exponent"))))))))),
+												new Document().append("$group", new Document().append("_id", null)
+														.append("budget", new Document().append("$sum", "$budget"))
+														.append("cost", new Document().append("$sum", "$cost"))
+														.append("presentBudget",
+																new Document().append("$sum", "$presentBudget"))
+														.append("presentCost",
+																new Document().append("$sum", "$presentCost")))))
+										.append("as", "cbsTotalData")),
 				new Document().append("$unwind", new Document().append("path", "$cbsTotalData").append(
 						"preserveNullAndEmptyArrays", true)),
 				new Document()
 						.append("$lookup",
 								new Document().append("from", "salesforecast")
-										.append("let", new Document()
-												.append("project_id", "$_id").append("discountRate", "$discountRate")
-												.append("nowYear", "$nowYear").append("sDate", "$sDate"))
+										.append("let", new Document().append("project_id", "$_id")
+												.append("discountRate", "$discountRate").append("nowYear", "$nowYear"))
 										.append("pipeline", Arrays.asList(
-												new Document().append("$match",
-														new Document().append("$expr",
-																new Document().append("$and", Arrays.asList(
-																		new Document().append("$eq",
-																				Arrays.asList("$project_id",
-																						"$$project_id")),
-																		new Document().append("$lte",
-																				Arrays.asList(
-																						new Document().append("$concat",
-																								Arrays.asList("$GJAHR",
-																										"$PERDE")),
-																						"$$sDate")))))),
+												new Document().append("$match", new Document().append("$expr",
+														new Document().append("$and", Arrays.asList(new Document()
+																.append("$eq",
+																		Arrays.asList("$project_id",
+																				"$$project_id")))))),
 												new Document().append("$group", new Document().append("_id", "$GJAHR")
 														.append("revenue", new Document().append("$sum", "$VV010"))
 														.append("cost", new Document().append("$sum",
@@ -795,25 +799,21 @@ public class ProjectMonthETLService extends AbstractMonthETLService {
 										.append("as", "salesForecastTotalData")),
 				new Document().append("$unwind", new Document().append("path", "$salesForecastTotalData").append(
 						"preserveNullAndEmptyArrays", true)),
-				new Document().append("$lookup", new Document().append("from", "salesforecast")
-						.append("let",
-								new Document().append("project_id", "$_id").append("discountRate", "$discountRate")
-										.append("nowYear", "$nowYear").append("sDate", "$sDate"))
-						.append("pipeline",
-								Arrays.asList(
-										new Document().append("$match",
-												new Document().append("$expr",
-														new Document().append("$and", Arrays.asList(
-																new Document().append("$eq",
-																		Arrays.asList("$project_id", "$$project_id")),
-																new Document().append("$eq",
-																		Arrays.asList(
-																				new Document().append("$concat",
-																						Arrays.asList("$GJAHR",
-																								"$PERDE")),
-																				"$$sDate")))))),
-										new Document().append("$group",
-												new Document().append("_id", null)
+				new Document().append("$lookup",
+						new Document().append("from", "salesforecast")
+								.append("let",
+										new Document().append("project_id", "$_id")
+												.append("discountRate", "$discountRate").append("nowYear", "$nowYear"))
+								.append("pipeline",
+										Arrays.asList(
+												new Document().append(
+														"$match",
+														new Document().append("$expr", new Document().append(
+																"$and",
+																Arrays.asList(new Document().append("$eq",
+																		Arrays.asList("$project_id",
+																				"$$project_id")))))),
+												new Document().append("$group", new Document().append("_id", null)
 														.append("revenue", new Document().append("$sum", "$VV010"))
 														.append("cost",
 																new Document().append(
@@ -828,44 +828,6 @@ public class ProjectMonthETLService extends AbstractMonthETLService {
 																						new Document().append("$add",
 																								Arrays.asList("$VV030",
 																										"$VV040"))))))),
-										new Document().append("$addFields", new Document().append("profitRate",
-												new Document().append("$cond", Arrays.asList(
-														new Document().append("$eq",
-																Arrays.asList(new Document().append("$ifNull",
-																		Arrays.asList("$revenue", 0.0)), 0.0)),
-														0.0,
-														new Document().append("$divide",
-																Arrays.asList("$profit", "$revenue")))))),
-										new Document().append("$sort", new Document().append("_id", 1.0))))
-						.append("as", "salesForecastMonthData")),
-				new Document().append("$unwind", new Document().append("path", "$salesForecastMonthData").append(
-						"preserveNullAndEmptyArrays", true)),
-				new Document()
-						.append("$lookup",
-								new Document().append("from", "salesMonthData")
-										.append("let",
-												new Document().append("project_id", "$_id")
-														.append("discountRate", "$discountRate")
-														.append("nowYear", "$nowYear").append("sDate", "$sDate"))
-										.append("pipeline", Arrays.asList(
-												new Document().append(
-														"$match",
-														new Document().append("$expr",
-																new Document().append("$and", Arrays.asList(
-																		new Document().append("$eq",
-																				Arrays.asList("$project_id",
-																						"$$project_id")),
-																		new Document().append("$eq",
-																				Arrays.asList(
-																						new Document().append("$concat",
-																								Arrays.asList("$GJAHR",
-																										"$PERDE")),
-																						"$$sDate")))))),
-												new Document().append("$group", new Document().append("_id", null)
-														.append("revenue", new Document().append("$sum", "$revenue"))
-														.append("cost",
-																new Document().append("$sum", "$cost"))
-														.append("profit", new Document().append("$sum", "$profit"))),
 												new Document().append("$addFields", new Document().append("profitRate",
 														new Document().append("$cond", Arrays.asList(
 																new Document().append("$eq",
@@ -873,66 +835,99 @@ public class ProjectMonthETLService extends AbstractMonthETLService {
 																				Arrays.asList("$revenue", 0.0)), 0.0)),
 																0.0,
 																new Document().append("$divide",
+																		Arrays.asList("$profit", "$revenue")))))),
+												new Document().append("$sort", new Document().append("_id", 1.0))))
+								.append("as", "salesForecastMonthData")),
+				new Document().append("$unwind", new Document().append("path",
+						"$salesForecastMonthData").append("preserveNullAndEmptyArrays",
+								true)),
+				new Document().append("$lookup",
+						new Document().append("from", "salesMonthData")
+								.append("let",
+										new Document().append("project_id", "$_id").append("discountRate",
+												"$discountRate").append("nowYear", "$nowYear").append("sDate",
+														"$sDate"))
+								.append("pipeline", Arrays.asList(
+										new Document().append("$match", new Document().append(
+												"$expr", new Document()
+														.append("$and",
+																Arrays.asList(
+																		new Document().append("$eq",
+																				Arrays.asList("$project_id",
+																						"$$project_id")),
+																		new Document().append("$eq", Arrays.asList(
+																				new Document().append("$concat",
+																						Arrays.asList("$GJAHR",
+																								"$PERDE")),
+																				"$$sDate")))))),
+										new Document().append("$group", new Document().append("_id", null)
+												.append("revenue", new Document().append("$sum", "$revenue"))
+												.append("cost", new Document().append("$sum", "$cost"))
+												.append("profit", new Document().append("$sum", "$profit"))),
+										new Document().append("$addFields",
+												new Document().append("profitRate",
+														new Document().append("$cond", Arrays.asList(
+																new Document().append("$eq",
+																		Arrays.asList(new Document().append("$ifNull",
+																				Arrays.asList("$revenue", 0.0)), 0.0)),
+																0.0,
+																new Document().append("$divide",
 																		Arrays.asList("$profit", "$revenue"))))))))
-										.append("as", "salesRealityMonthData")),
+								.append("as", "salesRealityMonthData")),
 				new Document().append("$unwind", new Document().append("path", "$salesRealityMonthData").append(
 						"preserveNullAndEmptyArrays", true)),
-				new Document().append("$lookup", new Document().append("from", "cbsSubject").append("let",
-						new Document().append("project_id", "$_id").append("discountRate", "$discountRate")
-								.append("nowYear", "$nowYear").append("sDate", "$sDate"))
-						.append("pipeline", Arrays.asList(
-								new Document().append("$lookup",
-										new Document().append("from", "cbs").append("localField", "cbsItem_id").append(
-												"foreignField", "_id").append("as", "cbs")),
-								new Document().append("$unwind", "$cbs"),
-								new Document().append("$graphLookup", new Document().append("from", "cbs")
-										.append("startWith", "$cbs._id").append("connectFromField", "parent_id")
-										.append("connectToField", "_id").append("as", "cbs")),
-								new Document().append("$lookup",
-										new Document().append("from", "work").append("localField", "cbs.scope_id")
-												.append("foreignField", "_id").append("as", "work")),
-								new Document().append("$unwind",
-										new Document().append("path", "$work").append("preserveNullAndEmptyArrays",
-												true)),
-								new Document().append("$lookup",
-										new Document().append("from", "project").append("localField", "cbs.scope_id")
-												.append("foreignField", "_id").append("as", "project")),
-								new Document().append("$unwind",
-										new Document().append("path", "$project").append("preserveNullAndEmptyArrays",
-												true)),
-								new Document().append("$addFields",
-										new Document().append("project_id",
-												new Document().append("$ifNull",
+				new Document().append("$lookup",
+						new Document()
+								.append("from", "cbsSubject").append(
+										"let",
+										new Document()
+												.append("project_id", "$_id").append("discountRate", "$discountRate")
+												.append("nowYear", "$nowYear"))
+								.append("pipeline", Arrays.asList(new Document().append("$lookup",
+										new Document().append("from", "cbs").append("localField", "cbsItem_id")
+												.append("foreignField", "_id").append("as", "cbs")),
+										new Document().append("$unwind", "$cbs"), new Document().append("$graphLookup",
+												new Document().append("from", "cbs").append("startWith", "$cbs._id")
+														.append("connectFromField", "parent_id")
+														.append("connectToField", "_id").append("as", "cbs")),
+										new Document().append("$lookup",
+												new Document().append("from", "work")
+														.append("localField", "cbs.scope_id")
+														.append("foreignField", "_id").append("as", "work")),
+										new Document().append("$unwind",
+												new Document().append("path", "$work")
+														.append("preserveNullAndEmptyArrays", true)),
+										new Document().append("$lookup",
+												new Document().append("from", "project")
+														.append("localField", "cbs.scope_id")
+														.append("foreignField", "_id").append("as", "project")),
+										new Document().append("$unwind",
+												new Document().append("path", "$project")
+														.append("preserveNullAndEmptyArrays", true)),
+										new Document().append("$addFields",
+												new Document().append("project_id", new Document().append("$ifNull",
 														Arrays.asList("$work.project_id", "$project._id")))),
-								new Document().append("$lookup",
-										new Document().append("from", "project").append("localField", "project_id")
-												.append("foreignField", "_id").append("as", "project")),
-								new Document().append("$unwind", new Document().append("path", "$project")),
-								new Document().append("$project", new Document().append("id", true)
-										.append("budget",
-												new Document().append("$ifNull", Arrays.asList("$budget", 0.0)))
-										.append("cost", new Document().append("$ifNull", Arrays.asList("$cost", 0.0)))
-										.append("project_id", true)),
-								new Document().append("$match",
-										new Document().append("$expr",
-												new Document().append("$and", Arrays.asList(
-														new Document().append("$eq",
-																Arrays.asList("$project_id", "$$project_id")),
-														new Document().append("$eq",
-																Arrays.asList("$id",
-																		new Document().append("$concat", Arrays.asList(
-																				new Document().append("$substr",
-																						Arrays.asList("$$sDate", 0.0,
-																								4.0)),
-																				new Document().append("$substr",
-																						Arrays.asList("$$sDate", 5.0,
-																								2.0)))))))))),
-								new Document().append("$group",
-										new Document().append("_id", null)
-												.append("budget", new Document().append("$sum", "$budget"))
-												.append("cost", new Document().append("$sum", "$cost"))),
-								new Document().append("$sort", new Document().append("_id", 1.0))))
-						.append("as", "cbsMonthData")),
+										new Document().append("$lookup",
+												new Document().append("from", "project")
+														.append("localField", "project_id")
+														.append("foreignField", "_id").append("as", "project")),
+										new Document().append("$unwind", new Document().append("path", "$project")),
+										new Document().append("$project", new Document().append("id", true)
+												.append("budget",
+														new Document().append("$ifNull", Arrays.asList("$budget", 0.0)))
+												.append("cost",
+														new Document().append("$ifNull", Arrays.asList("$cost", 0.0)))
+												.append("project_id", true)),
+										new Document().append("$match",
+												new Document().append("$expr", new Document().append("$and",
+														Arrays.asList(new Document().append("$eq",
+																Arrays.asList("$project_id", "$$project_id")))))),
+										new Document().append("$group",
+												new Document().append("_id", null)
+														.append("budget", new Document().append("$sum", "$budget"))
+														.append("cost", new Document().append("$sum", "$cost"))),
+										new Document().append("$sort", new Document().append("_id", 1.0))))
+								.append("as", "cbsMonthData")),
 				new Document().append("$unwind", new Document().append("path", "$cbsMonthData").append(
 						"preserveNullAndEmptyArrays", true)),
 				new Document().append("$project", new Document().append("project_id", "$_id")
