@@ -17,9 +17,11 @@ import com.mongodb.client.gridfs.model.GridFSUploadOptions;
 public class VisualService extends AbstractVisualService {
 
 	@Override
-	protected void updateResult(ObjectId _id, MongoDatabase db, String colName, ObjectId v_id, String msg) {
+	protected void updateResult(ObjectId _id, MongoDatabase db, String colName, ObjectId v_id, String msg,
+			String status) {
 		db.getCollection(colName + ".files").updateOne(new Document("_id", _id),
-				new Document("$set", new Document("metadata.preview", v_id).append("metadata.previewMsg", msg)));
+				new Document("$set", new Document("metadata.preview", v_id).append("metadata.previewMsg", msg)
+						.append("metadata.previewStatus", status)));
 	}
 
 	@SuppressWarnings("deprecation")
@@ -39,12 +41,12 @@ public class VisualService extends AbstractVisualService {
 		pdfs.close();
 		// 如果生成成功
 		if (v_id != null) {
-			updateResult(_id, db, colName, v_id, null);
+			updateResult(_id, db, colName, v_id, null, "finished");
 			result = new ProcessResult();
 			result.put("result", "");
 			return result;
 		} else {
-			updateResult(_id, db, colName, v_id, "保存可视化文件失败");
+			updateResult(_id, db, colName, v_id, "保存可视化文件失败", "failed");
 			result = new ProcessResult();
 			result.put("result", "保存可视化文件失败");
 			return result;

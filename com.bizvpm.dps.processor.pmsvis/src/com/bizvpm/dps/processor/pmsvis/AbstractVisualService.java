@@ -37,7 +37,7 @@ public abstract class AbstractVisualService implements IProcessorRunable {
 		MongoDatabase db = Domain.getDatabase((String) pT.get("domain"));
 		String colName = (String) pT.get("col");
 
-		updateResult(_id, db, colName, null, "正在转换可视化文件");
+		updateResult(_id, db, colName, null, "正在转换可视化文件", "working");
 
 		GridFSBucket bucket = GridFSBuckets.create(db, colName);
 		GridFSFile file = bucket.find(Filters.eq("_id", _id)).first();
@@ -75,7 +75,7 @@ public abstract class AbstractVisualService implements IProcessorRunable {
 
 		InputStream pdfs = result.getInputStream("file");
 		if (pdfs == null) {
-			updateResult(_id, db, colName, null, "转换可视化文件失败");
+			updateResult(_id, db, colName, null, "转换可视化文件失败", "failed");
 			result = new ProcessResult();
 			result.put("result", "转换可视化文件失败");
 			return result;
@@ -116,7 +116,8 @@ public abstract class AbstractVisualService implements IProcessorRunable {
 	protected abstract ProcessResult handleTransferedFile(ProcessTask pT, GridFSFile file, InputStream pdfs)
 			throws IOException;
 
-	protected abstract void updateResult(ObjectId _id, MongoDatabase db, String colName, ObjectId v_id, String msg);
+	protected abstract void updateResult(ObjectId _id, MongoDatabase db, String colName, ObjectId v_id, String msg,
+			String status);
 
 	private ProcessResult runDWG(ProcessTask pT, GridFSDownloadStream os, GridFSFile file, IProcessContext context)
 			throws Exception {
