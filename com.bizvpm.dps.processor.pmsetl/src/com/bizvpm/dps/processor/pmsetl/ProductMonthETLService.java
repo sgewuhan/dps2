@@ -26,8 +26,13 @@ public class ProductMonthETLService implements IProcessorRunable {
 	@Override
 	public ProcessResult run(ProcessTask pT, IProgressMonitor monitor, IProcessContext context) throws Exception {
 		MongoDatabase db = Domain.getDatabase((String) pT.get("domain"));
-		String year =  (String) pT.get("year");
+		String year = (String) pT.get("year");
 		String month = (String) pT.get("month");
+
+		MongoCollection<Document> sdColl = db.getCollection("salesData");
+		MongoCollection<Document> pMDCol = db.getCollection("productMonthData");
+
+		// createProductMonthData(sdColl, pMDCol);
 
 		MongoCollection<Document> prjColl = db.getCollection("project");
 		MongoCollection<Document> sMDCol = db.getCollection("salesMonthData");
@@ -35,6 +40,29 @@ public class ProductMonthETLService implements IProcessorRunable {
 		ProcessResult result = new ProcessResult();
 		result.put("result", "");
 		return result;
+	}
+
+	private void createProductMonthData(MongoCollection<Document> sdColl, MongoCollection<Document> pMDCol) {
+		List<Bson> pipeline = new ArrayList<Bson>();
+		pipeline.add(Aggregates.group(
+				new BasicDBObject("MATNR", "$MATNR").append("GJAHR", "$GJAHR").append("PERDE", "$PERDE"),
+				new BsonField("revenue", new BasicDBObject("$sum", "$VV010")),
+				new BsonField("cost",
+						new BasicDBObject("$sum", new BasicDBObject("$add", Arrays.asList("$VV030", "$VV040")))),
+				new BsonField("profit", new BasicDBObject("$sum", new BasicDBObject("$subtract",
+						Arrays.asList("$VV010", new BasicDBObject("$add", Arrays.asList("$VV030", "$VV040"))))))));
+		pipeline.add(Aggregates.addFields(new Field<String>("MATNR", "$_id.MATNR"),
+				new Field<String>("GJAHR", "$_id.GJAHR"), new Field<String>("PERDE", "$_id.PERDE")));
+
+		List<Document> productMonthDatas = new ArrayList<Document>();
+		sdColl.aggregate(pipeline).allowDiskUse(true).forEach((Document doc) -> {
+			doc.remove("_id");
+			productMonthDatas.add(doc);
+		});
+
+		pMDCol.deleteMany(new BasicDBObject());
+		if (productMonthDatas.size() > 0)
+			pMDCol.insertMany(productMonthDatas);
 	}
 
 	/**
@@ -78,15 +106,11 @@ public class ProductMonthETLService implements IProcessorRunable {
 				.append("cost", "$salesData.cost").append("profit", "$salesData.profit").append("GJAHR", "$sYear")
 				.append("PERDE", "$sMonth")));
 		pipeline.add(Aggregates.project(new BasicDBObject("_id", false)));
-		List<Document> salesMonthDatas = new ArrayList<Document>();
-		prjColl.aggregate(pipeline).into(salesMonthDatas);
-
 		// 清除之前写入的月销售数据
 		sMDCol.deleteMany(new BasicDBObject("year", year).append("month", month));
-
 		// 插入月销售数据
-		if (salesMonthDatas.size() > 0)
-			sMDCol.insertMany(salesMonthDatas);
+		prjColl.aggregate(pipeline).allowDiskUse(true).forEach((Document doc) -> sMDCol.insertOne(doc));
+
 	}
 
 }
